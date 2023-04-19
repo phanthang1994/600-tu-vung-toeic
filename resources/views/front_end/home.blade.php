@@ -89,7 +89,7 @@
         @include('front_end.layouts.ad_r')
     </div>
 </div>
-@include('front_end.layouts.footer')
+@include('front_end.layouts.footer_home')
 <script src="{{url('assets/js/index_home.js')}}"></script>
 <script>
     $(document).ready(function(){
