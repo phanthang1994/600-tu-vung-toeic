@@ -29,21 +29,21 @@ create table category
 
 create table chu_de
 (
-    ID                int unsigned auto_increment
-        primary key,
-    CHU_DE_NAME       varchar(255) not null,
-    IMAGE             varchar(255) not null,
-    SO_NGUOI_THEO_HOC int          null,
-    TONG_SO_TU        int          null,
-    CATEGORY_ID       int unsigned null,
-    created_at        timestamp    null,
-    updated_at        timestamp    null,
-    STATUS            int          null,
-    constraint chu_de_chu_de_name_unique
-        unique (CHU_DE_NAME),
-    constraint chu_de_category_id_foreign
-        foreign key (CATEGORY_ID) references category (ID)
-            on delete cascade
+        ID                int unsigned auto_increment
+            primary key,
+        CHU_DE_NAME       varchar(255) not null,
+        IMAGE             varchar(255) not null,
+        SO_NGUOI_THEO_HOC int          null,
+        TONG_SO_TU        int          null,
+        CATEGORY_ID       int unsigned null,
+        created_at        timestamp    null,
+        updated_at        timestamp    null,
+        STATUS            int          null,
+        constraint chu_de_chu_de_name_unique
+            unique (CHU_DE_NAME),
+        constraint chu_de_category_id_foreign
+            foreign key (CATEGORY_ID) references category (ID)
+                on delete cascade
 )
     collate = utf8mb4_unicode_ci;
 
