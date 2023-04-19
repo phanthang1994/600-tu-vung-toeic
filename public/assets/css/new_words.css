@@ -1,0 +1,457 @@
+
+    /* Thăng viết */
+    /* Full-width input fields */
+
+    /* Set a style for all buttons */
+
+    /* Center the image and position the close button */
+.imgcontainer {
+    text-align: center;
+    position: relative;
+}
+
+.container_tro_ve_trang_chu {
+    text-align: center;
+    /*padding: 16px;*/
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    max-width: 30%; /* Could be more or less, depending on screen size */
+    max-height: 80%;
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 8px;
+    top: 0px;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+.closeButtonCheTu{
+    position: absolute;
+    right: 8px;
+    top: 0px;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+.closeButtonCheTu:hover,
+.closeButtonCheTu:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)}
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #888;
+        min-width: 100%; /* Could be more or less, depending on screen size */
+        height: auto;
+    }
+}
+/* On screens that are 600px wide or less, the background color is olive */
+@media screen and (max-width: 600px) {
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #888;
+        min-width: 90%; /* Could be more or less, depending on screen size */
+        max-height: 30%;
+    }
+}
+/* On screens that are 992px wide or less, the background color is blue */
+@media screen and (max-width: 900px) {
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #888;
+        max-width: 80%; /* Could be more or less, depending on screen size */
+        max-height: 50%;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #888;
+        min-width: 50%; /* Could be more or less, depending on screen size */
+        max-height: 80%;
+    }
+}
+
+
+
+p {
+    font-family: CNN,Helvetica Neue,Helvetica,Arial,Utkal,sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.2rem;
+}
+
+/* progress bar */
+
+
+body{
+    background-color: #f6ae2d;
+    /* height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; */
+}
+
+#progress {
+    position: relative;
+    /* width: 500px; */
+    width: 100%;
+    background-color: #f26419;
+    border-radius:100px;
+    border: 3px solid black;
+    box-shadow: inset -5px 5px rgba(0,0,0,0.07);
+    top: 0;
+    left:0;
+    overflow:hidden;
+}
+
+#bar {
+    /* width: 1%; */
+    width: 0%;
+    height: 30px;
+    border-radius: 100px;
+    background: repeating-linear-gradient(
+            to right,
+                /* #000,
+                #000 10px, */
+            #ffdc00 10px,
+            #ffdc00 20px
+    );
+    text-align: center;
+    line-height: 30px;
+    color: red;
+}
+
+.button {
+    /* position: absolute; */
+    background-color: #fcca46;
+    border: none;
+    color: white;
+    /* padding: 15px 32px; */
+    padding:0px ;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 0px 2px;
+    border-radius:100px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    /* top:60px;
+    left:175px; */
+}
+
+.button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+
+#progressMobile{
+    position: absolute;
+    left: 66%;
+}
+@media screen and (min-width: 685px) {
+    #progressMobile{
+        display: none;
+    }
+    .xemTiepActive{
+        display: none;
+    }
+    .button {
+        /* position: absolute; */
+        background-color: #fcca46;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 4px 2px;
+        margin-right: 4px;
+        margin-left: 4px;
+        border-radius:100px;
+        cursor: pointer;
+        -webkit-transition-duration: 0.4s;
+        transition-duration: 0.4s;
+        /* top:60px;
+        left:175px; */
+    }
+}
+
+.statusButton{
+    text-align: center;
+    font-weight: bold;
+    display:inline-block;
+}
+.boxPercent {
+    width: 60%;
+    background-color: yellow;
+    border-radius:100px;
+    border: 3px solid black;
+    box-shadow: inset -5px 5px rgba(0,0,0,0.07);
+    overflow:hidden;
+    display: block;
+    text-align: center;
+}
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media screen and (max-width: 685px) {
+    #mobileHiddenWeb{
+        display: none;
+    }
+    .xemTieActive{
+        display: none;
+    }
+    .nextButtonMobile{
+        display:flex;
+        width: 50%;
+        margin-top: 5px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        padding-right: 8px;
+        padding-left: 8px;
+        height: 60px;
+        background-color: yellow;
+        align-items: center;
+        justify-content: center;
+    }
+
+}
+@media screen and (max-width: 991px) and (min-width:685px){
+    .nextButtonMobile{
+        display: none;
+    }
+    .xemTiepActive{
+        display: none;
+    }
+    .one {
+        flex: 11;
+    }
+    .one #progress{
+        min-width: 152%;
+    }
+    .two {
+        flex: 1;
+    }
+    .box-right{
+        display: flex;
+        align-items: center;
+        flex-direction:column;
+        /* justify-content: center; */
+    }
+    .btnSmallThan991px{
+        width: 90px;
+
+        align-items: center;
+        flex-direction:column;
+        justify-content: center;
+    }
+}
+@media screen and (min-width: 991px){
+    .nextButtonMobile{
+        display: none;
+    }
+    .btnBiggerThan991px{
+        min-width:55%;
+        min-height: 46px;
+    }}
+.event-img{
+    background-color: #FCFAF2;
+}
+.text_right{
+    text-align: left;
+    padding-top: 15px;
+    padding-left: 8px;
+    padding-right: 5px;
+    min-width: 100%;
+}
+
+.attributes{
+    background-color: rgb(116, 216, 193);
+    border-radius: 1rem / 50%;
+    color: rgb(1, 65, 53);
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    text-transform: uppercase;
+    max-height: 39px;
+    margin: 5px 5px;
+}
+.boder3D{
+    border-bottom: #ff0202  solid 4px;
+    border-left: #179b85 solid 4px;
+    border-right: #000000 solid 1px;
+    border-top: #000000 solid 1px;
+    border-radius: 15px;
+}
+.provideNewWords-active{
+    display:block;
+}
+.jPETsr{
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0px;
+    overflow-wrap: anywhere;
+}
+.dXQZrX {
+    color: rgb(112, 116, 126);
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    hyphens: auto;
+    overflow-wrap: anywhere;
+    text-transform: uppercase;
+}
+.jDSKR{
+    font-size: 1.5rem;
+    font-weight: 600;
+    hyphens: auto;
+    line-height: 1.2;
+    margin: 0px;
+    overflow-wrap: anywhere;
+}
+.flexCustom{
+    display: flex;
+    justify-content: space-between;
+}
+
+.displayButtonAccordion{
+    height: 54px;
+    margin  : 5px 5px 0 5px;
+    border-radius: 15px;
+    font-size: 15px;
+    font-weight: 600;
+
+}
+.displayButtonAccordion i{
+    margin: 10px 10px;
+}
+.chosingButton{
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content:space-around;
+    flex-wrap: wrap;
+    border-radius:15px;
+    background-color:#f1f1f1
+}
+.dot {
+    height: 5rem;
+    width: 5rem;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row;
+    align-items: center;
+    margin: 5px 5px;
+    cursor: pointer;
+}
+.outlineDot{
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    margin:10px 10px;
+}
+.continueStudying{
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row;
+    align-items: center;
+    margin: 5px 5px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 1000;
+    padding: 5px 5px;
+    border: #00a651 solid 5px;
+}
+.continueStudying i{
+    margin-right: 7px;
+}
+.actionEnd{
+    display: flex;
+    flex-flow:column;
+    align-items: center;
+}
+.cheTu{
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    border-top: #003218  solid 3px;
+    overflow: scroll;
+}
+.cheTuVaCauTruc{
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row;
+    align-items: center;
+    margin: 5px 5px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    padding: 5px 5px;
+    border: #00a651 solid 5px;
+
+}
+.xemTiepDeActive{
+    display: none;
+}

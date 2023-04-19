@@ -1,0 +1,125 @@
+/*list câu hỏi*/
+.centerForm{
+    display:flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 0.3rem;
+}
+.container_thang_list_question{
+    display: flex;
+    flex-direction: column;
+    margin: 50px auto;
+    padding: 30px 20px;
+    width: 70%;
+    box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+    background-color:#FCE6E6;
+    border-radius:8px;
+}
+@media screen and (max-width:1400px)
+{
+    .container_thang_list_question{
+        width:100%;
+
+    }
+}
+.cauHoiDapAn{
+    display: flex;
+    flex-flow: column wrap;
+    align-content: space-between;
+    justify-content: space-between;
+}
+.item{
+    flex: 1 1 300px;
+    border: 1px solid black;
+    /*font-size: 30px;*/
+    /*line-height: 100px;*/
+    text-align: center;
+    margin: 10px;
+}
+
+.form-control {
+    text-align: left;
+    margin-bottom: 25px;
+}
+.form-control label {
+    display: block;
+    margin-bottom: 0px !important;
+}
+.form-control input{
+    border: 1px solid #777;
+    border-radius: 2px;
+    font-family: inherit;
+    padding: 0px !important;
+    display: block;
+    width: 95%;
+}
+.form-control input[type="radio"]
+{
+    display: inline-block;
+    margin-right: 8px;
+    accent-color: red;
+    width: auto;
+}
+
+label input {
+    position: absolute;
+    left: -9999px;
+}
+label input:checked + span {
+    background-color: #d6d6e5;
+}
+label input:checked + span:before {
+    box-shadow: inset 0 0 0 0.4375em red;
+}
+label span {
+    display: flex;
+    align-items: center;
+    padding: 0.375em 0.75em 0.375em 0.375em;
+    border-radius: 99em;
+    transition: 0.25s ease;
+}
+label span:hover {
+    background-color: #d6d6e5;
+    cursor: pointer;
+}
+label span:before {
+    display: flex;
+    flex-shrink: 0;
+    content: "";
+    background-color: #fff;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    margin-right: 0.375em;
+    transition: 0.25s ease;
+    box-shadow: inset 0 0 0 0.125em #00005c;
+}
+button[type=submit]
+{
+    width: 95px; height:36px; padding:0 24px;
+    background-color: #E71A1A;
+    color: white;
+    font-weight: bold;
+    border-radius:5px;
+    border:none !important;
+}
+.submitAndClear{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 10px;
+}
+.submitAndClear span{
+    color: red;
+    cursor: pointer;
+}
+@media only screen and (max-width: 583px){
+    .container_thang_list_question{
+        height:500px;
+        overflow-y: scroll;
+        border: 3px solid blue;
+    }
+}
+.boiXanh
+{
+    border-radius: 18px;
+}

@@ -1,0 +1,66 @@
+/* Thăng viết */
+/* Full-width input fields */
+.rowFlexTest{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.rowFlexTestInnerLeft{
+    display: flex;
+    justify-content: flex-start;
+    width: 80%;
+}
+
+#tuKho:hover{
+    background-color:#b2d3e0;
+}
+
+.gridContainerThang{
+    display: grid;
+    grid-template-columns: 1fr 2fr 0.5fr;
+    grid-template-rows: 40px auto auto;
+    column-gap: 10px;
+    row-gap: 15px;
+    overflow-x: auto;
+}
+.itemGrid{
+    background-color: #FFFFFF;
+    padding-left: 15px;
+}
+.itemGridTieuDe{
+    padding-left: 10px;
+}
+.btnCheckItemGrid{
+    accent-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.btnCheckItemGrid input{
+    width: 20px;
+    height: 20px;
+}
+.khoaTiepThongTinDaHoc{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.thongTinDaHoc{
+    flex: 1;
+}
+.tuyChon{
+    flex: 0;
+    min-width: 150px;
+    display: flex;
+    height: 80px;
+    margin-right: 10px  ;
+}
+.tuyChon button{
+    display: flex;
+    justify-content: flex-start;
+    height: auto;
+    width: auto;
+    align-items: center;
+}
