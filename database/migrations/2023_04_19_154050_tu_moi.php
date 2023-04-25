@@ -15,18 +15,18 @@ class TuMoi extends Migration
     {
         Schema::create('tu_moi', function (Blueprint $table) {
             $table->engine = "InnoDB";
-            $table->increments('ID')->unsigned();
-            $table->string('NAME',255)->nullable();
-            $table->string('PHIEN_AM', 255)->nullable();
-            $table->string('AUDIO',2000);
-            $table->string('TU_LOAI', 20);
-            $table->text('VI_DU');
-            $table->string('IMAGE',2000);
-            $table->text('CHE_TU')->nullable();
-            $table->text('CAU_TRUC_CAU')->nullable();
+            $table->increments('id')->unsigned();
+            $table->string('name',255)->nullable();
+            $table->string('phien_am', 255)->nullable();
+            $table->string('audio',2000);
+            $table->string('tu_loai', 20);
+            $table->text('vi_du');
+            $table->string('image',2000);
+            $table->text('che_tu')->nullable();
+            $table->text('cau_truc_cau')->nullable();
             $table->timestamps();
-            $table->integer('CHU_DE_ID')->unsigned()->nullable();
-            $table->foreign('CHU_DE_ID')->references('ID')->on('chu_de')->onDelete('cascade');
+            $table->integer('chu_de_id')->unsigned()->nullable();
+            $table->foreign('chu_de_id')->references('id')->on('chu_de')->onDelete('cascade');
         });
     }
 

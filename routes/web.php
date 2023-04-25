@@ -1,27 +1,12 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChuDeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TuMoiController;
-use App\Http\Controllers\UserLoginController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
 Route::group(['middleware' => 'auth.admin'], function() {
     Route::get('/panel/category',[CategoryController::class,'index'])->name('category');
     Route::get('/panel/fetch category', [CategoryController::class, 'fetch'])->name('category.fetch');
@@ -74,9 +59,7 @@ Route::get('/', function () {
 Route::get('/courses', function () {
     return view('front_end.all_courses');
 })->name('courses');
-//Route::get('/chose learned words', function () {
-//    return view('front_end.chontucanhoc');
-//})->name('chose_learned_words');
+
 Route::get('/chose sentence tested', function () {
     return view('front_end.chontungcau');
 })->name('chose_sentence_tested');

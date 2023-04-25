@@ -15,10 +15,10 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('category', function (Blueprint $table) {
             $table->engine = "InnoDB";
-            $table->increments('ID')->unsigned();
-            $table->string('CATEGORY_NAME',500)->unique();
-            $table->string('IMAGE',2000);
-            $table->string('DESCRIPTION',500)->nullable();
+            $table->increments('id')->unsigned();
+            $table->string('category_name',255)->unique();
+            $table->string('image',2000);
+            $table->string('description',500)->nullable();
             $table->timestamps();
         });
     }
