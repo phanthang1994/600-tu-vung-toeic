@@ -15,13 +15,15 @@ class CreateTableChuDeTable extends Migration
     {
         Schema::create('chu_de', function (Blueprint $table) {
             $table->engine = "InnoDB";
-            $table->increments('ID')->unsigned();
-            $table->string('CHU_DE_NAME')->unique();
-            $table->string('IMAGE');
-            $table->integer('SO_NGUOI_THEO_HOC')->nullable();
-            $table->integer('TONG_SO_TU')->nullable();
-            $table->integer('CATEGORY_ID')->unsigned()->nullable();
-            $table->foreign('CATEGORY_ID')->references('ID')->on('category')->onDelete('cascade');
+            $table->increments('id')->unsigned();
+            $table->string('chu_de_name',255)->unique();
+            $table->string('image',2000);
+            $table->integer('so_nguoi_theo_hoc')->nullable();
+            $table->integer('thoi_gian_hoc')->nullable();
+            $table->integer('tong_so_tu')->nullable();
+            $table->string('description',255)->nullable();
+            $table->integer('category_id')->unsigned()->nullable();
+            $table->foreign('category_id')->references('id')->on('category')->onDelete('cascade');
             $table->timestamps();
         });
     }

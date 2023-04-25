@@ -14,10 +14,12 @@ class CreateAdminTable extends Migration
     public function up()
     {
         Schema::create('admin', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->engine = "InnoDB";
+            $table->increments('id')->unsigned();
+            $table->string('name',255);
+            $table->string('email',255)->unique();
+            $table->string('password',255);
+            $table->boolean('is_admin')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

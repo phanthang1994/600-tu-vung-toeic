@@ -26,7 +26,6 @@ class LoginController extends Controller
         $login = [
             'email' => $request->EMAIL,
             'password' => $request->PASSWORD,
-//            'STATUS'    =>1,
         ];
 //        dd($login);
 
