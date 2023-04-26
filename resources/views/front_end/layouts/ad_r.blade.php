@@ -15,33 +15,33 @@
             </ul>
         </div>
     </div>
-{{--    <div class="sidebar-recent-post mb-35">--}}
-{{--        <div class="sidebar-title mb-40">--}}
-{{--            <h4>Recent Post</h4>--}}
-{{--        </div>--}}
-{{--        <div class="recent-post-wrap">--}}
-{{--            <div class="single-recent-post">--}}
-{{--                <div class="recent-post-img">--}}
-{{--                    <a href="#"><img src="assets/img/blog/recent-post-1.jpg" alt=""></a>--}}
-{{--                </div>--}}
-{{--                <div class="recent-post-content">--}}
-{{--                    <h5><a href="#">Blog title will be here.</a></h5>--}}
-{{--                    <span>Blog Category</span>--}}
-{{--                    <p>Datat non proident qui offici.hafw adec qart.</p>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--            <div class="single-recent-post">--}}
-{{--                <div class="recent-post-img">--}}
-{{--                    <a href="#"><img src="assets/img/blog/recent-post-2.jpg" alt=""></a>--}}
-{{--                </div>--}}
-{{--                <div class="recent-post-content">--}}
-{{--                    <h5><a href="#">Blog title will be here.</a></h5>--}}
-{{--                    <span>Blog Category</span>--}}
-{{--                    <p>Datat non proident qui offici.hafw adec qart.</p>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    <div class="sidebar-recent-post mb-35">
+        <div class="sidebar-title mb-40">
+            <h4>Recent Post</h4>
+        </div>
+        <div class="recent-post-wrap">
+            <div class="single-recent-post">
+                <div class="recent-post-img">
+                    <a href="#"><img src="assets/img/blog/recent-post-1.jpg" alt=""></a>
+                </div>
+                <div class="recent-post-content">
+                    <h5><a href="#">Blog title will be here.</a></h5>
+                    <span>Blog Category</span>
+                    <p>Datat non proident qui offici.hafw adec qart.</p>
+                </div>
+            </div>
+            <div class="single-recent-post">
+                <div class="recent-post-img">
+                    <a href="#"><img src="assets/img/blog/recent-post-2.jpg" alt=""></a>
+                </div>
+                <div class="recent-post-content">
+                    <h5><a href="#">Blog title will be here.</a></h5>
+                    <span>Blog Category</span>
+                    <p>Datat non proident qui offici.hafw adec qart.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 {{--    <div class="sidebar-category mb-40">--}}
 {{--        <div class="sidebar-title mb-40">--}}
 {{--            <h4>Course Category</h4>--}}
@@ -89,19 +89,19 @@
 {{--            </div>--}}
 {{--        </div>--}}
 {{--    </div>--}}
-{{--    <div class="sidebar-tag-wrap">--}}
-{{--        <div class="sidebar-title mb-40">--}}
-{{--            <h4>Tag</h4>--}}
-{{--        </div>--}}
-{{--        <div class="sidebar-tag">--}}
-{{--            <ul>--}}
-{{--                <li><a href="#">Loremsite</a></li>--}}
-{{--                <li><a href="#">Loreipsum</a></li>--}}
-{{--                <li><a href="#">Dolar</a></li>--}}
-{{--                <li><a href="#">Site ament dollar</a></li>--}}
-{{--                <li><a href="#">Loremsite</a></li>--}}
-{{--                <li><a href="#">Dummy Text</a></li>--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    <div class="sidebar-tag-wrap">
+        <div class="sidebar-title mb-40">
+            <h4>Tag</h4>
+        </div>
+        <div class="sidebar-tag">
+            <ul>
+                <li><a href="#">Loremsite</a></li>
+                <li><a href="#">Loreipsum</a></li>
+                <li><a href="#">Dolar</a></li>
+                <li><a href="#">Site ament dollar</a></li>
+                <li><a href="#">Loremsite</a></li>
+                <li><a href="#">Dummy Text</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
