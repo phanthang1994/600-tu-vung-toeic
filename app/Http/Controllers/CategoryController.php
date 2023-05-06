@@ -57,10 +57,10 @@ class CategoryController extends Controller
 //            dd($x);
             $file_name = 'category-'.$x.'.'.$extension;
 //            dd($file_name);
-            $file->move(public_path("admin/img/category"),$file_name);
+            $file->move(public_path("assets/img/category"),$file_name);
 
 //            dd($extension);
-            $request->merge(['IMAGE'=> $file_name]);
+            $request->merge(['image'=> $file_name]);
 
         }
 
@@ -74,27 +74,9 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
 
-//        $validator = Validator::make($request->all(), [
-//            'category_name' => 'required',
-//            'file_upload' => 'required',
-//            'status' => 'required'
-//        ]);
-//
-//        if ($validator->passes()) {
-//            $category= new Category();
-//            $category->CATEGORY_NAME = $request["category_name"];
-//            $category->IMAGE = $request["file_upload"];
-//            $category->TRANG_THAI = $request["status"];
-//            $category->save();
-//            return response()->json(['success'=>"Tạo thành công"]);
-//        }
-//
-//        return response()->json(['error'=>$validator->errors()->all()]);
-
         $validator = Validator::make($request->all(), [
             'category_name' => 'required',
-            'image' => 'required',
-            'status' => 'required'
+            'image' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -103,11 +85,10 @@ class CategoryController extends Controller
                 'errors' => $validator->messages()
             ]);
         } else {
-            $fields = ["CATEGORY_NAME","IMAGE","TRANG_THAI"];
+            $fields = ["category_name","image"];
             $data = [
-                "CATEGORY_NAME"=>$request->input('category_name'),
-                "IMAGE" => $request->input('image'),
-                "TRANG_THAI" => $request->input('status')
+                "category_name"=>$request->input('category_name'),
+                "image" => $request->input('image')
             ];
 
             Category::upsert(
@@ -159,7 +140,7 @@ class CategoryController extends Controller
     {
 
         $categories = DB::table('category')
-            -> select('category.*')-> where('category.ID','=',$category_id)->get();
+            -> select('category.*')-> where('category.id','=',$category_id)->get();
 //        dd($categories);
         return view('admin.category.edit_category',compact('categories'));
     }
@@ -173,11 +154,33 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $category_id)
     {
-        $data =  [
-            'CATEGORY_NAME'=>$request->input('category_name'),
-            "IMAGE" => $request->input('image'),
-            "TRANG_THAI" => $request->input('status')
-        ];
+        if($request->input('image'))
+        {
+            if($request->has('file_upload'))
+            {
+                $file =  $request->file_upload;
+                $file_name =  $file->getClientoriginalName();
+                $extension = $file ->extension();
+                $x = pathinfo($file_name, PATHINFO_FILENAME);
+//            dd($x);
+                $file_name = 'category-'.$x.'.'.$extension;
+//            dd($file_name);
+                $file->move(public_path("admin/img/category"),$file_name);
+
+//            dd($extension);
+                $request->merge(['image'=> $file_name]);
+
+            }
+            $data =  [
+                'category_name'=>$request->input('category_name'),
+                "image" => $request->input('image'),
+
+            ];
+        }
+        else
+            $data =  [
+                'category_name'=>$request->input('category_name')
+            ];
         $u = Category::where('id',$category_id)->update(
             $data
         );
@@ -193,45 +196,6 @@ class CategoryController extends Controller
                     'status' => 404,
                     'message' => 'Error deleted'
                 ]);
-//        dd($request);
-//        $validator = Validator::make($request->all(), [
-//            'category_name' => 'required',
-//            'image' => 'required',
-//            'status' => 'required'
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json([
-//                'status' => 400,
-//                'errors' => $validator->messages()
-//            ]);
-//        } else {
-//            $category = new Category();
-//            if ($category) {
-//
-//                $category->CATEGORY_NAME = $request->input('category_name');
-//                $category->IMAGE = $request->input('image');
-//                $category->TRANG_THAI = $request->input('status');
-////                $category->update();
-////                dd($category->update());
-//                if ($category->update())
-//                    return response()->json([
-//                        'status' => 200,
-//                        'message' => 'Student Updated Successfully.'
-//                    ]);
-//                else
-//                    return response()->json([
-//                        'status' => 404,
-//                        'message' => 'Can not Student Update.'
-//                    ]);
-//            } else {
-//                return response()->json([
-//                    'status' => 404,
-//                    'message' => 'No Student Found.'
-//                ]);
-//            }
-//
-//        }
     }
     public function updates(Request $request, $category_id)
     {
@@ -247,17 +211,12 @@ class CategoryController extends Controller
             $file->move(public_path("admin/img/category"),$file_name);
 
 //            dd($extension);
-            $request->merge(['IMAGE'=> $file_name]);
+            $request->merge(['image'=> $file_name]);
 
         }
         $data_exept = ['_token','_method','file_upload'];
-        if( request()->TRANG_THAI==NULL)
-        {
-            array_push($data_exept,'TRANG_THAI');
-        }
         $data = request()->except($data_exept);
-//        dd($data);
-        $u = Category::where('ID',$category_id)->update(
+        $u = Category::where('id',$category_id)->update(
             $data
         );
         return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
@@ -270,34 +229,6 @@ class CategoryController extends Controller
      * @param $category_id
      * @return JsonResponse
      */
-//    public function destroy($category_id)
-//    {
-//        $category = Category::find($category_id);
-//        if($category)
-//        {
-//            if($category->delete())
-//            {
-//                return response()->json([
-//                    'status'=>200,
-//                    'message'=>'Student Deleted Successfully.'
-//                ]);
-//            }
-//            else
-//            {
-//                return response()->json([
-//                    'status'=>200,
-//                    'message'=>'Không thể xóa'
-//                ]);
-//            }
-//
-//        }
-//        else
-//        {
-//            return response()->json([
-//                'status'=>404,
-//                'message'=>'No Student Found.'
-//            ]);
-//        }
 
     public function destroy($category_id)
     {
@@ -309,7 +240,6 @@ class CategoryController extends Controller
                 'message' => 'Có tham chiếu'
             ]);
         }
-//        $u = Category::whereIn('id', [7,8])->delete();
 
         $u = Category::where('id', $category_id)->delete();
         if($u)
@@ -323,27 +253,6 @@ class CategoryController extends Controller
                     'message'=>'Không thể xóa'
                 ]);
             }
-//        dd($category);
-//        if ($category_id->totalChuDe->count() > 0) {
-//            return response()->json([
-//                    'status'=>400,
-//                    'message'=>'Không thể xóa'
-//                ]);
-//        } else {
-//
-//            if(Category::where('id', $category_id)->delete())
-//                return response()->json([
-//                        'status'=>200,
-//                        'message'=>'Student Deleted Successfully.'
-//                    ]);
-//            else {
-//                return response()->json([
-//                    'status'=>202,
-//                    'message'=>'Không thể xóa'
-//                ]);
-//            }
-//
-//        }
 
     }
 }

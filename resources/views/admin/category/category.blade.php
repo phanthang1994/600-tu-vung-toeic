@@ -21,16 +21,6 @@
                         <label for="image">IMAGE</label>
                         <input type="file" class="image form-control" placeholder="Input image" name="file_upload" id="image">
                     </div>
-                    <div class="form-group mb-3">
-                        <label>Trạng Thái</label>
-                        <div class="">
-                            <input type="radio" id="an" name="TRANG_THAI" value="0">
-                            <label for="an">ẨN</label>
-                            <input type="radio" id="hien" name="TRANG_THAI" value="1">
-                            <label for="hien">HIỆN</label><br>
-                        </div>
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -68,22 +58,7 @@
                         <label for="">Image Mới</label>
                         <input type="file" id="image_" required class="form-control">
                     </div>
-                    <div class="form-group mb-3">
-                        <label>Trạng Thái Hiện Tại : <span id="trang_thai_hien_tai"> </span></label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label>Trạng Thái Mới</label>
-                        <div class="">
-                            <input type="radio" id="AN_" name="TRANG_THAI_MOI" value="0">
-                            <label for="AN_">ẨN</label>
-                            <input type="radio" id="HIEN_" name="TRANG_THAI_MOI" value="1">
-                            <label for="HIEN_">HIỆN</label><br>
-                        </div>
-                    </div>
-{{--                    <div class="form-group mb-3">--}}
-{{--                        <label for="">Phone No</label>--}}
-{{--                        <input type="text" id="phone" required class="form-control">--}}
-{{--                    </div>--}}
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -138,7 +113,6 @@
                                 <th>ID</th>
                                 <th>Category Name</th>
                                 <th>Image</th>
-                                <th>Trang Thai</th>
                                 <th>Ngày Tạo</th>
                                 <th>Ngày Sửa</th>
                                 <th>Sửa</th>
@@ -175,14 +149,13 @@
                         $('tbody').html("");
                         $.each(response.categories, function (key, item) {
                             $('tbody').append('<tr>\
-                            <td>' + item.ID + '</td>\
-                            <td>' + item.CATEGORY_NAME + '</td>\
-                            <td>' + item.IMAGE + '</td>\
-                            <td>' + item.TRANG_THAI + '</td>\
-                            <td>' + item.created_at + '</td>\
+                            <td>' + item.id + '</td>\
+                            <td>' + item.category_name + '</td>\
+                            <td>' + item.image + '</td>\
+                            <td>' + item.trang_thai + '</td>\
                             <td>' + item.updated_at + '</td>\
-                            <td><button type="button" value="' + item.ID + '" clasguardss="btn btn-primary editbtn btn-sm">Edit</button></td>\
-                            <td><button type="button" value="' + item.ID + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
+                            <td><button type="button" value="' + item.id + '" class="btn btn-primary editbtn btn-sm">Edit</button></td>\
+                            <td><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
                         \</tr>');
                         });
                     }
@@ -196,8 +169,7 @@
 
                 var data = {
                     'category_name': $('.name').val(),
-                    'image': $('.image').val(),
-                    'status': $("input[name='TRANG_THAI']:checked").val()
+                    'image': $('.image').val()
                 }
                 console.log(data)
                 $.ajaxSetup({
@@ -249,12 +221,8 @@
                             $('#editModal').modal('hide');
                         } else {
                             console.log(response);
-                             $('#name').val(response.student.CATEGORY_NAME)
-                                 $('#image_curent').html(response.student.IMAGE)
-                            if(response.student.TRANG_THAI===0)
-                                 $('#trang_thai_hien_tai').html("ẨN")
-                            else
-                                $('#trang_thai_hien_tai').html("HIỆN")
+                             $('#name').val(response.student.category_name)
+                                 $('#image_curent').html(response.student.image)
                             $('#stud_id').html(stud_id);
                             $('#stud_id_').val(stud_id);
                         }
@@ -273,10 +241,8 @@
 
                 var data = {
                     'category_name': $('#name').val(),
-                    'image': $('#image_').val(),
-                    'status': $("input[name='TRANG_THAI_MOI']:checked").val()
+                    'image': $('#image_').val()
                 }
-                console.log($("input[name='TRANG_THAI_MOI']:checked").val())
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -303,9 +269,6 @@
 
                             $('#success_message').addClass('alert alert-success');
                             $('#success_message').text(response.message);
-                            $("input[name='TRANG_THAI']").prop( "checked", false )
-                            $("input[name='TRANG_THAI_MOI']").prop( "checked", false )
-                            // $('#editModal').find('input').val('');
                             $('.update_student').text('Update');
                             $('#editModal').modal('hide');
                             fetchstudent();

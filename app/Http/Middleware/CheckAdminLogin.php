@@ -25,17 +25,7 @@ class CheckAdminLogin
         }
         if (Auth::check())
         {
-            $user = Auth::user();
-            // nếu level =1 (admin), status = 1 (actived) thì cho qua.
-            if ($user->status == 1&&$user->level==1)
-            {
-                return $next($request);
-            }
-            else
-            {
-                Auth::logout();
-                return redirect()->route('getLogin')->with('status','Chỉ tài khoản admin mới được truy cập vào trang này');
-            }
+          return $next($request);
         } else
             return redirect()->route('getLogin')->with('status','Bạn chưa đăng nhập');
     }

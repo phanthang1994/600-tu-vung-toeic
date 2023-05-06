@@ -48,7 +48,7 @@ class TuMoiController extends Controller
      */
     public function create()
     {
-        $cats = ChuDe::select('ID',"CHU_DE_NAME")->get();
+        $cats = ChuDe::select('id',"chu_de_name")->get();
 //        dd($cats);
         return response()->json([
             'categories' => $cats,
@@ -56,7 +56,7 @@ class TuMoiController extends Controller
     }
     public function creates()
     {
-        $cats = ChuDe::select('ID',"CHU_DE_NAME")->get();
+        $cats = ChuDe::select('id',"chu_de_name")->get();
         //        dd($cats);
         return view('admin.tu_moi.create_tu_moi',compact('cats'));
     }
