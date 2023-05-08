@@ -23,7 +23,7 @@
                 <select name="CATEGORY_ID">
                     <option value="">--select one--</option>
                     @foreach($cats as $category)
-                        <option value="{{$category->ID}}">{{$category->CATEGORY_NAME}}</option>
+                        <option value="{{$category->id}}">{{$category->category_name}}</option>
                     @endforeach
                 </select>
                 @error('CATEGORY')
