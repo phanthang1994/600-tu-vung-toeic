@@ -73,7 +73,8 @@ class ChuDeController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'chu_de-'.$x.'.'.$extension;
+            $dateTime = date('dmYHis');
+            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/chu_de"),$file_name);
             $request->merge(['IMAGE'=> $file_name]);
 
@@ -206,7 +207,8 @@ class ChuDeController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'chu_de-'.$x.'.'.$extension;
+            $dateTime = date('dmYHis');
+            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/chu_de"),$file_name);
             $request->merge(['image'=> $file_name]);
 

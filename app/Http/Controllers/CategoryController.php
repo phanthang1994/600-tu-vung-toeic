@@ -54,17 +54,13 @@ class CategoryController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-            $file_name = 'category-'.$x.'.'.$extension;
-//            dd($file_name);
+            $dateTime = date('dmYHis');
+            $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("assets/img/category"),$file_name);
-
-//            dd($extension);
             $request->merge(['image'=> $file_name]);
 
         }
 
-//        dd($request->all());
         if(Category::create($request->all()))
         {
 
@@ -162,12 +158,8 @@ class CategoryController extends Controller
                 $file_name =  $file->getClientoriginalName();
                 $extension = $file ->extension();
                 $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
                 $file_name = 'category-'.$x.'.'.$extension;
-//            dd($file_name);
                 $file->move(public_path("admin/img/category"),$file_name);
-
-//            dd($extension);
                 $request->merge(['image'=> $file_name]);
 
             }
@@ -205,12 +197,9 @@ class CategoryController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-            $file_name = 'category-'.$x.'.'.$extension;
-//            dd($file_name);
+            $dateTime = date('dmYHis');
+            $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/category"),$file_name);
-
-//            dd($extension);
             $request->merge(['image'=> $file_name]);
 
         }
