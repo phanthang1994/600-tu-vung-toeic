@@ -30,13 +30,6 @@
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <label for="status">Trạng Thái:</label><br>
-            <div class="">
-                <input type="radio" id="AN" name="TRANG_THAI" value="0">
-                <label for="AN">ẨN</label>
-                <input type="radio" id="HIEN" name="TRANG_THAI" value="1">
-                <label for="HIEN">HIỆN</label><br>
-            </div>
             <input type="submit" value="Submit">
         </div>
     </form>

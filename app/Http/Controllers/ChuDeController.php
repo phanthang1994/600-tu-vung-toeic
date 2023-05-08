@@ -19,7 +19,11 @@ class ChuDeController extends Controller
      */
     public function index()
     {
-        return view('admin.chu_de.chu_de');
+        $subjects = DB::table('chu_de')
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            ->select('chu_de.*','category.category_name')->get();
+        ;
+        return view('admin.chu_de.chu_de',compact('subjects'));
     }
 
     /**
@@ -87,7 +91,7 @@ class ChuDeController extends Controller
         if(ChuDe::create($request->all()))
         {
 
-            return redirect()->route('chu_de.creates')->with('success','Thêm sản phẩm thành công');
+            return redirect()->route('chu_de')->with('success','Thêm sản phẩm thành công');
         }
     }
 
@@ -170,10 +174,10 @@ class ChuDeController extends Controller
     public function edits($chu_de_id)
     {
         $edits = DB::table('chu_de')
-            -> leftJoin('category','category.ID','=','chu_de.CATEGORY_ID')
-            -> where('chu_de.ID','=',$chu_de_id)
-            -> select('chu_de.*','category.CATEGORY_NAME')->get();
-        $categories = Category::select('ID',"CATEGORY_NAME")->get();
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            -> where('chu_de.id','=',$chu_de_id)
+            -> select('chu_de.*','category.category_name')->get();
+        $categories = Category::select('id',"category_name")->get();
 //        dd($edits);
         return view('admin.chu_de.edit_chu_de',compact('edits','categories'));
     }
@@ -191,7 +195,6 @@ class ChuDeController extends Controller
             'CATEGORY_ID'=>$request->input('category_id'),
             'CHU_DE_NAME'=>$request->input('chu_de_name'),
             "IMAGE" => $request->input('image'),
-            "STATUS" => $request->input('status')
         ];
         $u = ChuDe::where('ID',$category_id)->update(
             $data
@@ -226,24 +229,20 @@ class ChuDeController extends Controller
             $file->move(public_path("admin/img/chu_de"),$file_name);
 
 //            dd($extension);
-            $request->merge(['IMAGE'=> $file_name]);
+            $request->merge(['image'=> $file_name]);
 
         }
         $data_exept = ['_token','_method','file_upload'];
 
-        if( request()->CATEGORY_ID==NULL)
+        if( request()->category_id==NULL)
         {
-            array_push($data_exept,'CATEGORY_ID');
-        }
-        if( request()->STATUS==NULL)
-        {
-            array_push($data_exept,'STATUS');
+            array_push($data_exept,'category_id');
         }
         $data = request()->except($data_exept);
-        $u = ChuDe::where('ID',$chu_de_id)->update(
+        $u = ChuDe::where('id',$chu_de_id)->update(
             $data
         );
-        return view('admin.chu_de.chu_de');
+        return redirect()->route('chu_de');
     }
 
     /**

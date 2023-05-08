@@ -18,8 +18,8 @@ class CategoryController extends Controller
      * @return Application|Factory|View
      */
     public function index()
-    {
-        return view('admin.category.category');
+    {   $categories = Category::all();
+        return view('admin.category.category',compact('categories'));
     }
 
     /**
@@ -68,7 +68,7 @@ class CategoryController extends Controller
         if(Category::create($request->all()))
         {
 
-            return redirect()->route('category.create')->with('success','Thêm sản phẩm thành công');
+            return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
         }
     }
     public function store(Request $request)
@@ -227,7 +227,7 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $category_id
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
 
     public function destroy($category_id)
@@ -235,23 +235,15 @@ class CategoryController extends Controller
         $r = Category::find($category_id)->totalChuDe;
         if($r>0)
         {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Có tham chiếu'
-            ]);
+            return redirect()->route('category')->with('Fail','Có tham chiếu');
         }
 
         $u = Category::where('id', $category_id)->delete();
         if($u)
-            return response()->json([
-                        'status'=>200,
-                        'message'=>'Student Deleted Successfully.'
-                    ]);
+            return redirect()->route('category')->with('Success','Student Deleted Successfully.');
+
             else {
-                return response()->json([
-                    'status'=>400,
-                    'message'=>'Không thể xóa'
-                ]);
+                return redirect()->route('category')->with('Fail','Không xóa được');
             }
 
     }
