@@ -1,131 +1,98 @@
 @extends('admin.layout.main')
 @section('body')
-    @foreach($edits as $edit)
-    <form action="{{route('tu_moi.updates',$edit->ID)}}" method="post" enctype="multipart/form-data">
+    @foreach($new_word as $nw)
+    <form action="{{route('tu_moi.updates',$nw->id)}}" method="post" enctype="multipart/form-data">
         @csrf @method('PUT')
         <div class="container">
 
             <div class="form-group">
                 <label for="name">Name</label>
-
-                    <input type="text" class="form-control" name="NAME" id="NAME" placeholder="Input NAME" value="{{$edit->NAME}}">
-
-                @error('NAME')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Input NAME" value="{{$nw->name}}">
             </div>
             <div class="form-group">
                 <label for="">
                     Image Hiện Tại:
                     <span id="image_curent">
-
-                            {{$edit->IMAGE}}
-
+                            {{$nw->image}}
                     </span>
                 </label>
             </div>
             <div class="form-group">
-                <label for="IMAGE">image mới</label>
-                <input type="file" class="form-control" name="file_upload" id="IMAGE" placeholder="Input image">
-                @error('IMAGE')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <label for="image">image mới</label>
+                <input type="file" class="form-control" name="file_upload" id="image" placeholder="Input image">
             </div>
             <div class="form-group">
-                <label for="name">Phiên Âm</label>
-                <input type="text" class="form-control" name="PHIEN_AM" id="PHIEN_AM" placeholder="Input phien am" value="{{$edit->PHIEN_AM}}">
-                @error('PHIEN_AM')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <label for="phien_am">Phiên Âm</label>
+                <input type="text" class="form-control" name="phien_am" id="phien_am" placeholder="Input phien am" value="{{$nw->phien_am}}">
             </div>
             <div class="form-group">
-                <label for="name">Từ Loại</label>
-                <input type="text" class="form-control" name="TU_LOAI" id="TU_LOAI" placeholder="Input tu loai" value="{{$edit->TU_LOAI}}">
-                @error('TU_LOAI')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <label for="tu_loai">Từ Loại</label>
+                <input type="text" class="form-control" name="tu_loai" id="tu_loai" placeholder="Input tu loai" value="{{$nw->tu_loai}}">
             </div>
             <div class="form-group">
                 <label for="">
                     Audio Hiện Tại:
                     <span id="image_curent">
-
-                            {{$edit->AUDIO}}
-
+                            {{$nw->audio}}
                     </span>
                 </label>
             </div>
             <div class="form-group">
-                <label for="IMAGE">Audio Mới</label>
-                <input type="file" class="form-control" name="file_upload_audio" id="AUDIO" placeholder="Input audio">
-                @error('AUDIO')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <label for="audio">Audio Mới</label>
+                <input type="file" class="form-control" name="file_upload_audio" id="audio" placeholder="Input audio">
             </div>
             <div class="form-group">
-                <label for="name">VÍ DỤ</label>
-                <input type="text" class="form-control" name="VI_DU" id="VI_DU" placeholder="Input vi du" value="{{$edit->VI_DU}}">
-                @error('VI_DU')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <label for="vi_du">VÍ DỤ</label>
+                <input type="text" class="form-control" name="vi_du" id="vi_du" placeholder="Input vi du" value="{{$nw->vi_du}}">
             </div>
             <div class="form-group">
-                <label for="name">Chế Từ</label>
-                <input type="text" class="form-control" name="CHE_TU" id="CHE_TU" placeholder="Input chế từ" value="{{$edit->CHE_TU}}">
-                @error('CHE_TU')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <label for="che_tu">Chế Từ</label>
+                <input type="text" class="form-control" name="che_tu" id="che_tu" placeholder="Input chế từ" value="{{$nw->che_tu}}">
             </div>
             <div class="form-group">
-                <label for="name">Cấu Trúc Câu</label>
-                <input type="text" class="form-control" name="CAU_TRUC_CAU" id="CAU_TRUC_CAU" placeholder="Input cấu trúc câu" value="{{$edit->CAU_TRUC_CAU}}">
-                @error('CAU_TRUC_CAU')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <label for="cau_truc_cau">Cấu Trúc Câu</label>
+                <input type="text" class="form-control" name="cau_truc_cau" id="cau_truc_cau" placeholder="Input cấu trúc câu" value="{{$nw->cau_truc_cau}}">
             </div>
             <div class="form-group">
                 <label for="">
                     Chủ Đề Hiện Tại:
                     <span id="image_curent">
 
-                            {{$edit->CHU_DE_NAME}}
+                            {{$nw->chu_de_name}}
 
                     </span>
                 </label>
             </div>
             <div class="form-group">
                 <label for="">Chủ Đề Mới</label>
-                <select name="CHU_DE_ID">
+                <select name="chu_de_id">
                     <option value="">--select one--</option>
-                    @foreach($subjects as $category)
-                        <option value="{{$category->ID}}">{{$category->CHU_DE_NAME}}</option>
+                    @foreach($subjects as $subject)
+                        <option value="{{$subject->id}}">{{$subject->chu_de_name}}</option>
                     @endforeach
                 </select>
-                @error('CHU_DE')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
             </div>
-            <div class="form-group">
-                <label for="">
-                    Trạng Thái Hiện Tại:
-                    <span id="image_curent">
+{{--            <div class="form-group">--}}
+{{--                <label for="">--}}
+{{--                    Trạng Thái Hiện Tại:--}}
+{{--                    <span id="image_curent">--}}
 
-                            @if($edit->STATUS==1)
-                                Hiện
-                                @else
-                                Ẩn
-                        @endif
+{{--                            @if($edit->STATUS==1)--}}
+{{--                                Hiện--}}
+{{--                                @else--}}
+{{--                                Ẩn--}}
+{{--                        @endif--}}
 
-                    </span>
-                </label>
-            </div>
-            <label for="status">Trạng Thái:</label><br>
-            <div class="">
-                <input type="radio" id="AN" name="STATUS" value="0">
-                <label for="AN">ẨN</label>
-                <input type="radio" id="HIEN" name="STATUS" value="1">
-                <label for="HIEN">HIỆN</label><br>
-            </div>
+{{--                    </span>--}}
+{{--                </label>--}}
+{{--            </div>--}}
+{{--            <label for="status">Trạng Thái:</label><br>--}}
+{{--            <div class="">--}}
+{{--                <input type="radio" id="AN" name="STATUS" value="0">--}}
+{{--                <label for="AN">ẨN</label>--}}
+{{--                <input type="radio" id="HIEN" name="STATUS" value="1">--}}
+{{--                <label for="HIEN">HIỆN</label><br>--}}
+{{--            </div>--}}
             <input type="submit" value="Submit">
         </div>
     </form>

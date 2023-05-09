@@ -9,5 +9,5 @@ class TuMoi extends Model
 {
     use HasFactory;
     protected $table = "tu_moi";
-    protected $fillable = ["TU_MOI_NAME, PHIEN_AM","AUDIO","TU_LOAI","VI_DU","IMAGE","CHE_TU","CAU_TRUC_CAU","CHU_DE_ID","STATUS"];
+    protected $fillable = ["name", "phien_am","audio","tu_loai","vi_du","image","che_tu","cau_truc_cau","chu_de_id"];
 }

@@ -19,7 +19,11 @@ class ChuDeController extends Controller
      */
     public function index()
     {
-        return view('admin.chu_de.chu_de');
+        $subjects = DB::table('chu_de')
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            ->select('chu_de.*','category.category_name')->get();
+        ;
+        return view('admin.chu_de.chu_de',compact('subjects'));
     }
 
     /**
@@ -30,10 +34,8 @@ class ChuDeController extends Controller
     public function fetch()
     {
         $categories = DB::table('chu_de')
-            -> leftJoin('category','category.ID','=','chu_de.CATEGORY_ID')
-            ->select('chu_de.*','category.CATEGORY_NAME')->get();
-        ;
-//        dd($categories);
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            ->select('chu_de.*','category.category_name')->get();
         return response()->json([
             'categories' => $categories,
         ]);
@@ -46,15 +48,14 @@ class ChuDeController extends Controller
      */
     public function create()
     {
-        $cats = Category::select('ID',"CATEGORY_NAME")->get();
-//        dd($cats);
+        $cats = Category::select('id',"category_name")->get();
         return response()->json([
             'categories' => $cats,
         ]);
     }
     public function creates()
     {
-        $cats = Category::select('ID',"CATEGORY_NAME")->get();
+        $cats = Category::select('id',"category_name")->get();
         //        dd($cats);
         return view('admin.chu_de.create_chu_de',compact('cats'));
     }
@@ -66,34 +67,27 @@ class ChuDeController extends Controller
      */
     public function save(Request $request)
     {
-//        dd($request->all());
         if($request->has('file_upload'))
         {
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-            $file_name = 'chu_de-'.$x.'.'.$extension;
-//            dd($file_name);
+            $dateTime = date('dmYHis');
+            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/chu_de"),$file_name);
-
-//            dd($extension);
             $request->merge(['IMAGE'=> $file_name]);
 
         }
-
-//        dd($request->all());
         if(ChuDe::create($request->all()))
         {
 
-            return redirect()->route('chu_de.creates')->with('success','Thêm sản phẩm thành công');
+            return redirect()->route('chu_de')->with('success','Thêm sản phẩm thành công');
         }
     }
 
     public function store(Request $request)
     {
-//        dd($request->all());
         $validator = Validator::make($request->all(), [
             'chu_de_name' => 'required',
             'image' => 'required',
@@ -106,12 +100,12 @@ class ChuDeController extends Controller
                 'errors' => $validator->messages()
             ]);
         } else {
-            $fields = ["CHU_DE_NAME","IMAGE","CATEGORY_ID","TRANG_THAI"];
+            $fields = ["chu_de_name","image","category_id","trang_thai"];
             $data = [
-                "CHU_DE_NAME"=>$request->input('chu_de_name'),
-                "IMAGE" => $request->input('image'),
-                "CATEGORY_ID"=>$request->input('category_id'),
-                "STATUS" => $request->input('status')
+                "chu_de_name"=>$request->input('chu_de_name'),
+                "image" => $request->input('image'),
+                "category_id"=>$request->input('category_id'),
+                "status" => $request->input('status')
             ];
 //            dd($data);
             ChuDe::upsert(
@@ -147,13 +141,9 @@ class ChuDeController extends Controller
      */
     public function edit($chu_de_id)
     {
-//        dd($chu_de_id);
         $category_query = ChuDe::find($chu_de_id);
         $category_id = $category_query->CATEGORY_ID;
-//        dd($category_id);
         $category_name_query = Category::find($category_id);
-//        dd($category_name_query->CATEGORY_NAME);
-//        $student = array();
         if ($category_query) {
             return response()->json([
                 'status' => 200,
@@ -170,11 +160,10 @@ class ChuDeController extends Controller
     public function edits($chu_de_id)
     {
         $edits = DB::table('chu_de')
-            -> leftJoin('category','category.ID','=','chu_de.CATEGORY_ID')
-            -> where('chu_de.ID','=',$chu_de_id)
-            -> select('chu_de.*','category.CATEGORY_NAME')->get();
-        $categories = Category::select('ID',"CATEGORY_NAME")->get();
-//        dd($edits);
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            -> where('chu_de.id','=',$chu_de_id)
+            -> select('chu_de.*','category.category_name')->get();
+        $categories = Category::select('id',"category_name")->get();
         return view('admin.chu_de.edit_chu_de',compact('edits','categories'));
     }
     /**
@@ -188,12 +177,11 @@ class ChuDeController extends Controller
     {
         $data =  [
 
-            'CATEGORY_ID'=>$request->input('category_id'),
-            'CHU_DE_NAME'=>$request->input('chu_de_name'),
-            "IMAGE" => $request->input('image'),
-            "STATUS" => $request->input('status')
+            'category_id'=>$request->input('category_id'),
+            'chu_de_name'=>$request->input('chu_de_name'),
+            "image" => $request->input('image'),
         ];
-        $u = ChuDe::where('ID',$category_id)->update(
+        $u = ChuDe::where('id',$category_id)->update(
             $data
         );
         if ($u)
@@ -213,37 +201,35 @@ class ChuDeController extends Controller
     public function updates(Request $request, $chu_de_id)
     {
 
-//        dd($request->all());
         if($request->has('file_upload'))
         {
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-            $file_name = 'chu_de-'.$x.'.'.$extension;
-//            dd($file_name);
+            $dateTime = date('dmYHis');
+            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/chu_de"),$file_name);
-
-//            dd($extension);
-            $request->merge(['IMAGE'=> $file_name]);
+            $request->merge(['image'=> $file_name]);
 
         }
-        $data_exept = ['_token','_method','file_upload'];
-
-        if( request()->CATEGORY_ID==NULL)
+        if (request()->category_id==null)
         {
-            array_push($data_exept,'CATEGORY_ID');
+            $data_except = ['_token','_method','file_upload','category_id'];
+            $data = request()->except($data_except);
+            $u = ChuDe::where('id',$chu_de_id)->update(
+                $data
+            );
         }
-        if( request()->STATUS==NULL)
+        else
         {
-            array_push($data_exept,'STATUS');
+            $data_except = ['_token','_method','file_upload'];
+            $data = request()->except($data_except);
+            $u = ChuDe::where('id',$chu_de_id)->update(
+                $data
+            );
         }
-        $data = request()->except($data_exept);
-        $u = ChuDe::where('ID',$chu_de_id)->update(
-            $data
-        );
-        return view('admin.chu_de.chu_de');
+        return redirect()->route('chu_de');
     }
 
     /**
@@ -262,8 +248,6 @@ class ChuDeController extends Controller
                 'message' => 'Có tham chiếu không thể xóa'
             ]);
         }
-//        $u = Category::whereIn('id', [7,8])->delete();
-
         $u = ChuDe::where('id', $category_id)->delete();
         if($u)
             return response()->json([

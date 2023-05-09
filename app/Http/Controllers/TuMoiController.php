@@ -21,7 +21,11 @@ class TuMoiController extends Controller
      */
     public function index()
     {
-        return view('admin.tu_moi.tu_moi');
+        $new_words = DB::table('tu_moi')
+            -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
+            ->leftJoin('category','category.id','=','chu_de.category_id')
+            -> select('tu_moi.*','chu_de.chu_de_name','category.category_name')->get();
+        return view('admin.tu_moi.tu_moi',compact('new_words'));
     }
 
     /**
@@ -56,9 +60,9 @@ class TuMoiController extends Controller
     }
     public function creates()
     {
-        $cats = ChuDe::select('id',"chu_de_name")->get();
+        $subjects = ChuDe::select('id',"chu_de_name")->get();
         //        dd($cats);
-        return view('admin.tu_moi.create_tu_moi',compact('cats'));
+        return view('admin.tu_moi.create_tu_moi',compact('subjects'));
     }
 
     public function create_many()
@@ -83,14 +87,13 @@ class TuMoiController extends Controller
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
+            $dateTime = date('dmYHis');
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-            $file_name = date("d_m_Y").'-'.'tu_moi-'.$x.'.'.$extension;
-//            dd($file_name);
+            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/tu_moi"),$file_name);
 
 //            dd($extension);
-            $request->merge(['IMAGE'=> $file_name]);
+            $request->merge(['image'=> $file_name]);
 
         }
         if($request->has('file_upload_audio'))
@@ -100,12 +103,14 @@ class TuMoiController extends Controller
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
 //            dd($x);
-            $file_name = date("d_m_Y").'-'.'tu_moi-'.$x.'.'.$extension;
+            $dateTime = date('dmYHis');
+            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
 //            dd($file_name);
+
             $file->move(public_path("admin/audio/tu_moi"),$file_name);
 
 //            dd($extension);
-            $request->merge(['AUDIO'=> $file_name]);
+            $request->merge(['audio'=> $file_name]);
 
         }
 
@@ -116,7 +121,7 @@ class TuMoiController extends Controller
         if(TuMoi::create($request->all()))
         {
 
-            return redirect()->route('tu_moi.creates')->with('success','Thêm sản phẩm thành công');
+            return redirect()->route('tu_moi')->with('success','Thêm sản phẩm thành công');
         }
     }
     public function store(Request $request)
@@ -139,16 +144,16 @@ class TuMoiController extends Controller
         } else {
             $fields = ["NAME, PHIEN_AM","AUDIO","TU_LOAI","VI_DU",	"IMAGE",	"CHE_TU",	"CAU_TRUC_CAU",	"CHU_DE_ID","STATUS"];
             $data = [
-                "NAME"=>$request->input('name'),
-                "PHIEN_AM"=>$request->input('phien_am'),
-                "AUDIO"=>$request->input('audio'),
-                "TU_LOAI"=>$request->input('tu_loai'),
-                "VI_DU"=>$request->input('vi_du'),
-                "IMAGE" => $request->input('image'),
-                "CHE_TU" => $request->input('che_tu'),
-                "CAU_TRUC_CAU" => $request->input('cau_truc_cau'),
-                "CHU_DE_ID" => $request->input('chu_de_id'),
-                "STATUS" => $request->input('status')
+                "name"=>$request->input('name'),
+                "phien_am"=>$request->input('phien_am'),
+                "audio"=>$request->input('audio'),
+                "tu_loai"=>$request->input('tu_loai'),
+                "vi_du"=>$request->input('vi_du'),
+                "image" => $request->input('image'),
+                "che_tu" => $request->input('che_tu'),
+                "cau_truc_cau" => $request->input('cau_truc_cau'),
+                "chu_de_id" => $request->input('chu_de_id'),
+//                "status" => $request->input('status')
             ];
 //            dd($data);
             TuMoi::upsert(
@@ -244,12 +249,12 @@ class TuMoiController extends Controller
     }
     public function edits($tu_moi_id)
     {
-        $edits = DB::table('tu_moi')
-            -> leftJoin('chu_de','chu_de.ID','=','tu_moi.CHU_DE_ID')
-            -> where('tu_moi.ID','=',$tu_moi_id)
-            -> select('tu_moi.*','chu_de.CHU_DE_NAME')->get();
-        $subjects = ChuDe::select('ID',"CHU_DE_NAME")->get();
-        return view('admin.tu_moi.edit_tu_moi',compact('edits','subjects'));
+        $new_word = DB::table('tu_moi')
+            -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
+            -> where('tu_moi.id','=',$tu_moi_id)
+            -> select('tu_moi.*','chu_de.chu_de_name')->get();
+        $subjects = ChuDe::select('id',"chu_de_name")->get();
+        return view('admin.tu_moi.edit_tu_moi',compact('new_word','subjects'));
     }
 
     /**
@@ -290,57 +295,51 @@ class TuMoiController extends Controller
                 'message' => 'Error deleted'
             ]);
     }
-    public function updates(Request $request, $category_id)
+    public function updates(Request $request, $tu_moi_id)
     {
 
-
-//        dd($request->all());
         if($request->has('file_upload'))
         {
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-            $file_name = 'tu_moi-'.$x.'.'.$extension;
-//            dd($file_name);
+            $dateTime = date('dmYHis');
+            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/tu_moi"),$file_name);
-
-//            dd($extension);
-            $request->merge(['IMAGE'=> $file_name]);
+            $request->merge(['image'=> $file_name]);
 
         }
+
         if($request->has('file_upload_audio'))
         {
             $file =  $request->file_upload_audio;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-            $file_name = 'tu_moi-'.$x.'.'.$extension;
-//            dd($file_name);
+            $dateTime = date('dmYHis');
+            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/audio/tu_moi"),$file_name);
-
-//            dd($extension);
-            $request->merge(['AUDIO'=> $file_name]);
-
+            $request->merge(['audio'=> $file_name]);
         }
-        $data_exept = ['_token','_method','file_upload','file_upload_audio'];
 
-        if( request()->CHU_DE_ID==NULL)
+        if( request()->chu_de_id==NULL)
         {
-            array_push($data_exept,'CHU_DE_ID');
+            $data_exept = ['_token','_method','file_upload','file_upload_audio','chu_de_id'];
+            $data = request()->except($data_exept);
+            $u = TuMoi::where('id',$tu_moi_id)->update(
+                $data
+            );
         }
-        if( request()->TRANG_THAI==NULL)
+        else
         {
-            array_push($data_exept,'TRANG_THAI');
+            $data_exept = ['_token','_method','file_upload','file_upload_audio'];
+            $data = request()->except($data_exept);
+            $u = TuMoi::where('id',$tu_moi_id)->update(
+                $data
+            );
         }
-        $data = request()->except($data_exept);
-//        dd($data);
-        $u = TuMoi::where('ID',$category_id)->update(
-            $data
-        );
-        return view('admin.tu_moi.tu_moi');
+        return redirect()->route('tu_moi');
     }
 
     /**

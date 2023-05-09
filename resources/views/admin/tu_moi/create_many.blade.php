@@ -7,7 +7,8 @@
         <div class="card-body">
 
             <input type="file" id="excel_file" />
-            <button type id="save_file">Lưu File</button>
+            <button id="save_file">Lưu File</button>
+
         </div>
     </div>
     <div id="excel_data" class="mt-5"></div>
@@ -15,8 +16,6 @@
 @stop
 @section('js')
     <script>
-
-
         const excel_file = document.getElementById('excel_file');
         var data_to_back_end = {}
         // console.log(data_to_back_end)

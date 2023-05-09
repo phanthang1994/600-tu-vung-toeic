@@ -24,42 +24,7 @@
 @endsection
 @section('js')
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
-    <script type="text/javascript">
-
-
-
-        $("#uploadFile").change(function(){
-
-            $('#imgPreview').html("");
-
-            var total_file=document.getElementById("uploadFile").files.length;
-
-            for(var i=0;i<total_file;i++)
-
-            {
-
-                $('#imgPreview').append("<img src='"+URL.createObjectURL(event.target.files[i])+"'>");
-
-            }
-
-        });
-
-
-
-        $('form').ajaxForm(function()
-
-        {
-
-            alert("Uploaded SuccessFully");
-            location.reload();
-
-        });
-
-
-
-    </script>
 @endsection
 
 
