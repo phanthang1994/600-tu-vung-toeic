@@ -15,6 +15,7 @@
                     <span id="image_curent">
                             {{$nw->image}}
                     </span>
+                    <input style="display: none;" type="text" class="form-control" name="old_image" id="old_image"  value="{{$nw->image}}">
                 </label>
             </div>
             <div class="form-group">
@@ -35,6 +36,7 @@
                     <span id="image_curent">
                             {{$nw->audio}}
                     </span>
+                    <input style="display: none;" type="text" class="form-control" name="old_audio" id="old_audio"  value="{{$nw->audio}}">
                 </label>
             </div>
             <div class="form-group">
@@ -56,10 +58,8 @@
             <div class="form-group">
                 <label for="">
                     Chủ Đề Hiện Tại:
-                    <span id="image_curent">
-
+                    <span id="chu_de_nam">
                             {{$nw->chu_de_name}}
-
                     </span>
                 </label>
             </div>
@@ -67,32 +67,8 @@
                 <label for="">Chủ Đề Mới</label>
                 <select name="chu_de_id">
                     <option value="">--select one--</option>
-                    @foreach($subjects as $subject)
-                        <option value="{{$subject->id}}">{{$subject->chu_de_name}}</option>
-                    @endforeach
                 </select>
             </div>
-{{--            <div class="form-group">--}}
-{{--                <label for="">--}}
-{{--                    Trạng Thái Hiện Tại:--}}
-{{--                    <span id="image_curent">--}}
-
-{{--                            @if($edit->STATUS==1)--}}
-{{--                                Hiện--}}
-{{--                                @else--}}
-{{--                                Ẩn--}}
-{{--                        @endif--}}
-
-{{--                    </span>--}}
-{{--                </label>--}}
-{{--            </div>--}}
-{{--            <label for="status">Trạng Thái:</label><br>--}}
-{{--            <div class="">--}}
-{{--                <input type="radio" id="AN" name="STATUS" value="0">--}}
-{{--                <label for="AN">ẨN</label>--}}
-{{--                <input type="radio" id="HIEN" name="STATUS" value="1">--}}
-{{--                <label for="HIEN">HIỆN</label><br>--}}
-{{--            </div>--}}
             <input type="submit" value="Submit">
         </div>
     </form>

@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 
-
 class CategoryController extends Controller
 {
+    private $path_file_image = "assets/admin/img/category";
     /**
      * Display a listing of the resource.
      *
@@ -59,7 +59,7 @@ class CategoryController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("assets/img/category"),$file_name);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
         }
@@ -202,14 +202,18 @@ class CategoryController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("admin/img/category"),$file_name);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 //            Storage::disk('public/admin/img/category')->delete($request->old_image);
             $old_image=$request->old_image;
             $delete_file = 'admin/img/category/'.$old_image;
-            dd($delete_file);
+//            dd($delete_file);
             if(File::exists(public_path($delete_file))){
                 File::delete(public_path($delete_file));
+            $oldest_image = $request->old_image;
+            $path_to_remove=$this->path_file_image.'/'.$oldest_image;
+            if(File::exists(public_path($path_to_remove))){
+                File::delete(public_path($path_to_remove));
             }else{
                 dd('File does not exists.');
             }
@@ -221,7 +225,7 @@ class CategoryController extends Controller
         );
         return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
 
-    }
+    }}
 
     /**
      * Remove the specified resource from storage.
@@ -233,18 +237,19 @@ class CategoryController extends Controller
     public function destroy($category_id)
     {
         $r = Category::find($category_id)->totalChuDe;
+        $rd = Category::find($category_id);
         if($r>0)
         {
             return redirect()->route('category')->with('Fail','Có tham chiếu');
         }
-
+        $old_image = $rd->image;
+        $path_to_remove=$this->path_file_image.'/'.$old_image;
+        dd($old_image);
+        if(File::exists(public_path($path_to_remove))){
+            File::delete(public_path($path_to_remove));
+        }else{
+            dd('File does not exists.');
+        }
         $u = Category::where('id', $category_id)->delete();
-        if($u)
-            return redirect()->route('category')->with('Success','Student Deleted Successfully.');
-
-            else {
-                return redirect()->route('category')->with('Fail','Không xóa được');
-            }
-
     }
 }

@@ -10,10 +10,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class TuMoiController extends Controller
 {
+    private $path_file_image = "assets/admin/img/tu_moi";
+    private $path_file_audio = "assets/admin/audio/tu_moi";
+
     /**
      * Display a listing of the resource.
      *
@@ -81,7 +85,6 @@ class TuMoiController extends Controller
      */
     public function save(Request $request)
     {
-//        dd($request->all());
         if($request->has('file_upload'))
         {
             $file =  $request->file_upload;
@@ -90,9 +93,7 @@ class TuMoiController extends Controller
             $dateTime = date('dmYHis');
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("admin/img/tu_moi"),$file_name);
-
-//            dd($extension);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
         }
@@ -102,21 +103,12 @@ class TuMoiController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
             $dateTime = date('dmYHis');
             $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
-//            dd($file_name);
-
-            $file->move(public_path("admin/audio/tu_moi"),$file_name);
-
-//            dd($extension);
+            $file->move(public_path($this->path_file_audio),$file_name);
             $request->merge(['audio'=> $file_name]);
 
         }
-
-//        dd($request->all());
-//        $request->merge(['NAME'=> $request->name]);
-//        dd($request->all());
 
         if(TuMoi::create($request->all()))
         {
@@ -126,7 +118,6 @@ class TuMoiController extends Controller
     }
     public function store(Request $request)
     {
-//        dd($request->all());
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'image' => 'required',
@@ -155,7 +146,6 @@ class TuMoiController extends Controller
                 "chu_de_id" => $request->input('chu_de_id'),
 //                "status" => $request->input('status')
             ];
-//            dd($data);
             TuMoi::upsert(
                 $data,$fields
             );
@@ -209,44 +199,12 @@ class TuMoiController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param $tu_moi_id
-     * @return JsonResponse
+     * @return Application|Factory|View
      */
-    public function edit($tu_moi_id)
-    {
-//        dd($tu_moi_id);
-        $tu_moi_query = TuMoi::find($tu_moi_id);
-        $chu_de_id = $tu_moi_query->CHU_DE_ID;
-//        dd($category_id);
-        $chu_de_name_query = ChuDe::find($chu_de_id);
-//        dd($category_name_query->CATEGORY_NAME);
-//        $student = array();
-        if ($tu_moi_query) {
-            return response()->json([
-                'status' => 200,
-                'student' =>$tu_moi_query,
-                'chu_de_name'=>$chu_de_name_query->CHU_DE_NAME
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Student Found.'
-            ]);
-        }
-    }
+
     public function edits($tu_moi_id)
     {
         $new_word = DB::table('tu_moi')
@@ -261,43 +219,12 @@ class TuMoiController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param $category_id
-     * @return JsonResponse
+     * @param $tu_moi_id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $category_id)
-    {
-        $data =  [
-            'NAME'=>$request->input('name'),
-            'PHIEN_AM'=>$request->input('phien_am'),
-            'AUDIO'=>$request->input('audio'),
-            'TU_LOAI'=>$request->input('tu_loai'),
-            'VI_DU'=>$request->input('vi_du'),
-            "IMAGE" => $request->input('image'),
-            "CHE_TU" => $request->input('che_tu'),
-            "CAU_TRUC_CAU" => $request->input('cau_truc_cau'),
-            "CHU_DE_ID" => $request->input('chu_de_id'),
-            "STATUS" => $request->input('status')
-        ];
-//        dd($data);
-        $u = TuMoi::where('ID',$category_id)->update(
-            $data
-        );
-        if ($u)
-        {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Updated Successfully.'
-            ]);
-        }
-        else
-            return response()->json([
-                'status' => 404,
-                'message' => 'Error deleted'
-            ]);
-    }
     public function updates(Request $request, $tu_moi_id)
     {
-
+//        dd($request->all());
         if($request->has('file_upload'))
         {
             $file =  $request->file_upload;
@@ -308,7 +235,13 @@ class TuMoiController extends Controller
             $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/tu_moi"),$file_name);
             $request->merge(['image'=> $file_name]);
-
+            $oldest_image = $request->old_image;
+            $path_to_remove=$this->path_file_image.'/'.$oldest_image;
+            if(File::exists(public_path($path_to_remove))){
+                File::delete(public_path($path_to_remove));
+            }else{
+                dd('File does not exists.');
+            }
         }
 
         if($request->has('file_upload_audio'))
@@ -319,22 +252,29 @@ class TuMoiController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("admin/audio/tu_moi"),$file_name);
+            $file->move(public_path($this->path_file_audio),$file_name);
             $request->merge(['audio'=> $file_name]);
+            $oldest_audio = $request->old_audio;
+            $path_audio_to_remove=$this->path_file_audio.'/'.$oldest_audio;
+            if(File::exists(public_path($path_audio_to_remove))){
+                File::delete(public_path($path_audio_to_remove));
+            }else{
+                dd('File does not exists.');
+            }
         }
 
         if( request()->chu_de_id==NULL)
         {
-            $data_exept = ['_token','_method','file_upload','file_upload_audio','chu_de_id'];
-            $data = request()->except($data_exept);
+            $data_except = ['_token','_method','file_upload','file_upload_audio','chu_de_id','old_image','old_audio'];
+            $data = request()->except($data_except);
             $u = TuMoi::where('id',$tu_moi_id)->update(
                 $data
             );
         }
         else
         {
-            $data_exept = ['_token','_method','file_upload','file_upload_audio'];
-            $data = request()->except($data_exept);
+            $data_except = ['_token','_method','file_upload','file_upload_audio','old_image', 'old_audio'];
+            $data = request()->except($data_except);
             $u = TuMoi::where('id',$tu_moi_id)->update(
                 $data
             );
@@ -350,8 +290,6 @@ class TuMoiController extends Controller
      */
     public function destroy($id)
     {
-        //        $u = Category::whereIn('id', [7,8])->delete();
-
         $u = TuMoi::where('id', $id)->delete();
         if($u)
             return response()->json([

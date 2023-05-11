@@ -15,6 +15,8 @@
                     <span id="image_curent">
                             {{$edit->image}}
                     </span>
+                    <input style="display: none;" type="text" class="form-control" name="old_image" id="old_image"  value="{{$edit->image}}">
+
                 </label>
             </div>
             <div class="form-group">
@@ -33,9 +35,6 @@
                 <label for="">Category</label>
                 <select name="category_id">
                     <option value="">--select one--</option>
-                    @foreach($categories as $category)
-                        <option value="{{$category->id}}">{{$category->category_name}}</option>
-                    @endforeach
                 </select>
             </div>
             <input type="submit" value="Submit">

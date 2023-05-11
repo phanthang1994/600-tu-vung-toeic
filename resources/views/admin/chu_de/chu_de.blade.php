@@ -43,7 +43,13 @@
                                 <td> {{$item->created_at}} </td>
                                 <td> {{$item->updated_at}} </td>
                                 <td><a href="{{route('chu_de.edits',$item->id)}}" class="btn btn-primary btn-sm">Edit</a></td>
-                                <td><button type="button" data-item-id="{{ $item->id }}" class="btn btn-danger delete-item btn-sm">Delete</button></td>
+                                <td>
+                                    <form action="{{ route('chu_de.delete', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </td>
                             </tr>
                             @endforeach
                             </thead>

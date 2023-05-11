@@ -8,10 +8,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use function Symfony\Component\Translation\t;
 
 class ChuDeController extends Controller
 {
+    private $path_file_image = "admin/img/chu_de";
     /**
      * Display a listing of the resource.
      *
@@ -75,7 +78,7 @@ class ChuDeController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("admin/img/chu_de"),$file_name);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['IMAGE'=> $file_name]);
 
         }
@@ -209,13 +212,19 @@ class ChuDeController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("admin/img/chu_de"),$file_name);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
-
+            $oldest_image = $request->old_image;
+            $path_to_remove=$this->path_file_image.'/'.$oldest_image;
+            if(File::exists(public_path($path_to_remove))){
+                File::delete(public_path($path_to_remove));
+            }else{
+                dd('File does not exists.');
+            }
         }
         if (request()->category_id==null)
         {
-            $data_except = ['_token','_method','file_upload','category_id'];
+            $data_except = ['_token','_method','file_upload','category_id','old_image'];
             $data = request()->except($data_except);
             $u = ChuDe::where('id',$chu_de_id)->update(
                 $data
@@ -223,7 +232,7 @@ class ChuDeController extends Controller
         }
         else
         {
-            $data_except = ['_token','_method','file_upload'];
+            $data_except = ['_token','_method','file_upload','old_image'];
             $data = request()->except($data_except);
             $u = ChuDe::where('id',$chu_de_id)->update(
                 $data
@@ -240,25 +249,22 @@ class ChuDeController extends Controller
      */
     public function destroy($category_id)
     {
-        $r = ChuDe::find($category_id)->totalTuMoi;
-        if($r>0)
+        $r = ChuDe::find($category_id);
+        if(($r->totalTuMoi)>0)
         {
             return response()->json([
                 'status' => 404,
                 'message' => 'Có tham chiếu không thể xóa'
             ]);
         }
-        $u = ChuDe::where('id', $category_id)->delete();
-        if($u)
-            return response()->json([
-                'status'=>200,
-                'message'=>'Student Deleted Successfully.'
-            ]);
-        else {
-            return response()->json([
-                'status'=>400,
-                'message'=>'Không thể xóa'
-            ]);
+        $old_image = $r->image;
+        $path_to_remove=$this->path_file_image.'/'.$old_image;
+//        dd($old_image);
+        if(File::exists(public_path($path_to_remove))){
+            File::delete(public_path($path_to_remove));
+        }else{
+            dd('File does not exists.');
         }
+        $u = ChuDe::where('id', $category_id)->delete();
     }
 }
