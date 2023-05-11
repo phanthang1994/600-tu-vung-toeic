@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
+
+
 class CategoryController extends Controller
 {
     /**
@@ -201,9 +204,17 @@ class CategoryController extends Controller
             $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path("admin/img/category"),$file_name);
             $request->merge(['image'=> $file_name]);
-
+//            Storage::disk('public/admin/img/category')->delete($request->old_image);
+            $old_image=$request->old_image;
+            $delete_file = 'admin/img/category/'.$old_image;
+            dd($delete_file);
+            if(File::exists(public_path($delete_file))){
+                File::delete(public_path($delete_file));
+            }else{
+                dd('File does not exists.');
+            }
         }
-        $data_exept = ['_token','_method','file_upload'];
+        $data_exept = ['_token','_method','file_upload','old_image'];
         $data = request()->except($data_exept);
         $u = Category::where('id',$category_id)->update(
             $data
