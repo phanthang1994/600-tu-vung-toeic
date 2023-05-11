@@ -64,11 +64,8 @@ class CategoryController extends Controller
 
         }
 
-        if(Category::create($request->all()))
-        {
-
-            return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
-        }
+        Category::create($request->all());
+        return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
     }
     public function store(Request $request)
     {
@@ -204,28 +201,19 @@ class CategoryController extends Controller
             $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
-//            Storage::disk('public/admin/img/category')->delete($request->old_image);
-            $old_image=$request->old_image;
-            $delete_file = 'admin/img/category/'.$old_image;
-//            dd($delete_file);
-            if(File::exists(public_path($delete_file))){
-                File::delete(public_path($delete_file));
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
-            if(File::exists(public_path($path_to_remove))){
+            if(File::exists(public_path($path_to_remove)))
                 File::delete(public_path($path_to_remove));
-            }else{
-                dd('File does not exists.');
-            }
+
         }
         $data_exept = ['_token','_method','file_upload','old_image'];
         $data = request()->except($data_exept);
         $u = Category::where('id',$category_id)->update(
             $data
         );
-        return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
-
-    }}
+        return redirect()->route('category');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -244,12 +232,11 @@ class CategoryController extends Controller
         }
         $old_image = $rd->image;
         $path_to_remove=$this->path_file_image.'/'.$old_image;
-        dd($old_image);
+//        dd($old_image);
         if(File::exists(public_path($path_to_remove))){
             File::delete(public_path($path_to_remove));
-        }else{
-            dd('File does not exists.');
         }
         $u = Category::where('id', $category_id)->delete();
+        return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
     }
 }

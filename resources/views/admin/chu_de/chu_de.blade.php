@@ -47,7 +47,7 @@
                                     <form action="{{ route('chu_de.delete', $item->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit">Delete</button>
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -67,22 +67,4 @@
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script>
-        const deleteButtons = document.querySelectorAll('.delete-item');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const itemId = this.dataset.itemId;
-                const url = "/panel/chu_de/" + itemId + "/delete";
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                    .then(response => {
-                        window.location.reload();
-                    });
-            });
-        });
-    </script>
 @endsection

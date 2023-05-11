@@ -35,6 +35,9 @@
                 <label for="">Category</label>
                 <select name="category_id">
                     <option value="">--select one--</option>
+                    @foreach($categories as $category)
+                        <option value="{{$category->id}}">{{$category->category_name}}</option>
+                    @endforeach
                 </select>
             </div>
             <input type="submit" value="Submit">

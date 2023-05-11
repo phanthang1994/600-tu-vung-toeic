@@ -6,11 +6,11 @@
 
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" name="CHU_DE_NAME" id="CHU_DE_NAME" placeholder="Input name">
+                <input type="text" class="form-control" name="chu_de_name" id="chu_de_name" placeholder="Input name">
             </div>
             <div class="form-group">
-                <label for="IMAGE">image</label>
-                <input type="file" class="form-control" name="file_upload" id="IMAGE" placeholder="Input image">
+                <label for="image">image</label>
+                <input type="file" class="form-control" name="file_upload" id="image" placeholder="Input image">
             </div>
             <div class="form-group">
                 <label for="">Category</label>

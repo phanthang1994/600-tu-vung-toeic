@@ -79,14 +79,11 @@ class ChuDeController extends Controller
             $dateTime = date('dmYHis');
             $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['IMAGE'=> $file_name]);
+            $request->merge(['image'=> $file_name]);
 
         }
-        if(ChuDe::create($request->all()))
-        {
-
-            return redirect()->route('chu_de')->with('success','Thêm sản phẩm thành công');
-        }
+        ChuDe::create($request->all());
+        return redirect()->route('category');
     }
 
     public function store(Request $request)
@@ -216,11 +213,8 @@ class ChuDeController extends Controller
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
-            if(File::exists(public_path($path_to_remove))){
-                File::delete(public_path($path_to_remove));
-            }else{
-                dd('File does not exists.');
-            }
+            File::delete(public_path($path_to_remove));
+
         }
         if (request()->category_id==null)
         {
@@ -245,26 +239,23 @@ class ChuDeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $category_id
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($category_id)
     {
         $r = ChuDe::find($category_id);
         if(($r->totalTuMoi)>0)
         {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Có tham chiếu không thể xóa'
-            ]);
+            dd('Có tham chiếu không thể xóa.');
         }
         $old_image = $r->image;
         $path_to_remove=$this->path_file_image.'/'.$old_image;
 //        dd($old_image);
         if(File::exists(public_path($path_to_remove))){
             File::delete(public_path($path_to_remove));
-        }else{
-            dd('File does not exists.');
         }
         $u = ChuDe::where('id', $category_id)->delete();
+        return redirect()->route('chu_de');
     }
+
 }

@@ -67,6 +67,9 @@
                 <label for="">Chủ Đề Mới</label>
                 <select name="chu_de_id">
                     <option value="">--select one--</option>
+                    @foreach($subjects as $subject)
+                        <option value="{{$subject->id}}">{{$subject->chu_de_name}}</option>
+                    @endforeach
                 </select>
             </div>
             <input type="submit" value="Submit">

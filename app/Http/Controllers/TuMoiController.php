@@ -41,8 +41,8 @@ class TuMoiController extends Controller
     {
 
         $categories = DB::table('tu_moi')
-            -> leftJoin('chu_de','chu_de.ID','=','tu_moi.CHU_DE_ID')
-            ->select('tu_moi.*','chu_de.CHU_DE_NAME')->get();
+            -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
+            ->select('tu_moi.*','chu_de.chu_de_name')->get();
 
 //        dd($categories);
         return response()->json([
@@ -233,14 +233,14 @@ class TuMoiController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("admin/img/tu_moi"),$file_name);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
             if(File::exists(public_path($path_to_remove))){
                 File::delete(public_path($path_to_remove));
             }else{
-                dd('File does not exists.');
+                dd('File does not exists image.');
             }
         }
 
@@ -258,8 +258,9 @@ class TuMoiController extends Controller
             $path_audio_to_remove=$this->path_file_audio.'/'.$oldest_audio;
             if(File::exists(public_path($path_audio_to_remove))){
                 File::delete(public_path($path_audio_to_remove));
-            }else{
-                dd('File does not exists.');
+            }
+            else{
+                dd('File does not exists audio.');
             }
         }
 
@@ -286,22 +287,23 @@ class TuMoiController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        $u = TuMoi::where('id', $id)->delete();
-        if($u)
-            return response()->json([
-                'status'=>200,
-                'message'=>'Student Deleted Successfully.'
-            ]);
-        else {
-            return response()->json([
-                'status'=>400,
-                'message'=>'Không thể xóa'
-            ]);
+        $r = TuMoi::find($id);
+        $old_image = $r->image;
+        $path_to_remove=$this->path_file_image.'/'.$old_image;
+//        dd($old_image);
+        if(File::exists(public_path($path_to_remove)))
+            File::delete(public_path($path_to_remove));
+        $old_audio = $r->audio;
+        $path_to_remove_audio=$this->path_file_image.'/'.$old_audio;
+//        dd($old_image);
+        if(File::exists(public_path($path_to_remove_audio))){
+            File::delete(public_path($path_to_remove_audio));
         }
-
+        $u = TuMoi::where('id', $id)->delete();
+        return redirect()->route('tu_moi');
     }
 }
