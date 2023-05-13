@@ -15,6 +15,8 @@
                     <span id="image_curent">
                             {{$edit->image}}
                     </span>
+                    <input style="display: none;" type="text" class="form-control" name="old_image" id="old_image"  value="{{$edit->image}}">
+
                 </label>
             </div>
             <div class="form-group">

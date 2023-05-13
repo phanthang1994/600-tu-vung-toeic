@@ -12,7 +12,7 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::get('/panel/fetch category', [CategoryController::class, 'fetch'])->name('category.fetch');
     Route::get('/panel/category/create',[CategoryController::class,'create'])->name('category.create');
     Route::get('/panel/category/creates',[CategoryController::class,'create'])->name('category.creates');
-    Route::post('/panel/category/stores',[CategoryController::class,'save'])->name('category.stores');
+    Route::post('/panel/category/store',[CategoryController::class,'save'])->name('category.save');
     Route::post('/panel/category',[CategoryController::class,'store'])->name('category.store');
     Route::get('panel/category/{category_id}/edit', [CategoryController::class,'edit'])->name('category.edit');
     Route::get('panel/category/{category_id}/edits', [CategoryController::class,'edits'])->name('category.edits');

@@ -9,14 +9,14 @@ class ChuDe extends Model
 {
     use HasFactory;
     protected $table = 'chu_de';
-    protected $fillable = ["ID","CHU_DE_NAME","IMAGE","SO_NGUOI_THEO_HOC","TONG_SO_TU","CATEGORY_ID","STATUS"];
+    protected $fillable = ["id","chu_de_name","image","so_nguoi_theo_hoc","tong_so_tu","category_id"];
     //Joint 1 - 1
     public function cat()
     {
-        return $this->hasOne(Category::class,'ID','CATEGORY_ID');
+        return $this->hasOne(Category::class,'id','category_id');
     }
     public function totalTuMoi()
     {
-        return $this->hasOne(TuMoi::class,'CHU_DE_ID','ID');
+        return $this->hasOne(TuMoi::class,'chu_de_id','id');
     }
 }

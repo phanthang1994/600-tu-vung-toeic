@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 
-
 class CategoryController extends Controller
 {
+    private $path_file_image = "assets/admin/img/category";
     /**
      * Display a listing of the resource.
      *
@@ -59,16 +59,13 @@ class CategoryController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("assets/img/category"),$file_name);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
         }
 
-        if(Category::create($request->all()))
-        {
-
-            return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
-        }
+        Category::create($request->all());
+        return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
     }
     public function store(Request $request)
     {
@@ -202,25 +199,20 @@ class CategoryController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
             $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path("admin/img/category"),$file_name);
+            $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
-//            Storage::disk('public/admin/img/category')->delete($request->old_image);
-            $old_image=$request->old_image;
-            $delete_file = 'admin/img/category/'.$old_image;
-            dd($delete_file);
-            if(File::exists(public_path($delete_file))){
-                File::delete(public_path($delete_file));
-            }else{
-                dd('File does not exists.');
-            }
+            $oldest_image = $request->old_image;
+            $path_to_remove=$this->path_file_image.'/'.$oldest_image;
+            if(File::exists(public_path($path_to_remove)))
+                File::delete(public_path($path_to_remove));
+
         }
         $data_exept = ['_token','_method','file_upload','old_image'];
         $data = request()->except($data_exept);
         $u = Category::where('id',$category_id)->update(
             $data
         );
-        return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
-
+        return redirect()->route('category');
     }
 
     /**
@@ -233,18 +225,18 @@ class CategoryController extends Controller
     public function destroy($category_id)
     {
         $r = Category::find($category_id)->totalChuDe;
+        $rd = Category::find($category_id);
         if($r>0)
         {
             return redirect()->route('category')->with('Fail','Có tham chiếu');
         }
-
+        $old_image = $rd->image;
+        $path_to_remove=$this->path_file_image.'/'.$old_image;
+//        dd($old_image);
+        if(File::exists(public_path($path_to_remove))){
+            File::delete(public_path($path_to_remove));
+        }
         $u = Category::where('id', $category_id)->delete();
-        if($u)
-            return redirect()->route('category')->with('Success','Student Deleted Successfully.');
-
-            else {
-                return redirect()->route('category')->with('Fail','Không xóa được');
-            }
-
+        return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
     }
 }

@@ -9,8 +9,8 @@
                     ID: <span>{{$edit->id}}</span>
                 </div>
                 <div class="form-group">
-                    <label for="category_name">Name</label>
-                    <input type="text" class="form-control" name=" " id="category_name" placeholder="Input name"
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Input name"
                            value="{{$edit->category_name}}">
                 </div>
                 <div class="form-group">
@@ -21,6 +21,9 @@
                         </span>
                         <input style="visibility: hidden" type="text" class="form-control" name="old_image" id="old_image" placeholder="Input name"
                                value=" {{$edit->image}}">
+
+                    </span>
+                        <input style="display: none;" type="text" class="form-control" name="old_image" id="old_image"  value="{{$edit->image}}">
                     </label>
                 </div>
                 <div class="form-group">
