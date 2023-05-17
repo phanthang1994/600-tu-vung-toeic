@@ -306,4 +306,17 @@ class TuMoiController extends Controller
         $u = TuMoi::where('id', $id)->delete();
         return redirect()->route('tu_moi');
     }
+
+    public function get_create_many_records(Request $request)
+    {
+        return view('admin.tu_moi.create_many_records');
+    }
+    public function post_create_many_records(Request $request)
+    {
+        $data = $request->input('data');
+        // Process the received data as needed (e.g., save to database)
+//        $data1 = $request->input('data');
+//        echo($data1);
+        return response()->json(['success' => $data]);
+    }
 }

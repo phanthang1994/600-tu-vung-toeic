@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::get('/panel/chu_de/create',[ChuDeController::class,'create'])->name('chu_de.category_join');
     Route::get('/panel/chu_de/creates',[ChuDeController::class,'creates'])->name('chu_de.creates');
     Route::post('/panel/chu_de',[ChuDeController::class,'store'])->name('chu_de.store');
-    Route::post('/panel/category/save',[ChuDeController::class,'save'])->name('chu_de.save');
+    Route::post('/panel/chu_de/save',[ChuDeController::class,'save'])->name('chu_de.save');
     Route::get('panel/chu_de/{chu_de_id}/edit', [ChuDeController::class,'edit'])->name('chu_de.edit');
     Route::get('panel/chu_de/{chu_de_id}/edits', [ChuDeController::class,'edits'])->name('chu_de.edits');
     Route::put('/panel/chu_de/{chu_de_id}/update',[ChuDeController::class,'update'])->name('chu_de.update');
@@ -48,8 +48,8 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::delete('/panel/tu_moi/{tu_moi_id}/delete',[TuMoiController::class,'destroy'])->name('tu_moi.delete');
     Route::get('/panel/tu_moi/create_many',[TuMoiController::class,'create_many'])->name('tu_moi.create_many');
     Route::post('/panel/tu_moi/save_many',[TuMoiController::class,'store_many'])->name('tu_moi.store_many');
-    Route::get('/panel/tu_moi/upload_many',[TuMoiController::class,'upload_many'])->name('tu_moi.upload_many');
-    Route::post('/panel/tu_moi/upload_many',[TuMoiController::class,'store_many'])->name('tu_moi.store_upload_many');
+    Route::get('/panel/tu_moi/get_create_many_records',[TuMoiController::class,'get_create_many_records'])->name('tu_moi.upload_many');
+    Route::post('/panel/tu_moi/post_create_many_records',[TuMoiController::class,'post_create_many_records'])->name('tu_moi.post_create_many_records');
 });
 
 Route::get('/', function () {
@@ -87,16 +87,5 @@ Route::get('panel/login',[LoginController::class,'getLogin'])->name('getLogin');
 Route::post('panel/login',[LoginController::class,'postLogin'])->name('postLogin');
 Route::get('panel/logout',[LoginController::class,'getLogout'])->name('logout');
 
-//// user login
-//Route::get('/login',[UserLoginController::class,'getLogin'])->name('login');
-//Route::post('/login',[UserLoginController::class,'postLogin'])->name('user_login');
-//Route::get('/register',[UserLoginController::class,'getRegister'])->name('register');
-//Route::post('/register',[UserLoginController::class,'postRegister'])->name('user_register');
-//Route::get('/logout',[UserLoginController::class,'getLogout'])->name('user_logout');
-
-//Route::get('/show login',[AuthController::class,'showLogin'])->name('showLogin');
-//Route::get('/show profile',[AuthController::class,'showProfile'])->name('show_profile')->middleware('checklogin');
-//Route::get('/logout',[AuthController::class,'logout'])->name('logout')->middleware('checklogin');
-//Route::post('/login',[AuthController::class,'login'])->name('login');
 
 
