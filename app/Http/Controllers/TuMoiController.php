@@ -315,8 +315,8 @@ class TuMoiController extends Controller
     {
         $data = $request->input('data');
         // Process the received data as needed (e.g., save to database)
-//        $data1 = $request->input('data');
-//        echo($data1);
+        $data1 = $request->input('data');
+        echo($data1);
         return response()->json(['success' => $data]);
     }
 }
