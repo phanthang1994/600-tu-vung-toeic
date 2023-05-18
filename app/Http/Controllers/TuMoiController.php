@@ -319,4 +319,22 @@ class TuMoiController extends Controller
         echo($data1);
         return response()->json(['success' => $data]);
     }
+    public function upload_excel(Request $request)
+    {
+
+        if($request->has('file_upload'))
+        {
+            $file =  $request->file_upload;
+            $file_name =  $file->getClientoriginalName();
+            $extension = $file ->extension();
+            $x = pathinfo($file_name, PATHINFO_FILENAME);
+            $dateTime = date('dmYHis');
+            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
+            $file->move(public_path($this->path_file_image),$file_name);
+            $request->merge(['image'=> $file_name]);
+
+        }
+
+        return redirect()->route('tu_moi.create_many');
+    }
 }
