@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use PHPExcel_IOFactory;
 
 class TuMoiController extends Controller
 {
@@ -319,22 +320,55 @@ class TuMoiController extends Controller
         echo($data1);
         return response()->json(['success' => $data]);
     }
+    public function readExcelFile($filePath)
+    {
+        $data = [];
+        dd(file_exists($filePath));
+        if (file_exists($filePath)) {
+
+            $fileType = PHPExcel_IOFactory::identify($filePath);
+            $reader = PHPExcel_IOFactory::createReader($fileType);
+            $reader->setReadDataOnly(true);
+            $excel = $reader->load($filePath);
+            $sheet = $excel->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+            $highestColumn = $sheet->getHighestColumn();
+
+            for ($row = 1; $row <= $highestRow; $row++) {
+                $rowData = [];
+
+                for ($column = 'A'; $column <= $highestColumn; $column++) {
+                    $cellValue = $sheet->getCell($column . $row)->getValue();
+                    $rowData[] = $cellValue;
+                }
+
+                $data[] = $rowData;
+            }
+        }
+
+        return $data;
+    }
     public function upload_excel(Request $request)
     {
 
-        if($request->has('file_upload'))
-        {
-            $file =  $request->file_upload;
-            $file_name =  $file->getClientoriginalName();
-            $extension = $file ->extension();
-            $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
-
-        }
-
+//        if($request->has('file_upload'))
+//        {
+//            $file =  $request->file_upload;
+//            $file_name =  $file->getClientoriginalName();
+//            $extension = $file ->extension();
+//            $x = pathinfo($file_name, PATHINFO_FILENAME);
+//            $dateTime = date('dmYHis');
+//            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
+//            $file->move(public_path($this->path_file_image),$file_name);
+//            $request->merge(['image'=> $file_name]);
+//
+//        }
+        $filePath = 'C:\Users\phanx\Downloads\18_05\600-tu-vung-toeic\public\assets\admin\img\tu_moi\chu_de-18052023161553-600_tu_mau.xlsx';
+        $relativeFilePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', realpath($filePath));
+//        dd($relativeFilePath);
+        $filePath = str_replace('\\', '/', $filePath);
+        $data = $this->readExcelFile($relativeFilePath);
+        return response()->json($data);
         return redirect()->route('tu_moi.create_many');
     }
 }
