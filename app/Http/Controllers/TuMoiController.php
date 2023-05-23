@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\ChuDe;
 use App\Models\TuMoi;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
+use Box\Spout\Reader\Exception\ReaderNotOpenedException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Classes\PHPExcel;
+use Maatwebsite\Excel\Excel;
 
 
 class TuMoiController extends Controller
@@ -324,37 +327,30 @@ class TuMoiController extends Controller
     {
         return view('admin.tu_moi.read_excel_file');
     }
-    public function readExcelFile(Request $request)
+//https://www.nidup.io/blog/manipulate-excel-files-in-php
+    public function readExcelFile($filePath)
     {
-        $filePath = $request->input('chu_de_name');
-        dd(file_exists($filePath));
         if (file_exists($filePath)) {
-
-            $fileType = PHPExcel_IOFactory::identify($filePath);
-            $reader = PHPExcel_IOFactory::createReader($fileType);
-            $reader->setReadDataOnly(true);
-            $excel = $reader->load($filePath);
-            $sheet = $excel->getActiveSheet();
-            $highestRow = $sheet->getHighestRow();
-            $highestColumn = $sheet->getHighestColumn();
-
-            for ($row = 1; $row <= $highestRow; $row++) {
-                $rowData = [];
-
-                for ($column = 'A'; $column <= $highestColumn; $column++) {
-                    $cellValue = $sheet->getCell($column . $row)->getValue();
-                    $rowData[] = $cellValue;
+# open the file
+            $reader = ReaderEntityFactory::createXLSXReader();
+            $reader->open($filePath);
+# read each cell of each row of each sheet
+            try {
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    foreach ($sheet->getRowIterator() as $row) {
+                        $rowData = $row->toArray();
+                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                    }
                 }
-
-                $data[] = $rowData;
+            } catch (ReaderNotOpenedException $e) {
             }
+            $reader->close();
         }
-
-        return $data;
     }
     public function upload_excel(Request $request)
     {
-        $file_name='';
+
+        $filePath = '';
         if ($request->has('file_upload')) {
             $file = $request->file_upload;
             $file_name = $file->getClientoriginalName();
@@ -364,11 +360,11 @@ class TuMoiController extends Controller
             $file_name = 'chu_de-' . $dateTime . '-' . $x . '.' . $extension;
             $file->move(public_path($this->path_file_image), $file_name);
             $request->merge(['image' => $file_name]);
+            $filePath = public_path($this->path_file_image) .'/'. $file_name;
+            $filePath = str_replace('/', '\\', $filePath);
 
         }
-        $filePath = public_path($this->path_file_image) . $file_name;
-
-        $filePath = str_replace('\\', '/', $filePath);
+        $this->readExcelFile($filePath);
         return response()->json($filePath);
     }
 }
