@@ -50,6 +50,8 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::post('/panel/tu_moi/save_many',[TuMoiController::class,'store_many'])->name('tu_moi.store_many');
     Route::get('/panel/tu_moi/get_create_many_records',[TuMoiController::class,'get_create_many_records'])->name('tu_moi.get_create_many_records');
     Route::post('/panel/tu_moi/post_create_many_records',[TuMoiController::class,'upload_excel'])->name('tu_moi.post_create_many_records');
+    Route::post('/panel/tu_moi/read_excel_tu_moi',[TuMoiController::class,'readExcelFile'])->name('tu_moi.readExcelFile');
+    Route::get('/panel/tu_moi/read_excel_tu_moi',[TuMoiController::class,'displayReadExcevlFile'])->name('tu_moi.readExcelFile');
 });
 
 Route::get('/', function () {

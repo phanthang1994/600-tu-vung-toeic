@@ -310,7 +310,7 @@ class TuMoiController extends Controller
 
     public function get_create_many_records(Request $request)
     {
-        return view('admin.tu_moi.create_many_records');
+        return view('admin.tu_moi.create_many');
     }
     public function post_create_many_records(Request $request)
     {
@@ -320,9 +320,13 @@ class TuMoiController extends Controller
         echo($data1);
         return response()->json(['success' => $data]);
     }
-    public function readExcelFile($filePath)
+    public function displayReadExcevlFile(Request $request)
     {
-        $data = [];
+        return view('admin.tu_moi.read_excel_file');
+    }
+    public function readExcelFile(Request $request)
+    {
+        $filePath = $request->input('chu_de_name');
         dd(file_exists($filePath));
         if (file_exists($filePath)) {
 
@@ -350,8 +354,8 @@ class TuMoiController extends Controller
     }
     public function upload_excel(Request $request)
     {
-        $file_name = '';
-        if($request->has('file_upload')) {
+        $file_name='';
+        if ($request->has('file_upload')) {
             $file = $request->file_upload;
             $file_name = $file->getClientoriginalName();
             $extension = $file->extension();
@@ -362,13 +366,9 @@ class TuMoiController extends Controller
             $request->merge(['image' => $file_name]);
 
         }
-        $filePath = public_path($this->path_file_image).$file_name;
+        $filePath = public_path($this->path_file_image) . $file_name;
 
         $filePath = str_replace('\\', '/', $filePath);
-        dd($filePath);
-        sleep(20);
-        $data = $this->readExcelFile($filePath);
-        return response()->json($data);
-        return redirect()->route('tu_moi.create_many');
+        return response()->json($filePath);
     }
 }
