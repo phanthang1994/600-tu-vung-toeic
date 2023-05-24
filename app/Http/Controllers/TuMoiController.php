@@ -32,7 +32,9 @@ class TuMoiController extends Controller
         $new_words = DB::table('tu_moi')
             -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
             ->leftJoin('category','category.id','=','chu_de.category_id')
-            -> select('tu_moi.*','chu_de.chu_de_name','category.category_name')->get();
+            -> select('tu_moi.*','chu_de.chu_de_name','category.category_name')
+            ->orderByDesc('tu_moi.id')
+            ->get();
         return view('admin.tu_moi.tu_moi',compact('new_words'));
     }
 
@@ -298,12 +300,12 @@ class TuMoiController extends Controller
         $r = TuMoi::find($id);
         $old_image = $r->image;
         $path_to_remove=$this->path_file_image.'/'.$old_image;
-//        dd($old_image);
+        //dd($old_image);
         if(File::exists(public_path($path_to_remove)))
             File::delete(public_path($path_to_remove));
         $old_audio = $r->audio;
         $path_to_remove_audio=$this->path_file_image.'/'.$old_audio;
-//        dd($old_image);
+        //dd($old_image);
         if(File::exists(public_path($path_to_remove_audio))){
             File::delete(public_path($path_to_remove_audio));
         }
@@ -327,25 +329,46 @@ class TuMoiController extends Controller
     {
         return view('admin.tu_moi.read_excel_file');
     }
-//https://www.nidup.io/blog/manipulate-excel-files-in-php
+    //https://www.nidup.io/blog/manipulate-excel-files-in-php
     public function readExcelFile($filePath)
     {
         if (file_exists($filePath)) {
-# open the file
+            # open the file
             $reader = ReaderEntityFactory::createXLSXReader();
             $reader->open($filePath);
-# read each cell of each row of each sheet
+            $isFirstRow = true;
+            # read each cell of each row of each sheet
             try {
                 foreach ($reader->getSheetIterator() as $sheet) {
                     foreach ($sheet->getRowIterator() as $row) {
+                        if ($isFirstRow) {
+                            $isFirstRow = false;
+                            continue; // Skip the first row
+                        }
                         $rowData = $row->toArray();
-                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+//                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                        $model = new TuMoi();
+                        $model->name = $rowData[0];
+                        $model->image = $rowData[1];
+                        $model->tu_loai = $rowData[2];
+                        $model->phien_am = $rowData[3];
+                        $model->vi_du = $rowData[4];
+                        $model->audio = $rowData[5];
+                        $model->che_tu = $rowData[6];
+                        $model->cau_truc_cau = $rowData[7];
+                        $model->chu_de_id = intval($rowData[8]);
+//                        dd($model);
+                        $model->save();
                     }
                 }
             } catch (ReaderNotOpenedException $e) {
             }
             $reader->close();
         }
+
+        header("File Not Not Found");
+        echo "File Not Not Found";
+
     }
     public function upload_excel(Request $request)
     {
@@ -362,9 +385,8 @@ class TuMoiController extends Controller
             $request->merge(['image' => $file_name]);
             $filePath = public_path($this->path_file_image) .'/'. $file_name;
             $filePath = str_replace('/', '\\', $filePath);
-
         }
         $this->readExcelFile($filePath);
-        return response()->json($filePath);
+        return redirect()->route('tu_moi');
     }
 }
