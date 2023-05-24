@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Classes\PHPExcel;
-use Maatwebsite\Excel\Excel;
-
+use Illuminate\Support\Facades\Storage;
 
 class TuMoiController extends Controller
 {
@@ -362,8 +360,10 @@ class TuMoiController extends Controller
                     }
                 }
             } catch (ReaderNotOpenedException $e) {
+            } finally {
+                $reader->close();
+                unlink($filePath);
             }
-            $reader->close();
         }
 
         header("File Not Not Found");
