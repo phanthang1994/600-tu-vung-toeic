@@ -19,7 +19,7 @@ class TuMoi extends Migration
             $table->string('name',255)->nullable();
             $table->string('phien_am', 255)->nullable();
             $table->string('audio',2000);
-            $table->string('tu_loai', 20);
+            $table->text('tu_loai');
             $table->text('vi_du');
             $table->string('image',2000);
             $table->text('che_tu')->nullable();
