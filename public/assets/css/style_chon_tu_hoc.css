@@ -8,7 +8,7 @@
 .rowFlexTestInnerLeft{
     display: flex;
     justify-content: flex-start;
-    width: 80%;
+    width: 90%;
 }
 
 #tuKho:hover{

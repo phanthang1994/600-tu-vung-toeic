@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::delete('/panel/category/{category_id}/delete',[CategoryController::class,'destroy'])->name('category.delete');
 
 
+
     Route::get('/panel/chu_de',[ChuDeController::class,'index'])->name('chu_de');
     Route::get('/panel/fetch chu_de', [ChuDeController::class, 'fetch'])->name('chu_de.fetch');
     Route::get('/panel/chu_de/create',[ChuDeController::class,'create'])->name('chu_de.category_join');
@@ -32,6 +33,9 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::put('/panel/chu_de/{chu_de_id}/update',[ChuDeController::class,'update'])->name('chu_de.update');
     Route::put('/panel/chu_de/{chu_de_id}/updates',[ChuDeController::class,'updates'])->name('chu_de.updates');
     Route::delete('/panel/chu_de/{chu_de_id}/delete',[ChuDeController::class,'destroy'])->name('chu_de.delete');
+    Route::get('/panel/chu_de/get_create_many_records',[ChuDeController::class,'get_excel_file'])->name('chu_de.get_excel_file');
+    Route::post('/panel/chu_de/post_create_many_records',[ChuDeController::class,'upload_excel'])->name('chu_de.upload_excel');
+
 
 
     Route::get('/panel/tu_moi',[TuMoiController::class,'index'])->name('tu_moi');
@@ -59,28 +63,28 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/courses', function () {
-    return view('front_end.all_courses');
+    return view('front_end.chu_de');
 })->name('courses');
 
-Route::get('/chose sentence tested', function () {
-    return view('front_end.chontungcau');
-})->name('chose_sentence_tested');
-        Route::get('/enter word', function () {
-    return view('front_end.dientungtu');
-})->name('enter_word');
-Route::get('/chose many answers', function () {
-    return view('front_end.listcauhoi');
-})->name('chose_many_answers');
+Route::get('/multiple_choice_question', function () {
+    return view('front_end.multiple_choice_question');
+})->name('multiple_choice_question');
+Route::get('/"free_text_question', function () {
+    return view('front_end.free_text_question');
+})->name('free_text_question');
+Route::get('/form_question', function () {
+    return view('front_end.form_question');
+})->name('form_question');
 
-Route::get('/new words', function () {
-    return view('front_end.newwords');
+Route::get('/new_words', function () {
+    return view('front_end.new_words');
 })->name('new_words');
 
-Route::get('/test page', function () {
-    return view('front_end.chonkieutest');
-})->name('test_page');
+Route::get('/test_type', function () {
+    return view('front_end.test_type');
+})->name('test_type');
 
-Route::get('/che tu', function () {
+Route::get('/che_tu', function () {
     return view('front_end.che_tu');
 })->name('che_tu');
 

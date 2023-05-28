@@ -13,12 +13,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 
 class TuMoiController extends Controller
 {
     private $path_file_image = "assets/admin/img/tu_moi";
     private $path_file_audio = "assets/admin/audio/tu_moi";
+    private $path_file_excel = "assets/admin/excel/tu_moi";
 
     /**
      * Display a listing of the resource.
@@ -362,7 +362,7 @@ class TuMoiController extends Controller
             } catch (ReaderNotOpenedException $e) {
             } finally {
                 $reader->close();
-                unlink($filePath);
+                unlink($filePath); // delete excel file from server
             }
         }
 
@@ -380,7 +380,7 @@ class TuMoiController extends Controller
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $dateTime = date('dmYHis');
-            $file_name = 'chu_de-' . $dateTime . '-' . $x . '.' . $extension;
+            $file_name = 'tu-moi-' . $dateTime . '-' . $x . '.' . $extension;
             $file->move(public_path($this->path_file_image), $file_name);
             $request->merge(['image' => $file_name]);
             $filePath = public_path($this->path_file_image) .'/'. $file_name;

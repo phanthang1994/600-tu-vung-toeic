@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+namespace App\Http\Controllers;
 use App\Models\ChuDe;
+use App\Models\TuMoi;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
+use Box\Spout\Reader\Exception\ReaderNotOpenedException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use function Symfony\Component\Translation\t;
+use App\Models\Category;
 
 class ChuDeController extends Controller
 {
     private $path_file_image = "admin/img/chu_de";
+    private $path_file_excel = "assets/admin/excel/chu_de";
     /**
      * Display a listing of the resource.
      *
@@ -85,6 +88,7 @@ class ChuDeController extends Controller
         ChuDe::create($request->all());
         return redirect()->route('category');
     }
+
 
     public function store(Request $request)
     {
@@ -255,6 +259,69 @@ class ChuDeController extends Controller
             File::delete(public_path($path_to_remove));
         }
         $u = ChuDe::where('id', $category_id)->delete();
+        return redirect()->route('chu_de');
+    }
+
+    public function get_excel_file(Request $request)
+    {
+        return view('admin.chu_de.upload_many_excel');
+    }
+
+    //https://www.nidup.io/blog/manipulate-excel-files-in-php
+    public function readExcelFile($filePath)
+    {
+        if (file_exists($filePath)) {
+            # open the file
+            $reader = ReaderEntityFactory::createXLSXReader();
+            $reader->open($filePath);
+            $isFirstRow = true;
+            # read each cell of each row of each sheet
+            try {
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    foreach ($sheet->getRowIterator() as $row) {
+                        if ($isFirstRow) {
+                            $isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+                        $rowData = $row->toArray();
+//                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                        $model = new ChuDe();
+                        $model->chu_de_name = $rowData[0];
+                        $model->image = $rowData[1];
+                        $model->so_nguoi_theo_hoc = $rowData[2];
+                        $model->category_id = intval($rowData[3]);
+//                        dd($model);
+                        $model->save();
+                    }
+                }
+            } catch (ReaderNotOpenedException $e) {
+            } finally {
+                $reader->close();
+                unlink($filePath); // delete excel file from server
+            }
+        }
+
+        header("File Not Not Found");
+        echo "File Not Not Found";
+
+    }
+    public function upload_excel(Request $request)
+    {
+
+        $filePath = '';
+        if ($request->has('file_upload')) {
+            $file = $request->file_upload;
+            $file_name = $file->getClientoriginalName();
+            $extension = $file->extension();
+            $x = pathinfo($file_name, PATHINFO_FILENAME);
+            $dateTime = date('dmYHis');
+            $file_name = 'chu_de-' . $dateTime . '-' . $x . '.' . $extension;
+            $file->move(public_path($this->path_file_image), $file_name);
+            $request->merge(['image' => $file_name]);
+            $filePath = public_path($this->path_file_image) .'/'. $file_name;
+            $filePath = str_replace('/', '\\', $filePath);
+        }
+        $this->readExcelFile($filePath);
         return redirect()->route('chu_de');
     }
 

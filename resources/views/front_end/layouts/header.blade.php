@@ -72,10 +72,7 @@
                                         <a href="#"> Mẹo thi điểm cao </a>
                                     </li>
                                     <li>
-                                        <a href="{{route('courses')}}"> Học từ </a>
-                                    </li>
-                                    <li>
-                                        <a  href="{{route('test_page')}}"> Test </a>
+                                        <a  href="{{route('test_type')}}"> Test </a>
                                     </li>
                                     <li>
                                         <a href="#">ngữ pháp </a>
@@ -185,7 +182,7 @@
 {{--                                <a href="shop.html">Ôn tập</a>--}}
 {{--                            </li>--}}
                             <li>
-                                <a href="{{route('test_page')}}">Test</a>
+                                <a href="{{route('test_type')}}">Test</a>
                             </li>
 
                             <li>

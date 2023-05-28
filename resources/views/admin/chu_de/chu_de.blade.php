@@ -38,7 +38,6 @@
                                 <td> {{$item->description}} </td>
                                 <td> {{$item->image}} </td>
                                 <td> {{$item->category_name}}</td>
-                                <td> {{$item->tong_so_tu}}</td>
                                 <td> {{$item->so_nguoi_theo_hoc}} </td>
                                 <td> {{$item->created_at}} </td>
                                 <td> {{$item->updated_at}} </td>
