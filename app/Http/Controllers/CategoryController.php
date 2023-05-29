@@ -60,8 +60,7 @@ class CategoryController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'category-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
@@ -200,8 +199,7 @@ class CategoryController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'category-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;

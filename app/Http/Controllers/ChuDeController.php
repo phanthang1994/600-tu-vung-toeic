@@ -72,8 +72,7 @@ class ChuDeController extends Controller
                 $imageName = $image->getClientOriginalName();
                 $extension = $image ->extension();
                 $x = pathinfo($imageName, PATHINFO_FILENAME);
-                $dateTime = date('dmYHis');
-                $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
+                $file_name = 'chu_de-'.$x.'.'.$extension;
                 $image->move(public_path($this->path_file_image),$file_name);
                 $request->merge(['image'=> $file_name]);
             }
@@ -104,8 +103,7 @@ class ChuDeController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'chu_de-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
@@ -236,8 +234,7 @@ class ChuDeController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'chu_de-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
@@ -339,11 +336,10 @@ class ChuDeController extends Controller
             $file_name = $file->getClientoriginalName();
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'chu_de-' . $dateTime . '-' . $x . '.' . $extension;
-            $file->move(public_path($this->path_file_image), $file_name);
+            $file_name = 'chu_de-'. $x . '.' . $extension;
+            $file->move(public_path($this->path_file_excel), $file_name);
             $request->merge(['image' => $file_name]);
-            $filePath = public_path($this->path_file_image) .'/'. $file_name;
+            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
             $filePath = str_replace('/', '\\', $filePath);
         }
         $this->readExcelFile($filePath);

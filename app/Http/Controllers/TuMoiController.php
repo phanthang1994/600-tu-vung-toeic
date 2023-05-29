@@ -94,9 +94,8 @@ class TuMoiController extends Controller
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
-            $dateTime = date('dmYHis');
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
@@ -107,8 +106,7 @@ class TuMoiController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_audio),$file_name);
             $request->merge(['audio'=> $file_name]);
 
@@ -235,8 +233,7 @@ class TuMoiController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
@@ -254,8 +251,7 @@ class TuMoiController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_audio),$file_name);
             $request->merge(['audio'=> $file_name]);
             $oldest_audio = $request->old_audio;
@@ -379,8 +375,7 @@ class TuMoiController extends Controller
             $file_name = $file->getClientoriginalName();
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'tu-moi-' . $dateTime . '-' . $x . '.' . $extension;
+            $file_name = 'tu-moi-'. $x . '.' . $extension;
             $file->move(public_path($this->path_file_image), $file_name);
             $request->merge(['image' => $file_name]);
             $filePath = public_path($this->path_file_image) .'/'. $file_name;
