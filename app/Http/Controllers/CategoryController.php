@@ -24,7 +24,10 @@ class CategoryController extends Controller
     {   $categories = Category::all();
         return view('admin.category.category',compact('categories'));
     }
-
+    public function home()
+    {   $categories = Category::all();
+        return view('front_end.home',compact('categories'));
+    }
     /**
      * Show the form for creating a new resource.
      *

@@ -58,9 +58,8 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::get('/panel/tu_moi/read_excel_tu_moi',[TuMoiController::class,'displayReadExcevlFile'])->name('tu_moi.readExcelFile');
 });
 
-Route::get('/', function () {
-    return view('front_end.home');
-})->name('home');
+Route::get('/', [CategoryController::class,'home']
+)->name('home');
 
 Route::get('/courses', function () {
     return view('front_end.chu_de');
