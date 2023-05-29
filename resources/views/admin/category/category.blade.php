@@ -10,7 +10,9 @@
                     <div class="card-header">
                         <h4>
                             Category
-                            <a  href="{{route('category.creates')}}" class="btn btn-primary float-end">Add Category</a>
+                            <a  href="{{route('category.creates')}}" class="btn btn-primary float-end">
+                                Add Category
+                            </a>
                         </h4>
                     </div>
                     <div class="card-body">
@@ -28,7 +30,7 @@
                             </tr>
                             @foreach($categories as $item)
                             <tr>
-                                <td> {{$item->id}}</td>
+                                <td>{{$item->id}}</td>
                                 <td>{{$item->category_name}}</td>
                                 <td>{{$item->description}}</td>
                                 <td>{{$item->image}}'</td>
