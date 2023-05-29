@@ -28,9 +28,20 @@ class ChuDeController extends Controller
         $subjects = DB::table('chu_de')
             -> leftJoin('category','category.id','=','chu_de.category_id')
             ->select('chu_de.*','category.category_name')->get();
-        ;
         return view('admin.chu_de.chu_de',compact('subjects'));
     }
+
+    public function course()
+    {
+        $subjects = DB::table('chu_de')
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            ->select('chu_de.*','category.category_name')->get();
+        return view('front_end.subjects', compact('subjects'));
+    }
+    public function get_many_images(){
+        return view('admin.chu_de.upload_many_image');
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -50,15 +61,29 @@ class ChuDeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return JsonResponse
+     * @return string
      */
-    public function create()
+    public function upload_many_images(Request $request)
     {
-        $cats = Category::select('id',"category_name")->get();
-        return response()->json([
-            'categories' => $cats,
-        ]);
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+
+            foreach ($images as $image) {
+                $imageName = $image->getClientOriginalName();
+                $extension = $image ->extension();
+                $x = pathinfo($imageName, PATHINFO_FILENAME);
+                $dateTime = date('dmYHis');
+                $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
+                $image->move(public_path($this->path_file_image),$file_name);
+                $request->merge(['image'=> $file_name]);
+            }
+
+            return 'Images uploaded successfully!';
+        }
+
+        return 'No images selected for upload.';
     }
+
     public function creates()
     {
         $cats = Category::select('id',"category_name")->get();

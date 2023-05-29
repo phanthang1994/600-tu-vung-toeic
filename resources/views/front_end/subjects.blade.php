@@ -51,10 +51,12 @@
     </div>
     <div class="mainContent" style="flex: 2.5">
         <div class="styleRow">
+            @foreach($subjects as $item)
+
             <div class="borderClass">
                 <div class="innerWrap" >
                     <a href="event-details.html"><img style="width: 230px;height: 200px;"
-                                                      src="assets/img/event/event-6.jpg" alt=""></a>
+                                                      src="assets/img/event/{{$item->image}}" alt="{{$item->image}}"></a>
                     <div class="details-wrapper">
                         <div class="target-photo">
                             <img src="https://static.memrise.com/uploads/category_photos/en.png" alt="">
@@ -64,19 +66,19 @@
                                         <span class="author pull-right">
                                             bởi
 
-                                            <a href="/user/Memrise/courses/teaching/" data-role="hovercard"
+                                            <a href="#" data-role="hovercard"
                                                data-user-id="2224242" data-direction="bottom"
-                                               class="author-link">600 words</a>
+                                               class="author-link">{{$item->category_name}}</a>
 
                                         </span>
-                            <a href="/vi/courses/vietnamese/english/" class="category"
+                            <a href="#" class="category"
                                title="Tiếng Anh">Chủ đề</a>
 
                         </div>
                         <h3>
-                            <a href="/course/1658724/tieng-anh-anh-quoc-1/" class="inner"
+                            <a href="#" class="inner"
                                title="Tiếng Anh (Anh Quốc) 1" style="font-size: 18px;">
-                                Contract: Hợp đồng
+                                {{$item->chu_de_name}}
                             </a>
                         </h3>
 
@@ -84,11 +86,11 @@
 
                             <div class="stats">
                                             <span class="stat1" title="670930 người đang học khóa học này">
-                                                <i class="fa fa-user"></i> 671k
+                                                <i class="fa fa-user"></i>{{$item->so_nguoi_theo_hoc}}
                                             </span>
                                 <span class="stat2" title="Khóa học này cần khoảng 3h">
                                     <i class="fa fa-clock-o"></i>
-                                                 3h
+                                                 {{$item->thoi_gian_hoc}}
                             </span>
                             </div>
 
@@ -98,6 +100,7 @@
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
         <div class="pro-pagination-style text-center mt-25">
             <ul>
