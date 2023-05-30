@@ -8,27 +8,27 @@ let text = '{"vocab":[' +
     '{"src":"assets/img/event/event-4.jpg","newWords":"abide by 4 : /ə baid baid/","attributes":"P,V,N","meaningWords":"Tuân Thủ","exp":"The two parties abided by the judge decision","expMeaning":"- Hai bên đã tuân theo quyết định của tòa án.","audioSRC":"h1.mp3","daThuoc":"0","tuKho":"0"},' +
     '{"src":"assets/img/event/event-5.jpg","newWords":"abide by 5 : /ə baid baid/","attributes":"P,V,N","meaningWords":"Tuân Thủ","exp":"The two parties abided by the judge decision","expMeaning":"- Hai bên đã tuân theo quyết định của tòa án.","audioSRC":"h1.mp3","daThuoc":"0","tuKho":"0"}]}';
 const obj = JSON.parse(text);
-$(document).ready(function() {
-    $.ajax({
-        url: '/new_words/' + 4,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            // Handle the response data
-            text1 = data
-            console.log(text1);
-            // Process the data and update your HTML elements
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    });
-});
+const obj2 = {};
+var xhr = new XMLHttpRequest();
+url="/new_words/110"
+
+xhr.open("GET", url, true); // Replace with your API endpoint
+xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+        obj2.vocab = JSON.parse(xhr.responseText); // Assign the response to the "vocab" property of the "obj" object
+        txtx = JSON.stringify(obj2); // Convert the "obj" object back to a JSON string
+    }
+};
+xhr.send();
+obj3 = obj2
+console.log( JSON.stringify(obj2)); // Print the updated JSON string
+
+
 document.querySelector('.xemTiep').style.display='none'
 /*nút tiếp kiểu mới*/
 newWordTh = 0
-document.querySelector('.imagNewWords').src = obj.vocab[newWordTh].src
-document.querySelector('.newWords').innerHTML = obj.vocab[newWordTh].newWords;
+document.querySelector('.imagNewWords').src = obj2.vocab[newWordTh].src
+document.querySelector('.newWords').innerHTML = obj2.vocab[newWordTh].newWords;
 document.getElementById("myAudio").setAttribute('src', obj.vocab[newWordTh].audioSRC);
 document.querySelectorAll('.tiep').forEach(item => {
     item.addEventListener('click', event => {

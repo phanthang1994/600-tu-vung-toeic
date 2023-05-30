@@ -217,11 +217,11 @@ class TuMoiController extends Controller
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
                         $model = new TuMoi();
                         $model->name = $rowData[0];
-                        $model->image = $rowData[1];
+                        $model->image = $this->path_file_image.'/'.$rowData[1];
                         $model->tu_loai = $rowData[2];
                         $model->phien_am = $rowData[3];
                         $model->vi_du = $rowData[4];
-                        $model->audio = $rowData[5];
+                        $model->audio = $this->path_file_audio.'/'.$rowData[5];
                         $model->che_tu = $rowData[6];
                         $model->cau_truc_cau = $rowData[7];
                         $model->chu_de_id = intval($rowData[8]);
