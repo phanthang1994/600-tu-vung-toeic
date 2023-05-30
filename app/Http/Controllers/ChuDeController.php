@@ -66,7 +66,7 @@ class ChuDeController extends Controller
                 $request->merge(['image'=> $file_name]);
             }
 
-            return 'Images uploaded successfully!';
+            return redirect()->route('chu_de');
         }
 
         return 'No images selected for upload.';
