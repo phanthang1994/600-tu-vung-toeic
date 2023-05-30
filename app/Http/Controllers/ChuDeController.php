@@ -7,7 +7,11 @@ use App\Models\ChuDe;
 use App\Models\TuMoi;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Exception\ReaderNotOpenedException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -21,7 +25,7 @@ class ChuDeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -42,21 +46,6 @@ class ChuDeController extends Controller
         return view('admin.chu_de.upload_many_image');
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return JsonResponse
-     */
-    public function fetch()
-    {
-        $categories = DB::table('chu_de')
-            -> leftJoin('category','category.id','=','chu_de.category_id')
-            ->select('chu_de.*','category.category_name')->get();
-        return response()->json([
-            'categories' => $categories,
-        ]);
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -93,7 +82,7 @@ class ChuDeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function save(Request $request)
     {
@@ -113,77 +102,22 @@ class ChuDeController extends Controller
     }
 
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'chu_de_name' => 'required',
-            'image' => 'required',
-            'status' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages()
-            ]);
-        } else {
-            $fields = ["chu_de_name","image","category_id","trang_thai"];
-            $data = [
-                "chu_de_name"=>$request->input('chu_de_name'),
-                "image" => $request->input('image'),
-                "category_id"=>$request->input('category_id'),
-                "status" => $request->input('status')
-            ];
-//            dd($data);
-            ChuDe::upsert(
-                $data,$fields
-            );
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Added Successfully.'
-            ]);
-        }
-
-    }
-
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return JsonResponse
+     * @param int $id
+     * @return void
      */
     public function show($id)
     {
-        $categories = ChuDe::all();
-        return response()->json([
-            'categories' => $categories,
-        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param $chu_de_id
-     * @return JsonResponse
+     * @return Application|Factory|View
      */
-    public function edit($chu_de_id)
-    {
-        $category_query = ChuDe::find($chu_de_id);
-        $category_id = $category_query->CATEGORY_ID;
-        $category_name_query = Category::find($category_id);
-        if ($category_query) {
-            return response()->json([
-                'status' => 200,
-                'student' =>$category_query,
-                'category_name'=>$category_name_query->CATEGORY_NAME
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Student Found.'
-            ]);
-        }
-    }
     public function edits($chu_de_id)
     {
         $edits = DB::table('chu_de')
@@ -193,37 +127,14 @@ class ChuDeController extends Controller
         $categories = Category::select('id',"category_name")->get();
         return view('admin.chu_de.edit_chu_de',compact('edits','categories'));
     }
+
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param $category_id
-     * @return JsonResponse
+     * @param $chu_de_id
+     * @return RedirectResponse
      */
-    public function update(Request $request, $category_id)
-    {
-        $data =  [
-
-            'category_id'=>$request->input('category_id'),
-            'chu_de_name'=>$request->input('chu_de_name'),
-            "image" => $request->input('image'),
-        ];
-        $u = ChuDe::where('id',$category_id)->update(
-            $data
-        );
-        if ($u)
-        {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Updated Successfully.'
-            ]);
-        }
-        else
-            return response()->json([
-                'status' => 404,
-                'message' => 'Error deleted'
-            ]);
-    }
 
     public function updates(Request $request, $chu_de_id)
     {
@@ -265,7 +176,7 @@ class ChuDeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $category_id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($category_id)
     {

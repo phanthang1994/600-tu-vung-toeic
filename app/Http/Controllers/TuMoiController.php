@@ -36,36 +36,7 @@ class TuMoiController extends Controller
         return view('admin.tu_moi.tu_moi',compact('new_words'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return JsonResponse
-     */
-    public function fetch()
-    {
 
-        $categories = DB::table('tu_moi')
-            -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
-            ->select('tu_moi.*','chu_de.chu_de_name')->get();
-
-//        dd($categories);
-        return response()->json([
-            'categories' => $categories,
-        ]);
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return JsonResponse
-     */
-    public function create()
-    {
-        $cats = ChuDe::select('id',"chu_de_name")->get();
-//        dd($cats);
-        return response()->json([
-            'categories' => $cats,
-        ]);
-    }
     public function creates()
     {
         $subjects = ChuDe::select('id',"chu_de_name")->get();
@@ -77,10 +48,7 @@ class TuMoiController extends Controller
     {
         return view('admin.tu_moi.create_many');
     }
-    public function upload_many()
-    {
-        return view('admin.tu_moi.upload_many');
-    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -117,88 +85,9 @@ class TuMoiController extends Controller
 
             return redirect()->route('tu_moi')->with('success','Thêm sản phẩm thành công');
         }
+        return redirect()->route('tu_moi')->with('success','Thêm sản phẩm không thành công');
     }
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'image' => 'required',
-            'phien_am' => 'required',
-            'tu_loai' => 'required',
-            'audio' => 'required',
-            'status' => 'required'
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages()
-            ]);
-        } else {
-            $fields = ["NAME, PHIEN_AM","AUDIO","TU_LOAI","VI_DU",	"IMAGE",	"CHE_TU",	"CAU_TRUC_CAU",	"CHU_DE_ID","STATUS"];
-            $data = [
-                "name"=>$request->input('name'),
-                "phien_am"=>$request->input('phien_am'),
-                "audio"=>$request->input('audio'),
-                "tu_loai"=>$request->input('tu_loai'),
-                "vi_du"=>$request->input('vi_du'),
-                "image" => $request->input('image'),
-                "che_tu" => $request->input('che_tu'),
-                "cau_truc_cau" => $request->input('cau_truc_cau'),
-                "chu_de_id" => $request->input('chu_de_id'),
-//                "status" => $request->input('status')
-            ];
-            TuMoi::upsert(
-                $data,$fields
-            );
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Added Successfully.'
-            ]);
-        }
-
-    }
-    public function store_many(Request $request)
-    {
-       request()->validate([
-
-            'uploadFile' => 'required',
-
-        ]);
-
-//        dd($request->file('uploadFile'));
-        $files = $request->file('uploadFile');
-        foreach ($files as $file) {
-//            dd($value);
-            $file_name =  $file->getClientoriginalName();
-            $extension = $file ->extension();
-//            dd($extension);
-            if($extension =='wav' || $extension== 'mp3')
-            {
-                $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-                $file_name = 'tu_moi-'.$x.'.'.$extension;
-//            dd($file_name);
-                $file->move(public_path("admin/audio/tu_moi"),$file_name);
-            }
-            else
-            {
-                $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-                $file_name = 'tu_moi-'.$x.'.'.$extension;
-//            dd($file_name);
-                $file->move(public_path("admin/img/tu_moi"),$file_name);
-            }
-
-
-        }
-
-
-
-        return response()->json(['success'=>'Images Uploaded Successfully.']);
-
-
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -310,14 +199,6 @@ class TuMoiController extends Controller
     public function get_create_many_records(Request $request)
     {
         return view('admin.tu_moi.create_many');
-    }
-    public function post_create_many_records(Request $request)
-    {
-        $data = $request->input('data');
-        // Process the received data as needed (e.g., save to database)
-        $data1 = $request->input('data');
-        echo($data1);
-        return response()->json(['success' => $data]);
     }
     public function displayReadExcevlFile(Request $request)
     {
