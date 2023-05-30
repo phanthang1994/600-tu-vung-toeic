@@ -59,9 +59,8 @@ Route::get('/form_question', function () {
     return view('front_end.form_question');
 })->name('form_question');
 
-Route::get('/new_words', function () {
-    return view('front_end.new_words');
-})->name('new_words');
+Route::get('/new_words',[TuMoiController::class,'get_view'])->name('new_words');
+Route::get('/new_words/{chu_de_id}',[TuMoiController::class,'get_json'])->name('new_words_list');
 
 Route::get('/test_type', function () {
     return view('front_end.test_type');

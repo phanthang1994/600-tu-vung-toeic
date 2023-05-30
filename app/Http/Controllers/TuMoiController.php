@@ -8,12 +8,11 @@ use Box\Spout\Reader\Exception\ReaderNotOpenedException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
+
 
 class TuMoiController extends Controller
 {
@@ -45,10 +44,6 @@ class TuMoiController extends Controller
         return view('admin.tu_moi.create_tu_moi',compact('subjects'));
     }
 
-    public function create_many()
-    {
-        return view('admin.tu_moi.create_many');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -298,5 +293,17 @@ class TuMoiController extends Controller
         }
 
         return 'No images selected for upload.';
+    }
+    public function get_view()
+    {
+        return view('front_end.new_words');
+    }
+    public function get_json($chu_de_id)
+    {
+        $new_word = DB::table('tu_moi')
+            -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
+            -> where('tu_moi.chu_de_id','=',$chu_de_id)
+            -> select('tu_moi.*')->get();
+        return response()->json( $new_word);
     }
 }

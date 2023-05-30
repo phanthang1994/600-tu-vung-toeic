@@ -8,7 +8,22 @@ let text = '{"vocab":[' +
     '{"src":"assets/img/event/event-4.jpg","newWords":"abide by 4 : /ə baid baid/","attributes":"P,V,N","meaningWords":"Tuân Thủ","exp":"The two parties abided by the judge decision","expMeaning":"- Hai bên đã tuân theo quyết định của tòa án.","audioSRC":"h1.mp3","daThuoc":"0","tuKho":"0"},' +
     '{"src":"assets/img/event/event-5.jpg","newWords":"abide by 5 : /ə baid baid/","attributes":"P,V,N","meaningWords":"Tuân Thủ","exp":"The two parties abided by the judge decision","expMeaning":"- Hai bên đã tuân theo quyết định của tòa án.","audioSRC":"h1.mp3","daThuoc":"0","tuKho":"0"}]}';
 const obj = JSON.parse(text);
-console.log(Object.keys(obj.vocab).length)
+$(document).ready(function() {
+    $.ajax({
+        url: '/new_words/' + 4,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Handle the response data
+            text1 = data
+            console.log(text1);
+            // Process the data and update your HTML elements
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+});
 document.querySelector('.xemTiep').style.display='none'
 /*nút tiếp kiểu mới*/
 newWordTh = 0
@@ -78,23 +93,6 @@ document.querySelectorAll('.xemTiep').forEach(item => {
 
     })
 })
-// nút thuộc
-document.querySelectorAll('.thuocSTT').forEach(item => {
-    item.addEventListener('click', event => {
-        obj.vocab[newWordTh].daThuoc = 1
-        alert(newWordTh)
-        alert(obj.vocab[newWordTh].daThuoc)
-    })
-})
-// nút khó
-document.querySelectorAll('.khoBtt').forEach(item => {
-    item.addEventListener('click', event => {
-        obj.vocab[newWordTh].tuKho = 1
-        alert(newWordTh)
-        alert(obj.vocab[newWordTh].tuKho)
-    })
-})
-// Nút quay lại kiểu mới
 
 // chuyển slide
 function plusSlides() { // dùng cho web
@@ -126,28 +124,7 @@ function plusSlidesMobile() { // dùng cho mobile
     document.getElementsByClassName('previousBtn')[1].disabled = displayMinusIndex === 0;
 
 }
-/* viết cho nút Xong*/
-finishAll = document.getElementsByClassName('finishAll');
-var i;
 
-for (i = 0; i < finishAll.length; i++) {
-    finishAll[i].addEventListener("click", function () {
-        percent = 10; //tùy thuộc vào số từ của 1 phiên để chia độ rộng
-        const boxPercent = document.getElementsByClassName("boxPercent");
-        var elemBar = document.getElementById("bar");
-        for (a = 0; a < boxPercent.length; a++) {
-            boxPercent[a].innerHTML = 100 + "%";
-            width = valuePercent * percent; // tùy thuộc vào số từ của 1 phiên để chia độ rộng
-            elemBar.style.width = 100 + "%";
-        }
-        let slides = document.getElementsByClassName("mySlides");
-        for (sl = 0; sl < slides.length; sl++) {
-            slides[sl].style.display = "none";
-        }
-        slides[(slides.length - 1)].style.display = "block";
-        lastestSlide();
-    });
-}
 /*viết cho button chế từ*/
 var acc = document.getElementsByClassName("buttonCheTu");
 var i;
