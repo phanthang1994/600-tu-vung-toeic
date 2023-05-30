@@ -50,6 +50,7 @@ class ChuDeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param Request $request
      * @return string
      */
     public function upload_many_images(Request $request)

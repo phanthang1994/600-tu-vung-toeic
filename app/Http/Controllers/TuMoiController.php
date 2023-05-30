@@ -9,6 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -53,7 +54,7 @@ class TuMoiController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function save(Request $request)
     {
@@ -111,7 +112,7 @@ class TuMoiController extends Controller
      *
      * @param Request $request
      * @param $tu_moi_id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function updates(Request $request, $tu_moi_id)
     {
@@ -176,7 +177,7 @@ class TuMoiController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
@@ -200,10 +201,7 @@ class TuMoiController extends Controller
     {
         return view('admin.tu_moi.create_many');
     }
-    public function displayReadExcevlFile(Request $request)
-    {
-        return view('admin.tu_moi.read_excel_file');
-    }
+
     //https://www.nidup.io/blog/manipulate-excel-files-in-php
     public function readExcelFile($filePath)
     {
@@ -257,12 +255,48 @@ class TuMoiController extends Controller
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $file_name = 'tu-moi-'. $x . '.' . $extension;
-            $file->move(public_path($this->path_file_image), $file_name);
+            $file->move(public_path($this->path_file_excel), $file_name);
             $request->merge(['image' => $file_name]);
-            $filePath = public_path($this->path_file_image) .'/'. $file_name;
+            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
             $filePath = str_replace('/', '\\', $filePath);
         }
         $this->readExcelFile($filePath);
         return redirect()->route('tu_moi');
+    }
+
+    public function get_many_images(){
+        return view('admin.tu_moi.upload_many_image');
+    }
+    public function upload_many_images(Request $request)
+    {
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+
+            foreach ($images as $image) {
+                $imageName = $image->getClientOriginalName();
+                $extension = $image ->extension();
+                $x = pathinfo($imageName, PATHINFO_FILENAME);
+                $file_name = 'tu_moi-'.$x.'.'.$extension;
+                $image->move(public_path($this->path_file_image),$file_name);
+                $request->merge(['image'=> $file_name]);
+            }
+
+        }
+        if ($request->hasFile('audios')) {
+            $images = $request->file('audios');
+
+            foreach ($images as $image) {
+                $imageName = $image->getClientOriginalName();
+                $extension = $image ->extension();
+                $x = pathinfo($imageName, PATHINFO_FILENAME);
+                $file_name = 'tu_moi-'.$x.'.'.$extension;
+                $image->move(public_path($this->path_file_audio),$file_name);
+                $request->merge(['audio'=> $file_name]);
+            }
+
+            return redirect()->route('tu_moi');
+        }
+
+        return 'No images selected for upload.';
     }
 }
