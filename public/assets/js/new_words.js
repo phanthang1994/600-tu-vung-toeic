@@ -12,23 +12,28 @@ const obj2 = {};
 var xhr = new XMLHttpRequest();
 url="/new_words/110"
 
-xhr.open("GET", url, true); // Replace with your API endpoint
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-        obj2.vocab = JSON.parse(xhr.responseText); // Assign the response to the "vocab" property of the "obj" object
-        txtx = JSON.stringify(obj2); // Convert the "obj" object back to a JSON string
-    }
-};
-xhr.send();
-obj3 = obj2
-console.log( JSON.stringify(obj2)); // Print the updated JSON string
+fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response data
+        var inputElement = document.createElement('input');
+        inputElement.setAttribute('type', 'text');
+        inputElement.setAttribute('name', 'myInput');
+        inputElement.value = data[0].id; // Set the value of the input element to obj2.vocab
+        document.body.appendChild(inputElement);
+        console.log(data)
+        // Process the data and update your HTML elements
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
 
 document.querySelector('.xemTiep').style.display='none'
 /*nút tiếp kiểu mới*/
 newWordTh = 0
-document.querySelector('.imagNewWords').src = obj2.vocab[newWordTh].src
-document.querySelector('.newWords').innerHTML = obj2.vocab[newWordTh].newWords;
+document.querySelector('.imagNewWords').src = obj.vocab[newWordTh].src
+document.querySelector('.newWords').innerHTML = obj.vocab[newWordTh].newWords;
 document.getElementById("myAudio").setAttribute('src', obj.vocab[newWordTh].audioSRC);
 document.querySelectorAll('.tiep').forEach(item => {
     item.addEventListener('click', event => {
