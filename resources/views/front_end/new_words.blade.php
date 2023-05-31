@@ -95,16 +95,13 @@
                                                 <h3 class="" style="border-bottom:black solid 3px">
                                                     Chế từ
                                                 </h3>
-                                                <div>
-                                                    Today now in this post i will show you How to json response from
-                                                    controller in Laravel ? If we are working with REST API then we
-                                                    have always need to return json data in response that way the
-                                                    front-end developer can handle it easily.So here i will created
+                                                <div id="che_tu">
+
                                                 </div>
                                             </div>
                                             <button type="button" class="cheTuVaCauTruc" data-toggle="modal"
                                                     data-target="#exampleModalCenter">
-                                                <div>Trộn ngôn ngữ</div>
+                                                <div id="tron_ngon_ngu">Trộn ngôn ngữ</div>
                                             </button>
                                         </div>
                                         <div class="cheTu">
@@ -112,11 +109,8 @@
                                                 <h3 class="" style="border-bottom:black solid 3px">
                                                     Cấu trúc câu
                                                 </h3>
-                                                <div>
-                                                    Today now in this post i will show you How to json response from
-                                                    controller in Laravel ? If we are working with REST API then we
-                                                    have always need to return json data in response that way the
-                                                    front-end developer can handle it easily.So here i will created
+                                                <div id="cau_truc_cau">
+
                                                 </div>
                                             </div>
                                             <button type="button" class="cheTuVaCauTruc" data-toggle="modal"
@@ -154,27 +148,10 @@
                 <i class="fa fa-forward fa-4x" style="position: relative; bottom: 8px;"></i>
                 <p class="" style="position: relative; bottom: 8px;"></p>
             </button>
-            <button  class="previousBtn btnSmallThan991px btn  btnBiggerThan991px"
-                     style="margin-top: 5px; border-radius:100%;  background-color: yellow;"  onclick="plusSlides()" disabled>
+            <button  class="previousBtn previousBtnWeb btnSmallThan991px btn  btnBiggerThan991px"
+                     style="margin-top: 5px; border-radius:100%;  background-color: yellow;"  disabled>
                 <i class="fa fa-backward fa-2x"></i>
             </button>
-{{--            <button id="buttonXong" class="btnSmallThan991px btn  btnBiggerThan991px finishAll"--}}
-{{--                    style="margin-top: 5px; border-radius:100%;  background-color: yellow;">--}}
-{{--                <i class="fa fa-check" aria-hidden="true"></i>--}}
-{{--                <p class="statusButton">Xong</p>--}}
-{{--            </button>--}}
-
-{{--            <button id="buttonKho" class="btnSmallThan991px btn btnBiggerThan991px khoBtt"--}}
-{{--                    style=" margin-top: 5px;border-radius:100%;  background-color: yellow;">--}}
-{{--                <i class="fa fa-bolt"></i>--}}
-{{--                <p class="statusButton">Khó</p>--}}
-{{--            </button>--}}
-
-{{--            <button id="buttonThuoc" class="btnSmallThan991px btn  btnBiggerThan991px thuocSTT"--}}
-{{--                    style="margin-top: 5px; border-radius:100%;  background-color: yellow;">--}}
-{{--                <i class="fa fa-minus"></i>--}}
-{{--                <p class="statusButton">Thuộc</p>--}}
-{{--            </button>--}}
 
         </div>
         <!-- thanh điều hướng mobile -->
@@ -184,18 +161,11 @@
                     <div class="progressMobileHidden boxPercent" id="" value="0" style="width:auto;">
                         0%</div>
                 </div>
-{{--                <button id="buttonKhoMobile" class="col-2 button khoBtt" style=" width: 100%;--}}
-{{--                    height: 35px; padding-top: -10px;"> <i class="fa fa-bolt"></i> </button>--}}
-{{--                <button id="buttonThuocMobile" class="col-2 button thuocSTT" style=" width: 100%;--}}
-{{--                    height: 35px;"><i class="fa fa-minus"></i></button>--}}
-{{--                <button id="buttonXongMobile" class="col-2 button finishAll" style=" width: 100%;--}}
-{{--                    height: 35px;">--}}
-{{--                    <i class="fa fa-check" aria-hidden="true"></i>--}}
-{{--                </button>--}}
+
             </div>
         </div>
 
-        <button  class="previousBtn nextButtonMobile boder3D" onclick="plusSlidesMobile()">
+        <button  class="previousBtn previousBtnMobile nextButtonMobile boder3D">
             <i class="fa fa-backward fa-3x"></i>
         </button>
         <!-- nút next mobile -->
@@ -240,7 +210,237 @@
 </div>
 
 @include('front_end.layouts.footer')
-<script src="assets/js/new_words.js"></script>
+<script >
+    const get_chu_de_id = window.location.href;
+
+    // Extract the ID from the URL using regular expression
+    const regex = /\/(\d+)$/; // Assuming the ID is at the end of the URL
+    const matches = get_chu_de_id.match(regex);
+
+    // Check if there is a match
+
+    const id = matches[1];
+    url="/new_words/"+id
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            let slideMinus = 0;
+            let valuePercent = 0;
+            let displayMinusIndex = 0;
+            document.querySelector('.xemTiep').style.display='none'
+            /*nút tiếp kiểu mới*/
+            let newWordTh = 0
+            document.querySelector('.imagNewWords').src = data[newWordTh].image
+            document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+            document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+            const divElement = document.getElementById('che_tu');
+            divElement.innerHTML = 'Your string goes here';
+            document.querySelectorAll('.tiep').forEach(item => {
+                item.addEventListener('click', event => {
+                    document.getElementsByClassName('previousBtn')[0].disabled=false;
+                    if(slideMinus!==0)
+                    {
+                        slideMinus--;
+                        displayMinusIndex++
+                        console.log(displayMinusIndex);
+                        document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                        document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
+                        document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                        return;
+                    }
+                    newWordTh++;
+                    console.log(newWordTh)
+                    if (parseInt(newWordTh) < parseInt(data.length)) {
+                        if (slideMinus===0)
+                        {
+                            document.querySelector('.imagNewWords').src = data[newWordTh].image;
+                            document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+                            document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+                            increaseNumber();
+                        }
+                    }
+                    else {
+                        increaseNumber();
+                        lastestSlide();
+                    }
+
+                })
+            })
+
+// nút xem tiếp
+            document.querySelectorAll('.xemTiep').forEach(item => {
+                item.addEventListener('click', event => {
+                    document.getElementsByClassName('previousBtn')[0].disabled=false;
+                    if(slideMinus)
+                    {
+                        slideMinus--;
+                        displayMinusIndex++
+                        console.log(displayMinusIndex);
+                        document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                        document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                        document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                        return;
+                    }
+                    newWordTh++;
+                    console.log(newWordTh)
+                    if (parseInt(newWordTh) < parseInt(data.length)) {
+                        if (slideMinus===0)
+                        {
+                            document.querySelector('.imagNewWords').src = data[newWordTh].image;
+                            document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+                            document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+
+                        }
+                    }
+                    else{
+                        lastestSlide();
+                    }
+
+                })
+            })
+            const previousBtnWEB = document.querySelectorAll('.previousBtnWeb');
+            const previousBtnMobile = document.querySelectorAll('.previousBtnMobile');
+            previousBtnWEB.forEach((btn) => {
+                btn.addEventListener('click', plusSlides);
+            });
+            previousBtnMobile.forEach((btn) => {
+                btn.addEventListener('click', plusSlidesMobile);
+            });
+            // chuyển slide
+            function plusSlides() { // dùng cho web
+                slideMinus++;
+                console.log(slideMinus)
+                displayMinusIndex = newWordTh-slideMinus
+                document.querySelector('.imagNewWords').src =data[displayMinusIndex].image;
+                document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                if(displayMinusIndex===0)
+                {
+                    document.getElementsByClassName('previousBtnWeb')[0].disabled=true;
+                }
+
+            }
+            function plusSlidesMobile() { // dùng cho mobile
+                if (newWordTh===0)
+                {
+                    document.getElementsByClassName('previousBtnMobile')[0].disabled=true;
+                }
+                slideMinus++;
+                console.log(slideMinus)
+                displayMinusIndex = newWordTh-slideMinus
+                document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+
+                document.getElementsByClassName('previousBtn')[1].disabled = displayMinusIndex === 0;
+
+            }
+
+//*viết cho button chế từ*
+            var acc = document.getElementsByClassName("buttonCheTu");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+                    } else {
+                        panel.style.display = "block";
+                    }
+                });
+            }
+
+// viết cho  button close chế từ
+            var acc = document.getElementsByClassName("closeButtonCheTu");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    var parent = this.parentElement.parentElement.parentElement;
+                    parent.style.display = 'none';
+                });
+            }
+
+
+
+//audio
+            var play_audio = document.getElementById('myAudio')
+            function playAudio() {
+                play_audio.pause();
+                play_audio.load();
+                play_audio.play();
+            }
+// tăng phần trăm và prosgress bar
+            function increaseNumber() {
+                percent = 100/(data.length); //tùy thuộc vào số từ của 1 phiên để chia độ rộng
+                const boxPercent = document.getElementsByClassName("boxPercent");
+                var elemBar = document.getElementById("bar");
+                if (valuePercent === data.length) {
+                    valuePercent = 0;
+                }
+                else {
+                    valuePercent++;
+                }
+                for (a = 0; a < boxPercent.length; a++) {
+                    boxPercent[a].innerHTML = ' '+ valuePercent + ' ';
+                    width = valuePercent * percent; // tùy thuộc vào số từ của 1 phiên để chia độ rộng
+                    elemBar.style.width = width + "%";
+                }
+
+            }
+            // popup khi hết từ
+            function lastestSlide() {
+                document.getElementById('id01').style.display = 'block';
+                newWordTh--;
+            }
+
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+
+
+    // viết cho close button
+    function disabledCloseButton() {
+        document.querySelector(".tiep").style.display ='none';
+        document.querySelector("#buttonTiepMobile").style.display='none';
+        document.querySelector('.xemTiep').style.display='inline-block'
+        const list =document.querySelector('.xemTiepMobile').classList;
+        list.remove('xemTiepDeActive')
+        list.add('xemTiepActive')
+        return "0"
+    }
+    function closeButton() {
+        document.getElementById('id01').style.display = 'none';
+        disabledCloseButton();
+    }
+
+    // Get the modal
+    var modal = document.getElementById('id01');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            disabledCloseButton();
+        }
+    }
+    // viết cho Học tiếp từ mới, học lại, ôn tập, kiểm tra
+    actionEnd = document.getElementsByClassName('actionEnd')
+    actionEnd[0].addEventListener('click', function () {
+        location.reload();
+    }, false)
+    actionEnd[1].addEventListener('click', function () {
+        alert('Ôn tập')
+    }, false);
+    actionEnd[1].addEventListener('click', function () {
+        alert('Kiểm tra')
+    }, false);
+</script>
 
 </body>
 

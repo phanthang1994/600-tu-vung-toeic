@@ -208,11 +208,11 @@
     function user_history() {
         element.classList.toggle("hiddenDropContent");
     }
-    document.addEventListener('mouseup', function(e) {
-        if (!element.contains(e.target)) {
-            element.classList.add("hiddenDropContent");
-        }
-    });
+    // document.addEventListener('mouseup', function(e) {
+    //     if (!element.contains(e.target)) {
+    //         element.classList.add("hiddenDropContent");
+    //     }
+    // });
     // const buttons = document.querySelectorAll(".main-menu li")
     // for (const button of buttons) {
     //     button.addEventListener('click', function(event) {
