@@ -49,6 +49,8 @@ Route::get('/courses',
  [ChuDeController::class,'course']
 )->name('courses');
 
+Route::get('/test_type', [TuMoiController::class,'test_type'])->name('test_type');
+
 Route::get('/multiple_choice_question', function () {
     return view('front_end.multiple_choice_question');
 })->name('multiple_choice_question');
@@ -62,9 +64,7 @@ Route::get('/form_question', function () {
 Route::any('/new_word/{chu_de_id}',[TuMoiController::class,'get_view'])->name('new_words');
 Route::get('/new_words/{chu_de_id}',[TuMoiController::class,'get_json'])->name('new_words_list');
 
-Route::get('/test_type', function () {
-    return view('front_end.test_type');
-})->name('test_type');
+
 
 Route::get('/che_tu', function () {
     return view('front_end.che_tu');

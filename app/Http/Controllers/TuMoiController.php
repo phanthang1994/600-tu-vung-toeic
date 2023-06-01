@@ -306,4 +306,9 @@ class TuMoiController extends Controller
             -> select('tu_moi.*')->get();
         return response()->json( $new_word);
     }
+
+    public function test_type()
+    {
+        return view('front_end.test_type');
+    }
 }
