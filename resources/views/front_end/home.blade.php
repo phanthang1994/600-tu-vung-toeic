@@ -22,40 +22,55 @@
 
 </div>
 <div class="xuong" style=" ">
-    <div class="ad-l" style="flex: 0.5;">
+    <div class="ad-l" style="flex: 0.55;">
         @include('front_end.layouts.ad_l')
     </div>
-    <div class="" style="flex: 2.5; ">
+    <div class="" style="flex: 0.85; ">
         <div class="thongTinDaHoc" style="margin: 20px 0;padding-right: 15px; padding-left: 15px;">
             @foreach($categories as $item)
                 <div class="" style="background-color:#FCFAF2; display: flex;justify-content: center; " >
-                <div class="tatCaKhoaHocCon" style="cursor: pointer;">
-                    <div style="padding:10px 10px; ">
-                        <img class="imgAtHome" src="assets/img/course/{{$item->image}}" style="" alt="{{$item->image}}">
-                    </div>
-                    <div class="loGoImd call_route" style=" padding:10px 10px;display: flex;flex-wrap:wrap;">
-                        <ul class="" style="width:100%;">
-                            <li class="" style="display: flex;justify-content:space-between;">
-                                <a class="aInHome" style="line-break: auto;">
-                                    <p class="wrapbox auto aInHome">{{$item->category_name}}</p>
-                                </a>
+                    <div class="tatCaKhoaHocCon">
+                        <div style="padding:10px 10px; ">
+                            <img class="imgAtHome" src="{{$item->image}}" style="" alt="{{$item->image}}">
+                        </div>
+                        <div class="loGoImd" style=" padding:10px 10px;display: flex;flex-wrap:wrap;">
+                            <ul class="" style="width:100%;">
+                                <li class="" style="display: flex;justify-content:space-between;">
+                                    <div class="aInHome" style="line-break: auto;">
 
-                            </li>
-                            <div class="dpvpxs">
-                                <div class="cumBenTrai" style="margin-top:1rem;">
-                                    <p>{{$item->description}}</p>
+                                            <p class="wrapbox auto aInHome">{{$item->category_name}}</p>
+
+                                    </div>
+                                </li>
+                                <div class="dpvpxs" style="max-width: 350px;">
+                                    <div class="cumBenTrai" style="margin-top:1rem;">
+
+                                            <h4 style="color: #00a651">{{$item->description}}</h4>
+
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="dpvpxs">
+                                    <div class="cumBenPhai" style="margin-top:1rem;">
+                                        <a class="" href="{{route('courses')}}" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-top: solid blue 2px; background-color:#FCFAF2 ">
+                                            <i class="fa fa-rocket"></i>
+                                            <span style="color: red; font-size: 1.5rem;">Test</span>
+                                        </a>
+                                        <a class="" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-bottom: solid blue 2px; background-color:#FCFAF2 ">
+                                            <i class="fa fa-graduation-cap" style="font-size: 30px;"></i>
+                                            <span style="color: red; font-size: 1.5rem;">Học</span>
+                                        </a>
+                                    </div>
+                                </div>
 
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endforeach
 
         </div>
     </div>
-    <div class="ad-r" style="flex: 0.5">
+    <div class="ad-r" style="flex: 0.55">
         @include('front_end.layouts.ad_r')
     </div>
 </div>
