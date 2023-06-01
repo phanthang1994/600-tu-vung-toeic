@@ -294,7 +294,7 @@ class TuMoiController extends Controller
 
         return 'No images selected for upload.';
     }
-    public function get_view(Request $request, $chu_de_id)
+    public function get_view($chu_de_id)
     {
         return view('front_end.new_words');
     }

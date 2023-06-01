@@ -245,8 +245,9 @@
                 document.querySelector('.xemTiep').style.display='none'
                 /*nút tiếp kiểu mới*/
                 let newWordTh = 0
-                document.querySelector('.imagNewWords').src = data[newWordTh].image
-
+                var urle = new URL(document.querySelector('.imagNewWords').src);
+                var baseUrl = urle.origin;
+                document.querySelector('.imagNewWords').src = baseUrl+"/"+ data[newWordTh].image
                 const heading = document.querySelector('.newWords');
                 heading.innerHTML = data[newWordTh].name
                 const span = document.createElement("span");
@@ -254,7 +255,7 @@
                 span.textContent = data[newWordTh].phien_am;
                 heading.appendChild(span);
 
-                document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+                document.getElementById("myAudio").setAttribute('src', baseUrl+"/"+data[newWordTh].audio);
 
                 const che_tu_element = document.getElementById('che_tu');
                 che_tu_element.innerHTML = data[newWordTh].che_tu;
@@ -280,9 +281,9 @@
                             slideMinus--;
                             displayMinusIndex++
                             console.log(displayMinusIndex);
-                            document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                            document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[displayMinusIndex].image;
                             document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
-                            document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                            document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
                             che_tu_element.innerHTML = data[displayMinusIndex].che_tu
                             tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
                             vi_du_element.innerHTML=data[displayMinusIndex].vi_du
@@ -296,13 +297,13 @@
                         if (parseInt(newWordTh) < parseInt(data.length)) {
                             if (slideMinus===0)
                             {
-                                document.querySelector('.imagNewWords').src = data[newWordTh].image;
+                                document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[newWordTh].image;
 
                                 heading.innerHTML = data[newWordTh].name
                                 span.textContent = data[newWordTh].phien_am;
                                 heading.appendChild(span);
 
-                                document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+                                document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[newWordTh].audio);
 
                                 che_tu_element.innerHTML = data[newWordTh].che_tu
 
@@ -333,13 +334,13 @@
                             slideMinus--;
                             displayMinusIndex++
                             console.log(displayMinusIndex);
-                            document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                            document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[displayMinusIndex].image;
 
                             heading.innerHTML = data[displayMinusIndex].name
                             span.textContent = data[displayMinusIndex].phien_am;
                             heading.appendChild(span);
 
-                            document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                            document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
                             che_tu_element.innerHTML = data[displayMinusIndex].che_tu
                             tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
                             vi_du_element.innerHTML=data[displayMinusIndex].vi_du
@@ -353,13 +354,13 @@
                         if (parseInt(newWordTh) < parseInt(data.length)) {
                             if (slideMinus===0)
                             {
-                                document.querySelector('.imagNewWords').src = data[newWordTh].image;
+                                document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[newWordTh].image;
 
                                 heading.innerHTML = data[newWordTh].name
                                 span.textContent = data[newWordTh].phien_am;
                                 heading.appendChild(span);
 
-                                document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+                                document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[newWordTh].audio);
                                 che_tu_element.innerHTML = data[newWordTh].che_tu
                                 tu_loai_element.innerHTML = data[newWordTh].tu_loai;
                                 vi_du_element.innerHTML=data[newWordTh].vi_du
@@ -387,17 +388,18 @@
                     slideMinus++;
                     console.log(slideMinus)
                     displayMinusIndex = newWordTh-slideMinus
-                    document.querySelector('.imagNewWords').src =data[displayMinusIndex].image;
+                    document.querySelector('.imagNewWords').src = baseUrl+"/"+data[displayMinusIndex].image;
                     heading.innerHTML = data[displayMinusIndex].name
                     span.textContent = data[displayMinusIndex].phien_am;
                     heading.appendChild(span);
-                    document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                    document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
                     che_tu_element.innerHTML = data[displayMinusIndex].che_tu
                     tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
                     vi_du_element.innerHTML=data[displayMinusIndex].vi_du
                     giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
                     cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
 
+                    if(displayMinusIndex===0)
                     {
                         document.getElementsByClassName('previousBtnWeb')[0].disabled=true;
                     }
@@ -411,11 +413,11 @@
                     slideMinus++;
                     console.log(slideMinus)
                     displayMinusIndex = newWordTh-slideMinus
-                    document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                    document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[displayMinusIndex].image;
                     heading.innerHTML = data[displayMinusIndex].name
                     span.textContent = data[displayMinusIndex].phien_am;
                     heading.appendChild(span);
-                    document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                    document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
                     che_tu_element.innerHTML = data[displayMinusIndex].che_tu
                     tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
                     vi_du_element.innerHTML=data[displayMinusIndex].vi_du
@@ -456,13 +458,6 @@
 
 
 
-//audio
-                var play_audio = document.getElementById('myAudio')
-                function playAudio() {
-                    play_audio.pause();
-                    play_audio.load();
-                    play_audio.play();
-                }
 // tăng phần trăm và prosgress bar
                 function increaseNumber() {
                     percent = 100/(data.length); //tùy thuộc vào số từ của 1 phiên để chia độ rộng
@@ -494,6 +489,14 @@
         });
     });
 
+
+    //audio
+    var play_audio = document.getElementById('myAudio')
+    function playAudio() {
+        play_audio.pause();
+        play_audio.load();
+        play_audio.play();
+    }
 
     // viết cho close button
     function disabledCloseButton() {
