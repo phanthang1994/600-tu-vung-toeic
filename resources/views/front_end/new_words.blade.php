@@ -55,10 +55,20 @@
                     <div class="col-lg-7 col-md-6">
                         <div class="row">
                             <div class="text_right boder3D">
-                                <label class="dXQZrX">Tiếng anh</label>
-                                <h2 class="jPETsr newWords"></h2>
-                                <label class="dXQZrX" style="margin-top: 10px;">Từ loại: <span
-                                        class="attributes"></span></label>
+                                <h2 class="jPETsr newWords" style="padding-top: 0;">
+                                </h2>
+                                <span style="margin-top: 10px; color: #0b0b0b;font-weight: bolder;">
+                                    Giải thích:
+                                </span>
+                                <span id="str_giai_thich" style="color: darkblue">
+
+                                </span>
+                                <label class="dXQZrX" style="margin-top: 10px;">
+                                    Từ loại:
+                                    <span class="attributes" id="tu_loai">
+
+                                    </span>
+                                </label>
                                 <h3 class="jDSKR meaningWords" style="margin-bottom: 10px;"></h3>
                             </div>
                         </div>
@@ -68,9 +78,9 @@
                                     <span style="text-decoration: line-through;">
                                         Ví dụ:
                                     </span>
-                                <span class="exp">
+                                <span class="exp" id="str_vi_du">
 
-                                    </span> <br>
+                                </span> <br>
                                 <span style="padding-left: 2rem;">
                                         <spans tyle="padding-left: 1rem;" class="expMeaning"></spans>
                                     </span>
@@ -109,7 +119,7 @@
                                                 <h3 class="" style="border-bottom:black solid 3px">
                                                     Cấu trúc câu
                                                 </h3>
-                                                <div id="cau_truc_cau">
+                                                <div id="str_cau_truc_cau">
 
                                                 </div>
                                             </div>
@@ -236,10 +246,32 @@
                 /*nút tiếp kiểu mới*/
                 let newWordTh = 0
                 document.querySelector('.imagNewWords').src = data[newWordTh].image
-                document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+
+                const heading = document.querySelector('.newWords');
+                heading.innerHTML = data[newWordTh].name
+                const span = document.createElement("span");
+                span.style.color = "red";
+                span.textContent = data[newWordTh].phien_am;
+                heading.appendChild(span);
+
                 document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
-                const divElement = document.getElementById('che_tu');
-                divElement.innerHTML = 'Your string goes here';
+
+                const che_tu_element = document.getElementById('che_tu');
+                che_tu_element.innerHTML = data[newWordTh].che_tu;
+
+                const tu_loai_element = document.getElementById('tu_loai');
+                tu_loai_element.innerHTML = data[newWordTh].tu_loai;
+
+                const vi_du_element = document.getElementById('str_vi_du');
+                vi_du_element.innerHTML=data[newWordTh].vi_du
+
+                const giai_thich_element = document.getElementById('str_giai_thich');
+                giai_thich_element.innerHTML=data[newWordTh].vi_du
+                const cau_truc_cau_element = document.getElementById('str_cau_truc_cau');
+                cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
+
+
+
                 document.querySelectorAll('.tiep').forEach(item => {
                     item.addEventListener('click', event => {
                         document.getElementsByClassName('previousBtn')[0].disabled=false;
@@ -251,6 +283,12 @@
                             document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
                             document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
                             document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                            che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+                            tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+                            vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+                            giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+                            cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+
                             return;
                         }
                         newWordTh++;
@@ -259,8 +297,22 @@
                             if (slideMinus===0)
                             {
                                 document.querySelector('.imagNewWords').src = data[newWordTh].image;
-                                document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+
+                                heading.innerHTML = data[newWordTh].name
+                                span.textContent = data[newWordTh].phien_am;
+                                heading.appendChild(span);
+
                                 document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+
+                                che_tu_element.innerHTML = data[newWordTh].che_tu
+
+                                tu_loai_element.innerHTML = data[newWordTh].tu_loai;
+
+                                vi_du_element.innerHTML=data[newWordTh].vi_du
+                                giai_thich_element.innerHTML=data[newWordTh].vi_du
+                                cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
+
+
                                 increaseNumber();
                             }
                         }
@@ -282,8 +334,18 @@
                             displayMinusIndex++
                             console.log(displayMinusIndex);
                             document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
-                            document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+
+                            heading.innerHTML = data[displayMinusIndex].name
+                            span.textContent = data[displayMinusIndex].phien_am;
+                            heading.appendChild(span);
+
                             document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                            che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+                            tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+                            vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+                            giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+                            cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+
                             return;
                         }
                         newWordTh++;
@@ -292,8 +354,17 @@
                             if (slideMinus===0)
                             {
                                 document.querySelector('.imagNewWords').src = data[newWordTh].image;
-                                document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+
+                                heading.innerHTML = data[newWordTh].name
+                                span.textContent = data[newWordTh].phien_am;
+                                heading.appendChild(span);
+
                                 document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+                                che_tu_element.innerHTML = data[newWordTh].che_tu
+                                tu_loai_element.innerHTML = data[newWordTh].tu_loai;
+                                vi_du_element.innerHTML=data[newWordTh].vi_du
+                                giai_thich_element.innerHTML=data[newWordTh].vi_du
+                                cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
 
                             }
                         }
@@ -317,9 +388,16 @@
                     console.log(slideMinus)
                     displayMinusIndex = newWordTh-slideMinus
                     document.querySelector('.imagNewWords').src =data[displayMinusIndex].image;
-                    document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                    heading.innerHTML = data[displayMinusIndex].name
+                    span.textContent = data[displayMinusIndex].phien_am;
+                    heading.appendChild(span);
                     document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
-                    if(displayMinusIndex===0)
+                    che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+                    tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+                    vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+                    giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+                    cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+
                     {
                         document.getElementsByClassName('previousBtnWeb')[0].disabled=true;
                     }
@@ -334,8 +412,16 @@
                     console.log(slideMinus)
                     displayMinusIndex = newWordTh-slideMinus
                     document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
-                    document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                    heading.innerHTML = data[displayMinusIndex].name
+                    span.textContent = data[displayMinusIndex].phien_am;
+                    heading.appendChild(span);
                     document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                    che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+                    tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+                    vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+                    giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+                    cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+
 
                     document.getElementsByClassName('previousBtn')[1].disabled = displayMinusIndex === 0;
 

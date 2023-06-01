@@ -21,6 +21,7 @@ class TuMoi extends Migration
             $table->string('audio',2000);
             $table->text('tu_loai');
             $table->text('vi_du');
+            $table->string('giai_thich', 2000);
             $table->string('image',2000);
             $table->text('che_tu')->nullable();
             $table->text('cau_truc_cau')->nullable();

@@ -319,7 +319,7 @@ body{
 }
 .text_right{
     text-align: left;
-    padding-top: 15px;
+    padding-top: 0px;
     padding-left: 8px;
     padding-right: 5px;
     min-width: 100%;
