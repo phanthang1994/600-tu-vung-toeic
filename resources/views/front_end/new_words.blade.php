@@ -222,186 +222,191 @@
     const id = matches[1];
     url="/new_words/"+id
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            let slideMinus = 0;
-            let valuePercent = 0;
-            let displayMinusIndex = 0;
-            document.querySelector('.xemTiep').style.display='none'
-            /*nút tiếp kiểu mới*/
-            let newWordTh = 0
-            document.querySelector('.imagNewWords').src = data[newWordTh].image
-            document.querySelector('.newWords').innerHTML = data[newWordTh].name;
-            document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
-            const divElement = document.getElementById('che_tu');
-            divElement.innerHTML = 'Your string goes here';
-            document.querySelectorAll('.tiep').forEach(item => {
-                item.addEventListener('click', event => {
-                    document.getElementsByClassName('previousBtn')[0].disabled=false;
-                    if(slideMinus!==0)
-                    {
-                        slideMinus--;
-                        displayMinusIndex++
-                        console.log(displayMinusIndex);
-                        document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
-                        document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
-                        document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
-                        return;
-                    }
-                    newWordTh++;
-                    console.log(newWordTh)
-                    if (parseInt(newWordTh) < parseInt(data.length)) {
-                        if (slideMinus===0)
+    $(document).ready(function() {
+        // Fetch data using AJAX
+        $.ajax({
+            url:url, // Replace 'json.route' with your actual route name
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                let slideMinus = 0;
+                let valuePercent = 0;
+                let displayMinusIndex = 0;
+                document.querySelector('.xemTiep').style.display='none'
+                /*nút tiếp kiểu mới*/
+                let newWordTh = 0
+                document.querySelector('.imagNewWords').src = data[newWordTh].image
+                document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+                document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+                const divElement = document.getElementById('che_tu');
+                divElement.innerHTML = 'Your string goes here';
+                document.querySelectorAll('.tiep').forEach(item => {
+                    item.addEventListener('click', event => {
+                        document.getElementsByClassName('previousBtn')[0].disabled=false;
+                        if(slideMinus!==0)
                         {
-                            document.querySelector('.imagNewWords').src = data[newWordTh].image;
-                            document.querySelector('.newWords').innerHTML = data[newWordTh].name;
-                            document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
-                            increaseNumber();
+                            slideMinus--;
+                            displayMinusIndex++
+                            console.log(displayMinusIndex);
+                            document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                            document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
+                            document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                            return;
                         }
-                    }
-                    else {
-                        increaseNumber();
-                        lastestSlide();
-                    }
+                        newWordTh++;
+                        console.log(newWordTh)
+                        if (parseInt(newWordTh) < parseInt(data.length)) {
+                            if (slideMinus===0)
+                            {
+                                document.querySelector('.imagNewWords').src = data[newWordTh].image;
+                                document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+                                document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
+                                increaseNumber();
+                            }
+                        }
+                        else {
+                            increaseNumber();
+                            lastestSlide();
+                        }
 
+                    })
                 })
-            })
 
 // nút xem tiếp
-            document.querySelectorAll('.xemTiep').forEach(item => {
-                item.addEventListener('click', event => {
-                    document.getElementsByClassName('previousBtn')[0].disabled=false;
-                    if(slideMinus)
-                    {
-                        slideMinus--;
-                        displayMinusIndex++
-                        console.log(displayMinusIndex);
-                        document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
-                        document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
-                        document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
-                        return;
-                    }
-                    newWordTh++;
-                    console.log(newWordTh)
-                    if (parseInt(newWordTh) < parseInt(data.length)) {
-                        if (slideMinus===0)
+                document.querySelectorAll('.xemTiep').forEach(item => {
+                    item.addEventListener('click', event => {
+                        document.getElementsByClassName('previousBtn')[0].disabled=false;
+                        if(slideMinus)
                         {
-                            document.querySelector('.imagNewWords').src = data[newWordTh].image;
-                            document.querySelector('.newWords').innerHTML = data[newWordTh].name;
-                            document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
-
+                            slideMinus--;
+                            displayMinusIndex++
+                            console.log(displayMinusIndex);
+                            document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                            document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                            document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                            return;
                         }
-                    }
-                    else{
-                        lastestSlide();
-                    }
+                        newWordTh++;
+                        console.log(newWordTh)
+                        if (parseInt(newWordTh) < parseInt(data.length)) {
+                            if (slideMinus===0)
+                            {
+                                document.querySelector('.imagNewWords').src = data[newWordTh].image;
+                                document.querySelector('.newWords').innerHTML = data[newWordTh].name;
+                                document.getElementById("myAudio").setAttribute('src', data[newWordTh].audio);
 
+                            }
+                        }
+                        else{
+                            lastestSlide();
+                        }
+
+                    })
                 })
-            })
-            const previousBtnWEB = document.querySelectorAll('.previousBtnWeb');
-            const previousBtnMobile = document.querySelectorAll('.previousBtnMobile');
-            previousBtnWEB.forEach((btn) => {
-                btn.addEventListener('click', plusSlides);
-            });
-            previousBtnMobile.forEach((btn) => {
-                btn.addEventListener('click', plusSlidesMobile);
-            });
-            // chuyển slide
-            function plusSlides() { // dùng cho web
-                slideMinus++;
-                console.log(slideMinus)
-                displayMinusIndex = newWordTh-slideMinus
-                document.querySelector('.imagNewWords').src =data[displayMinusIndex].image;
-                document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
-                document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
-                if(displayMinusIndex===0)
-                {
-                    document.getElementsByClassName('previousBtnWeb')[0].disabled=true;
+                const previousBtnWEB = document.querySelectorAll('.previousBtnWeb');
+                const previousBtnMobile = document.querySelectorAll('.previousBtnMobile');
+                previousBtnWEB.forEach((btn) => {
+                    btn.addEventListener('click', plusSlides);
+                });
+                previousBtnMobile.forEach((btn) => {
+                    btn.addEventListener('click', plusSlidesMobile);
+                });
+                // chuyển slide
+                function plusSlides() { // dùng cho web
+                    slideMinus++;
+                    console.log(slideMinus)
+                    displayMinusIndex = newWordTh-slideMinus
+                    document.querySelector('.imagNewWords').src =data[displayMinusIndex].image;
+                    document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                    document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
+                    if(displayMinusIndex===0)
+                    {
+                        document.getElementsByClassName('previousBtnWeb')[0].disabled=true;
+                    }
+
                 }
+                function plusSlidesMobile() { // dùng cho mobile
+                    if (newWordTh===0)
+                    {
+                        document.getElementsByClassName('previousBtnMobile')[0].disabled=true;
+                    }
+                    slideMinus++;
+                    console.log(slideMinus)
+                    displayMinusIndex = newWordTh-slideMinus
+                    document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
+                    document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
+                    document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
 
-            }
-            function plusSlidesMobile() { // dùng cho mobile
-                if (newWordTh===0)
-                {
-                    document.getElementsByClassName('previousBtnMobile')[0].disabled=true;
+                    document.getElementsByClassName('previousBtn')[1].disabled = displayMinusIndex === 0;
+
                 }
-                slideMinus++;
-                console.log(slideMinus)
-                displayMinusIndex = newWordTh-slideMinus
-                document.querySelector('.imagNewWords').src = data[displayMinusIndex].image;
-                document.querySelector('.newWords').innerHTML = data[displayMinusIndex].name;
-                document.getElementById("myAudio").setAttribute('src', data[displayMinusIndex].audio);
-
-                document.getElementsByClassName('previousBtn')[1].disabled = displayMinusIndex === 0;
-
-            }
 
 //*viết cho button chế từ*
-            var acc = document.getElementsByClassName("buttonCheTu");
-            var i;
+                var acc = document.getElementsByClassName("buttonCheTu");
+                var i;
 
-            for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function () {
-                    this.classList.toggle("active");
-                    var panel = this.nextElementSibling;
-                    if (panel.style.display === "block") {
-                        panel.style.display = "none";
-                    } else {
-                        panel.style.display = "block";
-                    }
-                });
-            }
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        var panel = this.nextElementSibling;
+                        if (panel.style.display === "block") {
+                            panel.style.display = "none";
+                        } else {
+                            panel.style.display = "block";
+                        }
+                    });
+                }
 
 // viết cho  button close chế từ
-            var acc = document.getElementsByClassName("closeButtonCheTu");
-            var i;
+                var acc = document.getElementsByClassName("closeButtonCheTu");
+                var i;
 
-            for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function () {
-                    var parent = this.parentElement.parentElement.parentElement;
-                    parent.style.display = 'none';
-                });
-            }
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        var parent = this.parentElement.parentElement.parentElement;
+                        parent.style.display = 'none';
+                    });
+                }
 
 
 
 //audio
-            var play_audio = document.getElementById('myAudio')
-            function playAudio() {
-                play_audio.pause();
-                play_audio.load();
-                play_audio.play();
-            }
+                var play_audio = document.getElementById('myAudio')
+                function playAudio() {
+                    play_audio.pause();
+                    play_audio.load();
+                    play_audio.play();
+                }
 // tăng phần trăm và prosgress bar
-            function increaseNumber() {
-                percent = 100/(data.length); //tùy thuộc vào số từ của 1 phiên để chia độ rộng
-                const boxPercent = document.getElementsByClassName("boxPercent");
-                var elemBar = document.getElementById("bar");
-                if (valuePercent === data.length) {
-                    valuePercent = 0;
+                function increaseNumber() {
+                    percent = 100/(data.length); //tùy thuộc vào số từ của 1 phiên để chia độ rộng
+                    const boxPercent = document.getElementsByClassName("boxPercent");
+                    var elemBar = document.getElementById("bar");
+                    if (valuePercent === data.length) {
+                        valuePercent = 0;
+                    }
+                    else {
+                        valuePercent++;
+                    }
+                    for (a = 0; a < boxPercent.length; a++) {
+                        boxPercent[a].innerHTML = ' '+ valuePercent + ' ';
+                        width = valuePercent * percent; // tùy thuộc vào số từ của 1 phiên để chia độ rộng
+                        elemBar.style.width = width + "%";
+                    }
+
                 }
-                else {
-                    valuePercent++;
-                }
-                for (a = 0; a < boxPercent.length; a++) {
-                    boxPercent[a].innerHTML = ' '+ valuePercent + ' ';
-                    width = valuePercent * percent; // tùy thuộc vào số từ của 1 phiên để chia độ rộng
-                    elemBar.style.width = width + "%";
+                // popup khi hết từ
+                function lastestSlide() {
+                    document.getElementById('id01').style.display = 'block';
+                    newWordTh--;
                 }
 
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
             }
-            // popup khi hết từ
-            function lastestSlide() {
-                document.getElementById('id01').style.display = 'block';
-                newWordTh--;
-            }
-
-        })
-        .catch(error => {
-            console.error(error);
         });
-
+    });
 
 
     // viết cho close button
