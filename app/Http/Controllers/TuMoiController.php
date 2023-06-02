@@ -311,6 +311,7 @@ class TuMoiController extends Controller
     {
         $subjects = DB::table('chu_de')
             -> leftJoin('category','category.id','=','chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
             ->select( 'chu_de.id',
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
@@ -319,7 +320,23 @@ class TuMoiController extends Controller
                 'chu_de.description AS chu_de_description',
                 'category.category_name AS category_name',
                 'category.image AS category_image',
-                'category.description AS category_description')->get();
-        return view('front_end.test_type', compact('subjects'));
+                'category.description AS category_description',
+                DB::raw('COUNT(tu_moi.id) AS tu_moi_count')
+            )
+            ->groupBy('chu_de.id', 'chu_de.chu_de_name',
+                'chu_de.image', 'chu_de.so_nguoi_theo_hoc', 'chu_de.thoi_gian_hoc',
+                'chu_de.description', 'category.category_name', 'category.image',
+                'category.description')->get();
+        $results = $subjects->map(function ($result) {
+            $minutes = floor($result->tu_moi_count*2 / 60);
+            $seconds = $result->tu_moi_count % 60;
+            $timeToTest = sprintf("%02d:%02d", $minutes, $seconds);
+
+            // Add the 'time_to_test' field to the result object
+            $result->time_to_test = $timeToTest;
+            return $result;
+        });
+//        dd($results);
+        return view('front_end.test_type', compact('results'));
     }
 }

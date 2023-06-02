@@ -9,14 +9,14 @@
     <div class="" style="background-color: #2B3648;border-top: 3px solid red; padding:1rem 1rem; ">
         <div class="container">
             <div class="rowFlexTest">
-                @if(count($subjects)>0)
+                @if(count($results)>0)
                     <div class="rowFlexTestInnerLeft">
-                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{$subjects[0]->category_image}}" alt="{{$subjects[0]->category_image}}" srcset=""></div>
+                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{$results[0]->category_image}}" alt="{{$results[0]->category_image}}" srcset=""></div>
 
                         <div style="text-align:left; margin-left: 10px;">
                             <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
-                            <p style="color:white">{{$subjects[0]->category_name}}<span>
-                    </span> <br>{{$subjects[0]->category_description}}</p>
+                            <p style="color:white">{{$results[0]->category_name}}<span>
+                    </span> <br>{{$results[0]->category_description}}</p>
                         </div>
                     </div>
                 @endif
@@ -53,7 +53,7 @@
     </div>
     <div class="mainContent" style="display:flex;flex-direction:column;">
         <div class="col-thang" style="margin-top:2rem">
-            @foreach($subjects as $item)
+            @foreach($results as $item)
             <div class="borderClassTest">
                 <div class="borderInnerTest">
                     <div class="khuyetXuong" style="width:40px;height:40px;border-radius: 50% 50%; background-color:red;">
@@ -81,11 +81,11 @@
                         <div class="" style="display:flex;flex-direction:column;">
                             <div class="cr  cr-orange" style="text-align:left;width:100%;margin: 5px 0;padding: 0 15px;">
                                 <i style="" class="fa fa-location-arrow"></i>
-                                <span style="font-weight:bolder;" class="soTu">30 từ</span>
+                                <span style="font-weight:bolder;" class="soTu">{{$item->tu_moi_count}}</span>
                             </div>
                             <div class="cr  cr-green" style="text-align:right;width: 100%;padding: 0 15px;">
                                 <i style="" class="fa fa-clock-o"></i>
-                                <span style="font-weight:bolder;" class="tongThoiGian">00:01:15</span>
+                                <span style="font-weight:bolder;" class="tongThoiGian">{{($item->time_to_test)}}</span>
                             </div>
                         </div>
                     </div>
