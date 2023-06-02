@@ -147,13 +147,5 @@ class CategoryController extends Controller
         return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
     }
 
-    public function subject_detail($category_id)
-    {
-        $subjects = DB::table('chu_de')
-            ->where('category.id', $category_id)
-            ->leftJoin('category','category.id','=','chu_de.category_id')
-            ->select('chu_de.*','category.category_name')->get();
-        dd($subjects);
-        return view('front_end.subjects', compact('subjects'));
-    }
+
 }

@@ -309,6 +309,17 @@ class TuMoiController extends Controller
 
     public function test_type()
     {
-        return view('front_end.test_type');
+        $subjects = DB::table('chu_de')
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            ->select( 'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description AS chu_de_description',
+                'category.category_name AS category_name',
+                'category.image AS category_image',
+                'category.description AS category_description')->get();
+        return view('front_end.test_type', compact('subjects'));
     }
 }

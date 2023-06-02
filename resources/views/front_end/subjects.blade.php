@@ -9,13 +9,15 @@
         <div class="container">
             <div class="rowFlexTest">
                 <div class="rowFlexTestInnerLeft">
-                    <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="assets/img/event/event-6.jpg" alt="" srcset=""></div>
+                    @if(count($subjects)>0)
+                    <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{$subjects[0]->category_image}}" alt="{{$subjects[0]->category_image}}" srcset=""></div>
 
                     <div style="text-align:left; margin-left: 10px;">
-                        <p style="color:white; border-bottom: white solid 2px;">Khóa học &gt; Languages &gt; European &gt; English</p>
-                        <p style="color:white">600 từ vựng TOEIC<span>
-                    </span> <br> 1Tự giới thiệu bản thân, khám phá xung quanh</p>
+                        <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                        <p style="color:white">{{$subjects[0]->category_name}}<span>
+                    </span> <br> {{$subjects[0]->category_description}}</p>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -56,7 +58,7 @@
             <div class="borderClass">
                 <div class="innerWrap" >
                     <a href="event-details.html"><img style="width: 230px;height: 200px;"
-                                                      src="assets/img/event/{{$item->image}}" alt="{{$item->image}}"></a>
+                                                      src="assets/img/event/{{$item->chu_de_image}}" alt="{{$item->chu_de_image}}"></a>
                     <div class="details-wrapper">
                         <div class="target-photo">
                             <img src="https://static.memrise.com/uploads/category_photos/en.png" alt="">

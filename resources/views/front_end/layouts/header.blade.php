@@ -31,17 +31,6 @@
                                 <li><a class="google-plus" href="#"><i class="fa fa-google-plus"></i></a></li>
                             </ul>
                         </div>
-{{--                        <a  href="{{route('login')}}"--}}
-{{--                            class="btnDangNhap"--}}
-{{--                            style="color:black;--}}
-{{--                            vertical-align: middle;--}}
-{{--                            font-weight: 600;--}}
-{{--                            border: none;--}}
-{{--                            border-radius: 8px;--}}
-{{--                            padding:0.5rem 1.2rem;--}}
-{{--                            background-color:#FFBB00;font-size: 15px;" >--}}
-{{--                            Đăng nhập--}}
-{{--                        </a>--}}
                     </div>
                 </div>
             </div>
@@ -69,6 +58,9 @@
                                         <a href="{{route('che_tu')}}"> Chế từ</a>
                                     </li>
                                     <li>
+                                        <a href="{{route('courses')}}"> Học từ</a>
+                                    </li>
+                                    <li>
                                         <a href="#"> Mẹo thi điểm cao </a>
                                     </li>
                                     <li>
@@ -84,23 +76,8 @@
                             </nav>
                         </div>
                         <div class="cart-search-wrap" >
-{{--                            <a onclick="user_history()" class="dropbtn" style = "border-radius: 50% 50%;background-color:#9FC1FC; width: 3rem;height: 3rem; margin-left:0.2rem; display:flex;align-items: center;justify-content: center;">--}}
-{{--                                <i style="color:#4275E1;" class="fa fa-user fa-2x" aria-hidden="true"></i>--}}
-{{--                            </a>--}}
-{{--                            <div>--}}
-{{--                                <div id="myDropdown" class="dropdown-content hiddenDropContent" style="min-width: 150px;">--}}
-{{--                                    <a href="#home" style="width: 100%; margin:5px 8px;">User name--}}
-{{--                                        <span class="close" style="cursor: pointer;" onClick="close_ho_so()">&times;</span>--}}
-{{--                                    </a>--}}
-{{--                                    <a href="#home" style="width: 100%; margin:0px 8px;">Cấp</a>--}}
-{{--                                    <a href="#home" style="width: 100%; margin:0px 8px; ">Điểm/1000</a>--}}
-{{--                                    <a href="#home" style="width: 100%; margin:0px 8px; border-bottom: gray solid 2px;">Từ đã học</a>--}}
-{{--                                    <a href="{{route('user_logout')}}" style="color:red;width: 100%; margin:5px 8px;">Đăng xuất</a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
 
                             <div class="cart-wrap" style="margin: 0 5px;">
-{{--                                Z--}}
                                 <div class="shopping-cart-content">
                                     <ul>
                                         <li class="single-shopping-cart">
