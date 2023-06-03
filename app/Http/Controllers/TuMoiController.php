@@ -296,15 +296,11 @@ class TuMoiController extends Controller
     }
     public function get_view($chu_de_id)
     {
-        return view('front_end.new_words');
-    }
-    public function get_json($chu_de_id)
-    {
         $new_word = DB::table('tu_moi')
             -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
             -> where('tu_moi.chu_de_id','=',$chu_de_id)
             -> select('tu_moi.*')->get();
-        return response()->json( $new_word);
+        return view('front_end.new_words',compact('new_word'));
     }
 
     public function test_type()

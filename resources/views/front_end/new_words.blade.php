@@ -221,273 +221,256 @@
 
 @include('front_end.layouts.footer')
 <script >
+    const data = @json($new_word);
     const get_chu_de_id = window.location.href;
-
-    // Extract the ID from the URL using regular expression
-    const regex = /\/(\d+)$/; // Assuming the ID is at the end of the URL
-    const matches = get_chu_de_id.match(regex);
+    const url = new URL(get_chu_de_id);
+    const baseUrl = `${url.protocol}//${url.host}`;
 
     // Check if there is a match
+    let slideMinus = 0;
+    let valuePercent = 0;
+    let displayMinusIndex = 0;
+    document.querySelector('.xemTiep').style.display='none'
+    /*nút tiếp kiểu mới*/
+    let newWordTh = 0
+    const urle = new URL(document.querySelector('.imagNewWords').src);
 
-    const id = matches[1];
-    url="/new_words/"+id
+    document.querySelector('.imagNewWords').src = baseUrl+ data[newWordTh].image
+    const heading = document.querySelector('.newWords');
+    heading.innerHTML = data[newWordTh].name
+    const span = document.createElement("span");
+    span.style.color = "red";
+    span.textContent = data[newWordTh].phien_am;
+    heading.appendChild(span);
 
-    $(document).ready(function() {
-        // Fetch data using AJAX
-        $.ajax({
-            url:url, // Replace 'json.route' with your actual route name
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                let slideMinus = 0;
-                let valuePercent = 0;
-                let displayMinusIndex = 0;
-                document.querySelector('.xemTiep').style.display='none'
-                /*nút tiếp kiểu mới*/
-                let newWordTh = 0
-                var urle = new URL(document.querySelector('.imagNewWords').src);
-                var baseUrl = urle.origin;
-                document.querySelector('.imagNewWords').src = baseUrl+"/"+ data[newWordTh].image
-                const heading = document.querySelector('.newWords');
-                heading.innerHTML = data[newWordTh].name
-                const span = document.createElement("span");
-                span.style.color = "red";
-                span.textContent = data[newWordTh].phien_am;
-                heading.appendChild(span);
+    document.getElementById("myAudio").setAttribute('src', baseUrl+data[newWordTh].audio);
 
-                document.getElementById("myAudio").setAttribute('src', baseUrl+"/"+data[newWordTh].audio);
+    const che_tu_element = document.getElementById('che_tu');
+    che_tu_element.innerHTML = data[newWordTh].che_tu;
 
-                const che_tu_element = document.getElementById('che_tu');
-                che_tu_element.innerHTML = data[newWordTh].che_tu;
+    const tu_loai_element = document.getElementById('tu_loai');
+    tu_loai_element.innerHTML = data[newWordTh].tu_loai;
 
-                const tu_loai_element = document.getElementById('tu_loai');
-                tu_loai_element.innerHTML = data[newWordTh].tu_loai;
+    const vi_du_element = document.getElementById('str_vi_du');
+    vi_du_element.innerHTML=data[newWordTh].vi_du
 
-                const vi_du_element = document.getElementById('str_vi_du');
-                vi_du_element.innerHTML=data[newWordTh].vi_du
-
-                const giai_thich_element = document.getElementById('str_giai_thich');
-                giai_thich_element.innerHTML=data[newWordTh].vi_du
-                const cau_truc_cau_element = document.getElementById('str_cau_truc_cau');
-                cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
+    const giai_thich_element = document.getElementById('str_giai_thich');
+    giai_thich_element.innerHTML=data[newWordTh].vi_du
+    const cau_truc_cau_element = document.getElementById('str_cau_truc_cau');
+    cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
 
 
 
-                document.querySelectorAll('.tiep').forEach(item => {
-                    item.addEventListener('click', event => {
-                        document.getElementsByClassName('previousBtn')[0].disabled=false;
-                        if(slideMinus!==0)
-                        {
-                            slideMinus--;
-                            displayMinusIndex++
-                            console.log(displayMinusIndex);
-                            document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[displayMinusIndex].image;
-                            document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
-                            document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
-                            che_tu_element.innerHTML = data[displayMinusIndex].che_tu
-                            tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
-                            vi_du_element.innerHTML=data[displayMinusIndex].vi_du
-                            giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
-                            cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+    document.querySelectorAll('.tiep').forEach(item => {
+        item.addEventListener('click', event => {
+            document.getElementsByClassName('previousBtn')[0].disabled=false;
+            if(slideMinus!==0)
+            {
+                slideMinus--;
+                displayMinusIndex++
+                console.log(displayMinusIndex);
+                document.querySelector('.imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
+                document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
+                document.getElementById("myAudio").setAttribute('src',  baseUrl+data[displayMinusIndex].audio);
+                che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+                tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+                vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+                giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+                cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
 
-                            return;
-                        }
-                        newWordTh++;
-                        console.log(newWordTh)
-                        if (parseInt(newWordTh) < parseInt(data.length)) {
-                            if (slideMinus===0)
-                            {
-                                document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[newWordTh].image;
+                return;
+            }
+            newWordTh++;
+            console.log(newWordTh)
+            if (parseInt(newWordTh) < parseInt(data.length)) {
+                if (slideMinus===0)
+                {
+                    document.querySelector('.imagNewWords').src =  baseUrl+data[newWordTh].image;
 
-                                heading.innerHTML = data[newWordTh].name
-                                span.textContent = data[newWordTh].phien_am;
-                                heading.appendChild(span);
+                    heading.innerHTML = data[newWordTh].name
+                    span.textContent = data[newWordTh].phien_am;
+                    heading.appendChild(span);
 
-                                document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[newWordTh].audio);
+                    document.getElementById("myAudio").setAttribute('src',  baseUrl+data[newWordTh].audio);
 
-                                che_tu_element.innerHTML = data[newWordTh].che_tu
+                    che_tu_element.innerHTML = data[newWordTh].che_tu
 
-                                tu_loai_element.innerHTML = data[newWordTh].tu_loai;
+                    tu_loai_element.innerHTML = data[newWordTh].tu_loai;
 
-                                vi_du_element.innerHTML=data[newWordTh].vi_du
-                                giai_thich_element.innerHTML=data[newWordTh].vi_du
-                                cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
+                    vi_du_element.innerHTML=data[newWordTh].vi_du
+                    giai_thich_element.innerHTML=data[newWordTh].vi_du
+                    cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
 
 
-                                increaseNumber();
-                            }
-                        }
-                        else {
-                            increaseNumber();
-                            lastestSlide();
-                        }
+                    increaseNumber();
+                }
+            }
+            else {
+                increaseNumber();
+                lastestSlide();
+            }
 
-                    })
-                })
+        })
+    })
 
 // nút xem tiếp
-                document.querySelectorAll('.xemTiep').forEach(item => {
-                    item.addEventListener('click', event => {
-                        document.getElementsByClassName('previousBtn')[0].disabled=false;
-                        if(slideMinus)
-                        {
-                            slideMinus--;
-                            displayMinusIndex++
-                            console.log(displayMinusIndex);
-                            document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[displayMinusIndex].image;
+    document.querySelectorAll('.xemTiep').forEach(item => {
+        item.addEventListener('click', event => {
+            document.getElementsByClassName('previousBtn')[0].disabled=false;
+            if(slideMinus)
+            {
+                slideMinus--;
+                displayMinusIndex++
+                console.log(displayMinusIndex);
+                document.querySelector('.imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
 
-                            heading.innerHTML = data[displayMinusIndex].name
-                            span.textContent = data[displayMinusIndex].phien_am;
-                            heading.appendChild(span);
+                heading.innerHTML = data[displayMinusIndex].name
+                span.textContent = data[displayMinusIndex].phien_am;
+                heading.appendChild(span);
 
-                            document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
-                            che_tu_element.innerHTML = data[displayMinusIndex].che_tu
-                            tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
-                            vi_du_element.innerHTML=data[displayMinusIndex].vi_du
-                            giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
-                            cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+                document.getElementById("myAudio").setAttribute('src',  baseUrl+data[displayMinusIndex].audio);
+                che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+                tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+                vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+                giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+                cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
 
-                            return;
-                        }
-                        newWordTh++;
-                        console.log(newWordTh)
-                        if (parseInt(newWordTh) < parseInt(data.length)) {
-                            if (slideMinus===0)
-                            {
-                                document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[newWordTh].image;
+                return;
+            }
+            newWordTh++;
+            console.log(newWordTh)
+            if (parseInt(newWordTh) < parseInt(data.length)) {
+                if (slideMinus===0)
+                {
+                    document.querySelector('.imagNewWords').src =  baseUrl+data[newWordTh].image;
 
-                                heading.innerHTML = data[newWordTh].name
-                                span.textContent = data[newWordTh].phien_am;
-                                heading.appendChild(span);
-
-                                document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[newWordTh].audio);
-                                che_tu_element.innerHTML = data[newWordTh].che_tu
-                                tu_loai_element.innerHTML = data[newWordTh].tu_loai;
-                                vi_du_element.innerHTML=data[newWordTh].vi_du
-                                giai_thich_element.innerHTML=data[newWordTh].vi_du
-                                cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
-
-                            }
-                        }
-                        else{
-                            lastestSlide();
-                        }
-
-                    })
-                })
-                const previousBtnWEB = document.querySelectorAll('.previousBtnWeb');
-                const previousBtnMobile = document.querySelectorAll('.previousBtnMobile');
-                previousBtnWEB.forEach((btn) => {
-                    btn.addEventListener('click', plusSlides);
-                });
-                previousBtnMobile.forEach((btn) => {
-                    btn.addEventListener('click', plusSlidesMobile);
-                });
-                // chuyển slide
-                function plusSlides() { // dùng cho web
-                    slideMinus++;
-                    console.log(slideMinus)
-                    displayMinusIndex = newWordTh-slideMinus
-                    document.querySelector('.imagNewWords').src = baseUrl+"/"+data[displayMinusIndex].image;
-                    heading.innerHTML = data[displayMinusIndex].name
-                    span.textContent = data[displayMinusIndex].phien_am;
+                    heading.innerHTML = data[newWordTh].name
+                    span.textContent = data[newWordTh].phien_am;
                     heading.appendChild(span);
-                    document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
-                    che_tu_element.innerHTML = data[displayMinusIndex].che_tu
-                    tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
-                    vi_du_element.innerHTML=data[displayMinusIndex].vi_du
-                    giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
-                    cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
 
-                    if(displayMinusIndex===0)
-                    {
-                        document.getElementsByClassName('previousBtnWeb')[0].disabled=true;
-                    }
+                    document.getElementById("myAudio").setAttribute('src',  baseUrl+data[newWordTh].audio);
+                    che_tu_element.innerHTML = data[newWordTh].che_tu
+                    tu_loai_element.innerHTML = data[newWordTh].tu_loai;
+                    vi_du_element.innerHTML=data[newWordTh].vi_du
+                    giai_thich_element.innerHTML=data[newWordTh].vi_du
+                    cau_truc_cau_element.innerHTML=data[newWordTh].cau_truc_cau
 
                 }
-                function plusSlidesMobile() { // dùng cho mobile
-                    if (newWordTh===0)
-                    {
-                        document.getElementsByClassName('previousBtnMobile')[0].disabled=true;
-                    }
-                    slideMinus++;
-                    console.log(slideMinus)
-                    displayMinusIndex = newWordTh-slideMinus
-                    document.querySelector('.imagNewWords').src =  baseUrl+"/"+data[displayMinusIndex].image;
-                    heading.innerHTML = data[displayMinusIndex].name
-                    span.textContent = data[displayMinusIndex].phien_am;
-                    heading.appendChild(span);
-                    document.getElementById("myAudio").setAttribute('src',  baseUrl+"/"+data[displayMinusIndex].audio);
-                    che_tu_element.innerHTML = data[displayMinusIndex].che_tu
-                    tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
-                    vi_du_element.innerHTML=data[displayMinusIndex].vi_du
-                    giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
-                    cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+            }
+            else{
+                lastestSlide();
+            }
+
+        })
+    })
+    const previousBtnWEB = document.querySelectorAll('.previousBtnWeb');
+    const previousBtnMobile = document.querySelectorAll('.previousBtnMobile');
+    previousBtnWEB.forEach((btn) => {
+        btn.addEventListener('click', plusSlides);
+    });
+    previousBtnMobile.forEach((btn) => {
+        btn.addEventListener('click', plusSlidesMobile);
+    });
+    // chuyển slide
+    function plusSlides() { // dùng cho web
+        slideMinus++;
+        console.log(slideMinus)
+        displayMinusIndex = newWordTh-slideMinus
+        document.querySelector('.imagNewWords').src = baseUrl+data[displayMinusIndex].image;
+        heading.innerHTML = data[displayMinusIndex].name
+        span.textContent = data[displayMinusIndex].phien_am;
+        heading.appendChild(span);
+        document.getElementById("myAudio").setAttribute('src',  baseUrl+data[displayMinusIndex].audio);
+        che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+        tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+        vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+        giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+        cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
+
+        if(displayMinusIndex===0)
+        {
+            document.getElementsByClassName('previousBtnWeb')[0].disabled=true;
+        }
+
+    }
+    function plusSlidesMobile() { // dùng cho mobile
+        if (newWordTh===0)
+        {
+            document.getElementsByClassName('previousBtnMobile')[0].disabled=true;
+        }
+        slideMinus++;
+        console.log(slideMinus)
+        displayMinusIndex = newWordTh-slideMinus
+        document.querySelector('.imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
+        heading.innerHTML = data[displayMinusIndex].name
+        span.textContent = data[displayMinusIndex].phien_am;
+        heading.appendChild(span);
+        document.getElementById("myAudio").setAttribute('src',  baseUrl+data[displayMinusIndex].audio);
+        che_tu_element.innerHTML = data[displayMinusIndex].che_tu
+        tu_loai_element.innerHTML = data[displayMinusIndex].tu_loai;
+        vi_du_element.innerHTML=data[displayMinusIndex].vi_du
+        giai_thich_element.innerHTML=data[displayMinusIndex].vi_du
+        cau_truc_cau_element.innerHTML=data[displayMinusIndex].cau_truc_cau
 
 
-                    document.getElementsByClassName('previousBtn')[1].disabled = displayMinusIndex === 0;
+        document.getElementsByClassName('previousBtn')[1].disabled = displayMinusIndex === 0;
 
-                }
+    }
 
 //*viết cho button chế từ*
-                var acc = document.getElementsByClassName("buttonCheTu");
-                var i;
+    var acc = document.getElementsByClassName("buttonCheTu");
+    var i;
 
-                for (i = 0; i < acc.length; i++) {
-                    acc[i].addEventListener("click", function () {
-                        this.classList.toggle("active");
-                        var panel = this.nextElementSibling;
-                        if (panel.style.display === "block") {
-                            panel.style.display = "none";
-                        } else {
-                            panel.style.display = "block";
-                        }
-                    });
-                }
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
 
 // viết cho  button close chế từ
-                var acc = document.getElementsByClassName("closeButtonCheTu");
-                var i;
+    var acc = document.getElementsByClassName("closeButtonCheTu");
+    var i;
 
-                for (i = 0; i < acc.length; i++) {
-                    acc[i].addEventListener("click", function () {
-                        var parent = this.parentElement.parentElement.parentElement;
-                        parent.style.display = 'none';
-                    });
-                }
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            var parent = this.parentElement.parentElement.parentElement;
+            parent.style.display = 'none';
+        });
+    }
 
 
 
 // tăng phần trăm và prosgress bar
-                function increaseNumber() {
-                    percent = 100/(data.length); //tùy thuộc vào số từ của 1 phiên để chia độ rộng
-                    const boxPercent = document.getElementsByClassName("boxPercent");
-                    var elemBar = document.getElementById("bar");
-                    if (valuePercent === data.length) {
-                        valuePercent = 0;
-                    }
-                    else {
-                        valuePercent++;
-                    }
-                    for (a = 0; a < boxPercent.length; a++) {
-                        boxPercent[a].innerHTML = ' '+ valuePercent + ' ';
-                        width = valuePercent * percent; // tùy thuộc vào số từ của 1 phiên để chia độ rộng
-                        elemBar.style.width = width + "%";
-                    }
+    function increaseNumber() {
+        percent = 100/(data.length); //tùy thuộc vào số từ của 1 phiên để chia độ rộng
+        const boxPercent = document.getElementsByClassName("boxPercent");
+        var elemBar = document.getElementById("bar");
+        if (valuePercent === data.length) {
+            valuePercent = 0;
+        }
+        else {
+            valuePercent++;
+        }
+        for (a = 0; a < boxPercent.length; a++) {
+            boxPercent[a].innerHTML = ' '+ valuePercent + ' ';
+            width = valuePercent * percent; // tùy thuộc vào số từ của 1 phiên để chia độ rộng
+            elemBar.style.width = width + "%";
+        }
 
-                }
-                // popup khi hết từ
-                function lastestSlide() {
-                    document.getElementById('id01').style.display = 'block';
-                    newWordTh--;
-                }
+    }
+    // popup khi hết từ
+    function lastestSlide() {
+        document.getElementById('id01').style.display = 'block';
+        newWordTh--;
+    }
 
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
+
 
 
     //audio
