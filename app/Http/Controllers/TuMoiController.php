@@ -339,4 +339,66 @@ class TuMoiController extends Controller
 //        dd($results);
         return view('front_end.test_type', compact('results'));
     }
+
+    public function multiple_choice_question($id_chu_de)
+    {
+        $subjects = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image')
+            ->get();
+
+        $questions = [];
+        $tu_loai_list = $subjects->pluck('tu_loai')->all();
+        $list_option = ["optionA","optionB","optionC","optionD"];
+        foreach ($subjects as $subject) {
+            $question = [
+                'question' => $subject->name,
+                'optionA' => '',
+                'optionB' => '',
+                'optionC' => '',
+                'optionD' => '',
+                'correctOption' => '',
+                'optionChoiced' => '',
+                'trueOrFlase' => 0,
+                'valueChoiced' => '',
+                'remeber' => 0,
+                'image' => $subject->image
+            ];
+
+            $options = $this->generateRandomList($subject->tu_loai, $tu_loai_list);
+
+            $question['optionA'] = $options[0];
+            $question['optionB'] = $options[1];
+            $question['optionC'] = $options[2];
+            $question['optionD'] = $options[3];
+
+            $index = array_search($subject->tu_loai, $options);
+//            dd($index);
+
+            $question['correctOption'] = $list_option[$index]; // Assign the correct option
+
+            $questions[] = $question;
+        }
+//        dd($questions);
+        return view('front_end.multiple_choice_question', compact('questions'));
+    }
+    private function generateRandomList($fixedValue,$possibleValues) {
+        $items = [$fixedValue];
+
+        $remainingValues = array_diff($possibleValues, [$fixedValue]);
+        $randomValues = array_rand($remainingValues, 3);
+
+        if (!is_array($randomValues)) {
+            $randomValues = [$randomValues];
+        }
+
+        foreach ($randomValues as $randomIndex) {
+            $items[] = $remainingValues[$randomIndex];
+            unset($remainingValues[$randomIndex]);
+        }
+
+        shuffle($items);
+
+        return $items;
+    }
 }
