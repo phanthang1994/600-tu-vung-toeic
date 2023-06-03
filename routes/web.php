@@ -63,7 +63,6 @@ Route::get('/form_question', function () {
 })->name('form_question');
 
 Route::any('/new_word/{chu_de_id}',[TuMoiController::class,'get_view'])->name('new_words');
-Route::get('/new_words/{chu_de_id}',[TuMoiController::class,'get_json'])->name('new_words_list');
 
 
 
