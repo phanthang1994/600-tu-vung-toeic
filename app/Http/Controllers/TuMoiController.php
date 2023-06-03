@@ -340,7 +340,7 @@ class TuMoiController extends Controller
     {
         $subjects = DB::table('tu_moi')
             ->where('tu_moi.chu_de_id', '=', $id_chu_de)
-            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image')
+            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
             ->get();
 
         $questions = [];
@@ -358,7 +358,8 @@ class TuMoiController extends Controller
                 'trueOrFlase' => 0,
                 'valueChoiced' => '',
                 'remeber' => 0,
-                'image' => $subject->image
+                'image' => $subject->image,
+                'phien_am' => $subject->phien_am
             ];
 
             $options = $this->generateRandomList($subject->tu_loai, $tu_loai_list);
@@ -396,5 +397,36 @@ class TuMoiController extends Controller
         shuffle($items);
 
         return $items;
+    }
+    public function free_text_question($id_chu_de)
+    {
+        $subjects = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
+            ->get();
+
+        $questions = []; // Initialize an empty array for questions
+
+        foreach ($subjects as $subject) {
+            $nameParts = explode(' ', $subject->tu_loai); // Split the name by space into an array
+            shuffle($nameParts); // Randomize the array
+
+            $question = [
+                'question' => $subject->name,
+                'suggestion' => $nameParts,
+                'correctOption' => $subject->tu_loai,
+                'optionChoiced' => '',
+                'trueOrFlase' => '',
+                'valueChoiced' => '',
+                'remeber' => '',
+                'image' => $subject->image,
+                'phien_am' => $subject->phien_am
+
+            ];
+
+            $questions[] = $question; // Add each question to the array of questions
+        }
+
+        return view('front_end.free_text_question', compact('questions'));
     }
 }

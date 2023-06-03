@@ -74,44 +74,42 @@
                         Question: <span id="cauThu"></span>\<span id="totalQuestion"></span>
                     </p>
                 </div>
-                <h2 id="cauHoi"></h2>
+                <h2 style="">>><span id="cauHoi"></span><<</h2>
                 <div class="blog-img" style="display:flex; justify-content: flex-start; flex-wrap: wrap;">
-                    <div><img src="assets/img/blog/blog-1.jpg" alt="" style="max-width:100%;"></div>
-                    <div class="" style="width:500px;">
-                        <label class="dXQZrX">Tiếng anh</label>
-                        <h2 class="jPETsr newWords"></h2>
-                        <label class="" style="margin-top: 10px;">Từ loại: <span class=""></span></label>
-                    </div>
-                </div>
-                <form class="form">
-                    <fieldset class="username">
-                        <input type="text" placeholder="" value="" id="dapAn"/>
-                        <input type="text" placeholder="" style="display:none" value="" id="dapAnSai"/>
-                    </fieldset>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-11 col-sm-12">
-                                <div class="row" style="text-align:center;">
-                                    <div class="col-sm-12 goiY">
+                    <div><img id="str_image" src="" alt="" style="max-width:100%;"></div>
+                    <div class="" style="max-width:500px; margin-left: 10px;">
+                        <form class="form">
+                            <fieldset class="username">
+                                <input type="text" placeholder="" value="" id="dapAn"/>
+                                <input type="text" placeholder="" style="display:none" value="" id="dapAnSai"/>
+                            </fieldset>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-11 col-sm-12">
+                                        <div class="row" style="text-align:center;">
+                                            <div class="col-sm-12 goiY">
 
-                                    </div>
-                                    <div class="col-sm-12 goiY" id="whiteSpace" >
-                                        <button class="btn space_button" onclick="whiteSpace()" type="button">_____</button>
-                                        <button class="btn space_button" onclick="backSpace()" type="button"><i class="fa-solid fa-delete-left">Xóa</i></button>
-                                    </div>
-                                    <div class="col-sm-12 goiY" id="backSpace" >
+                                            </div>
+                                            <div class="col-sm-12 goiY" id="whiteSpace" >
+                                                <button class="btn space_button" onclick="whiteSpace()" type="button">_____</button>
+                                                <button class="btn space_button" onclick="backSpace()" type="button"><i class="fa-solid fa-delete-left">Xóa</i></button>
+                                            </div>
+                                            <div class="col-sm-12 goiY" id="backSpace" >
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 col-sm-12" id="outMyBTN">
+                                        <button type="button" class="btn btnNExt" id="myBtn" onclick="next_Button()"><i
+                                                class="fa fa-angle-double-right fa-2x" aria-hidden="true"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-1 col-sm-12" id="outMyBTN">
-                                <button type="button" class="btn btnNExt" id="myBtn" onclick="next_Button()"><i
-                                        class="fa fa-angle-double-right fa-2x" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
+                        </form>
+
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -123,10 +121,142 @@
 
 @include('front_end.layouts.footer')
 
-<script src="assets/alertifyjs/alertify.min.js"></script>
-<link rel="stylesheet" href="assets/alertifyjs/css/alertify.min.css"/>
-<link rel="stylesheet" href="assets/alertifyjs/css/themes/default.min.css"/>
-<script src="assets/js/dien_tu_2.js"></script>
+{{--<script src="assets/alertifyjs/alertify.min.js"></script>--}}
+<script src="{{url("admin/js")}}/alertifyjs/alertify.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="{{url("admin/js")}}/alertifyjs/css/alertify.min.css"/>
+<link rel="stylesheet" href="{{url("admin/js")}}/alertifyjs/css/themes/default.min.css"/>
+<script>
+    const get_chu_de_id = window.location.href;
+    const url = new URL(get_chu_de_id);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const questions = @json($questions);
+    // console.log(questions)
+    let shuffledQuestions = questions //empty array to hold shuffled selected questions
+    indexNumber = 0
+    score = 0
+    shuffledQuestionsBackUp = questions
+    cauHoi = document.getElementById('cauHoi')
+
+    // viết cho phần gợi ý câu hỏi
+    dispalySuggession(0)
+    function dispalySuggession(orderQuestion) {
+        //xóa hêt phần tử hiện tại
+        document.querySelector('.goiY').innerHTML=''
+        document.getElementById('dapAn').value=''
+        cauHoi.innerHTML=shuffledQuestions[orderQuestion].question+shuffledQuestions[orderQuestion].phien_am
+        document.querySelector('#str_image').src = baseUrl+ shuffledQuestions[orderQuestion].image
+        document.getElementById('scoreGet').innerHTML = score
+        document.getElementById('cauThu').innerHTML = indexNumber+1
+        document.getElementById('totalQuestion').innerHTML = shuffledQuestions.length
+        // gen ra phần tử mới
+        for (let suggestion of questions[orderQuestion].suggestion) {
+            inpuNhap = document.getElementById('dapAn')
+            inpuNhap.style.backgroundColor = '#FFFFFF'
+            inpuNhap.style.color = 'black'
+            inpuNhap.value=''
+            document.querySelector('#dapAnSai').style.display = 'none'
+            var button_ = document.createElement('button');
+            button_.classList.add('btn', 'goiYTu')
+            button_.setAttribute('type', 'button')
+            if(suggestion===' ')
+            {
+                button_.classList.add('space_button')
+            }
+            button_.innerHTML = suggestion
+            // get data for input
+            button_.onclick = function() {
+                currrentValue = inpuNhap.value
+                inpuNhap.value = currrentValue + suggestion
+            }
+            document.querySelector('.goiY').appendChild(button_)
+        }
+    }
+    // viết cho nút cách
+    function whiteSpace()
+    {
+        hien_tai = document.getElementById('dapAn').value
+        document.getElementById('dapAn').value=hien_tai+' '
+    }
+    //viết cho phím xóa trước
+    function backSpace()
+    {
+        var textbox = document.getElementById('dapAn');
+        var ss = textbox.selectionStart;
+        var se = textbox.selectionEnd;
+        var ln  = textbox.value.length;
+
+        var textbefore = textbox.value.substring( 0, ss );    //text in front of selected text
+        var textselected = textbox.value.substring( ss, se ); //selected text
+        var textafter = textbox.value.substring( se, ln );    //text following selected text
+
+        if(ss===se) // if no text is selected
+        {
+            textbox.value = textbox.value.substring(0, ss-1 ) + textbox.value.substring(se, ln );
+            textbox.focus();
+            textbox.selectionStart = ss-1;
+            textbox.selectionEnd = ss-1;
+        }
+        else // if some text is selected
+        {
+            textbox.value = textbefore + textafter ;
+            textbox.focus();
+            textbox.selectionStart = ss;
+            textbox.selectionEnd = ss;
+        }
+    }
+    // viết cho nút next
+
+    function next_Button() {
+        currrentValue = inpuNhap.value
+        currrentValue = currrentValue.replace(/^\s+|\s+$/gm,'');
+        checkAnsewr(indexNumber)
+
+    }
+
+    function checkAnsewr(index)
+    {
+        if(indexNumber<shuffledQuestionsBackUp.length-1)
+        {
+            if (shuffledQuestionsBackUp[index].correctOption === currrentValue) {
+                alertify.success('chính xác');
+                score++;
+                indexNumber++;
+                dispalySuggession(indexNumber)
+            }
+            else if(currrentValue.includes('đáp án đúng ( '))
+            {
+                indexNumber++;
+                dispalySuggession(indexNumber)
+            }else if(shuffledQuestionsBackUp[index].correctOption !== currrentValue)
+            {
+                inpuNhap.value='đáp án đúng ( ' + shuffledQuestionsBackUp[index].correctOption + ' )'
+                inpuNhap.style.backgroundColor = 'blue'
+                inpuNhap.style.color='white'
+                dap_an_sai = document.querySelector('#dapAnSai')
+                dap_an_sai.style.display = 'block';
+                dap_an_sai.value='đáp án của bạn ( ' + currrentValue + ')';
+            }
+        }
+        else
+        {
+            handleEndGame()
+        }
+
+    }
+    //function to close warning modal
+    function closeOptionModal() {
+        document.getElementById('score-modal').style.display = "none"
+    }
+
+    function handleEndGame() {
+        document.getElementById('grade-percentage').innerHTML = score/shuffledQuestions.length*100
+        document.getElementById('soCauDaHoc').innerHTML = shuffledQuestions.length
+        document.getElementById('wrong-answers').innerHTML = (shuffledQuestions.length)-score
+        document.getElementById('right-answers').innerHTML = score
+        document.getElementById('score-modal').style.display = "flex"
+    }
+
+</script>
 </body>
 
 </html>

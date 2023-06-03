@@ -63,7 +63,7 @@
                             <span id=questionID></span></h1>
                     </div>
                     <div class="game-question-container">
-                        <h1 id="display-question"></h1>
+                        <h1 style="color:black;font-weight: bolder;" id="display-question"></h1>
                     </div>
                     <div class="game-options-container">
                         <div class="modal-container" id="option-modal">
@@ -116,7 +116,7 @@
     const baseUrl = `${url.protocol}//${url.host}`;
     let shuffledQuestions = questions
     shuffledQuestionsBackUp = questions
-    console.log(shuffledQuestionsBackUp)
+    // console.log(shuffledQuestionsBackUp)
 
     document.getElementById('questionID').innerHTML = "/" + String(shuffledQuestionsBackUp.length)
     let questionNumber = 1
@@ -129,7 +129,7 @@
         document.getElementById("question-number").innerHTML = index+1;
         document.getElementById("player-score").innerHTML = countPlayerScore();
         document.querySelector('#str_imgQuestion').src = baseUrl+ currentQuestion.image
-        document.getElementById("display-question").innerHTML = currentQuestion.question;
+        document.getElementById("display-question").innerHTML = currentQuestion.question+currentQuestion.phien_am;
         document.getElementById("option-one-label").innerHTML = currentQuestion.optionA;
         document.getElementById("option-two-label").innerHTML = currentQuestion.optionB;
         document.getElementById("option-three-label").innerHTML = currentQuestion.optionC;

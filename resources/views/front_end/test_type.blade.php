@@ -60,12 +60,12 @@
                     </div>
                     <div style="text-align:center; ">
                         <div class>
-                            <a href="{{route('multiple_choice_question',$item->id)}}" ><aside class='ribbon' style="width: 170px;margin: 10px auto;">Điền Từ</aside></a>
+                            <a href="{{route('free_text_question',$item->id)}}" ><aside class='ribbon' style="width: 170px;margin: 10px auto;">Điền Từ</aside></a>
                         </div>
 
 
                         <div class>
-                           <a> <aside class='ribbon' style="width: 170px;margin: 10px auto;">Chọn Từ</aside></a>
+                           <a href="{{route('multiple_choice_question',$item->id)}}" > <aside class='ribbon' style="width: 170px;margin: 10px auto;">Chọn Từ</aside></a>
                         </div>
 
 

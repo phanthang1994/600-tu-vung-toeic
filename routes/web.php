@@ -55,9 +55,7 @@ Route::get('/category_detail/{category_id}',
 Route::get('/test_type', [TuMoiController::class,'test_type'])->name('test_type');
 
 Route::any('/multiple_choice_question/{id_chu_de}',[TuMoiController::class,'multiple_choice_question'])->name('multiple_choice_question');
-Route::get('/"free_text_question', function () {
-    return view('front_end.free_text_question');
-})->name('free_text_question');
+Route::get('/free_text_question/{id_chu_de}', [TuMoiController::class,'free_text_question'])->name('free_text_question');
 Route::get('/form_question', function () {
     return view('front_end.form_question');
 })->name('form_question');
