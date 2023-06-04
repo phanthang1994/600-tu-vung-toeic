@@ -294,7 +294,7 @@ class TuMoiController extends Controller
 
         return 'No images selected for upload.';
     }
-    public function get_view($chu_de_id)
+    public function new_words($chu_de_id)
     {
         $new_word = DB::table('tu_moi')
             -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')

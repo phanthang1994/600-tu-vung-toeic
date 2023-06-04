@@ -58,7 +58,7 @@ Route::any('/multiple_choice_question/{id_chu_de}',[TuMoiController::class,'mult
 Route::get('/free_text_question/{id_chu_de}', [TuMoiController::class,'free_text_question'])->name('free_text_question');
 Route::get('/form_question/{id_chu_de}', [TuMoiController::class,'form_question'])->name('form_question');
 
-Route::any('/new_word/{chu_de_id}',[TuMoiController::class,'get_view'])->name('new_words');
+Route::any('/new_words/{chu_de_id}',[TuMoiController::class,'new_words'])->name('new_words');
 
 
 
