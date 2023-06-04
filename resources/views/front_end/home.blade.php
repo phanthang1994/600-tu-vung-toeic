@@ -51,11 +51,11 @@
                                 </div>
                                 <div class="dpvpxs">
                                     <div class="cumBenPhai" style="margin-top:1rem;">
-                                        <a class="" href="{{route('courses')}}" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-top: solid blue 2px; background-color:#FCFAF2 ">
+                                        <a class="" href="{{route('category_detail',$item->id)}}" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-top: solid blue 2px; background-color:#FCFAF2 ">
                                             <i class="fa fa-rocket"></i>
                                             <span style="color: red; font-size: 1.5rem;">Test</span>
                                         </a>
-                                        <a class="" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-bottom: solid blue 2px; background-color:#FCFAF2 ">
+                                        <a class="" href="{{route('category_detail',$item->id)}}" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-bottom: solid blue 2px; background-color:#FCFAF2 ">
                                             <i class="fa fa-graduation-cap" style="font-size: 30px;"></i>
                                             <span style="color: red; font-size: 1.5rem;">Học</span>
                                         </a>
