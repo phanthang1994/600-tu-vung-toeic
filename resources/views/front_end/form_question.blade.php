@@ -30,9 +30,13 @@
     </div>
     <div class="mainContent centerForm">
         <form onsubmit="return false" class="container_thang_list_question" id="form">
-            <img style="max-width:100%; align-self:center;border-radius: 8px;" src="assets/img/slider/slider-1.jpg"/>
+            <img style="max-width:100%; align-self:center;border-radius: 8px;"  id="str_image_chu_de" src=""/>
             <div style="display:flex; flex-direction:row;justify-content:space-between;margin-top: 20px;align-self:center; max-width:100%; border-top: 15px solid red;border-top-left-radius: 8px;border-top-right-radius: 8px;" class="form-control">
-                <div class="">DAY 20- Chinh phục part 5 (Nopain Nogain)</div>
+                @foreach ($chu_de_image as $img)
+                <div class="">
+                    Chủ đề: <span style="color: red; font-weight: bolder; font-size: 30px;"> {{$img->chu_de_name}}</span>
+                </div>
+                @endforeach
                 <div id="resultsContainer"></div>
             </div>
             <div class="cauHoiDapAn">
@@ -65,12 +69,6 @@
                                 <div class="dot"><img src="watering-can (64).png" style="width: 72%;" alt="" srcset=""></div>
                                 <p>Xem câu trả lời</p>
                             </div>
-                            <!--                                <div class="modal-button-container">-->
-                            <!--                                    <button onclick="closeScoreModal()"> Test lại</button>-->
-                            <!--                                </div>-->
-                            <!--                                <div class="modal-button-container">-->
-                            <!--                                    <button><a href="#">Test tiếp</a> </button>-->
-                            <!--                                </div>-->
                         </div>
 
 
@@ -78,17 +76,23 @@
                 </div>
                 @foreach ($questions as $question)
                     <fieldset id="group{{ $question['group_id'] }}" style="display: flex;flex-direction:row; flex-wrap: wrap;justify-content: center; margin-bottom: 10px;">
-                        <div><img style="max-width: 200px; height:200px; border-radius:20px;" src="assets/img/blog/blog-1.jpg" alt="" ></div>
+                        <div>
+                            <img style="max-width: 200px; height:200px; border-radius:20px;" class="str_image_tu_moi" src="" alt="" >
+                        </div>
                         <div class="form-control item answers">
 
-                            <label>
+                            <div>
                                 {{ $question['question'] }}
-                            </label>
+                                <span style="color: red">
+                                     {{ $question['phien_am'] }}
+                                </span>
+
+                            </div>
 
                             <!-- Input Type Radio Button -->
                             <label class = "boiXanh" for="recommed-{{ $question['a_id'] }}">
                                 <input type="radio"
-                                       id="recommed-{{ $question['a_id'] }}"
+                                       id="recommed-{{ $question['a_id']}}"
                                        name="group{{ $question['group_id'] }}" value="a"/><span>{{ $question['a'] }}</span>
                             </label>
                             <label class = "boiXanh" for="recommed-{{ $question['b_id'] }}">
@@ -117,9 +121,7 @@
                 <button  type="submit" value="submit" style=""  id="submit">
                     Submit
                 </button>
-                <span style="align-self: flex-end;">
-            Clear form
-        </span>
+                <span id="clear_form" style="align-self: flex-end;">Clear form</span>
             </div>
         </form>
     </div>
@@ -131,7 +133,6 @@
 @include('front_end.layouts.footer')
 <script>
     const myQuestions = @json($questions);
-    console.log(myQuestions)
     function showResults(){
         const quizContainer = document.getElementById('form');
         // gather answer containers from our quiz
@@ -167,6 +168,21 @@
         }
         handleEndGame(numCorrect)
     }
+    const get_chu_de_id = window.location.href;
+    const url = new URL(get_chu_de_id);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    immm = @json($chu_de_image);
+
+    const imgElementChuDe = document.getElementById('str_image_chu_de');
+    const firstImageChuDE = immm[0];
+    const imageNameChuDe = firstImageChuDE.image;
+    imgElementChuDe.src = baseUrl+imageNameChuDe;
+
+    const elements = document.getElementsByClassName("str_image_tu_moi");
+
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].src = baseUrl+myQuestions[i].image;
+    }
 
     const submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', showResults);
@@ -183,6 +199,20 @@
         document.getElementById('right-answers').innerHTML = numCorrect
         document.getElementById('score-modal').style.display = "flex"
     }
+    const cauHoiDapAn = document.querySelector('.cauHoiDapAn');
+    const radioButtons = cauHoiDapAn.querySelectorAll('input[type="radio"]');
+    radioButtons.forEach(radioButton => {
+        radioButton.checked = false;
+    });
+    const clearFormButton = document.getElementById('clear_form');
+    clearFormButton.addEventListener('click', () => {
+        const cauHoiDapAn = document.querySelector('.cauHoiDapAn');
+        const radioButtons = cauHoiDapAn.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(radioButton => {
+            radioButton.checked = false;
+        });
+    });
+
 </script>
 </body>
 

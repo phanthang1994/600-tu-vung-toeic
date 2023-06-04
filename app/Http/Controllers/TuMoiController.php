@@ -435,7 +435,10 @@ class TuMoiController extends Controller
             ->where('tu_moi.chu_de_id', '=', $id_chu_de)
             ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
             ->get();
-
+        $chu_de_image = DB::table('chu_de')
+            ->where('chu_de.id', '=', $id_chu_de)
+            ->select('chu_de.image','chu_de.chu_de_name')
+            ->get();
         $questions = [];
         $tu_loai_list = $subjects->pluck('tu_loai')->all();
         $list_option = ["a","b","c","d"];
@@ -500,7 +503,7 @@ class TuMoiController extends Controller
 
             $questions[] = $question;
         }
-//        dd($questions);
-        return view('front_end.form_question',compact('questions'));
+//        dd($chu_de_image);
+        return view('front_end.form_question',compact('questions','chu_de_image'));
     }
 }
