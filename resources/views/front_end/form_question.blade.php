@@ -30,9 +30,9 @@
     </div>
     <div class="mainContent centerForm">
         <form onsubmit="return false" class="container_thang_list_question" id="form">
-            <img style="max-width:100%; align-self:center;border-radius: 8px;"  id="str_image_chu_de" src=""/>
+            @foreach ($chu_de_image as $img)
+            <img style="max-width:100%; align-self:center;border-radius: 8px;" src="{{ asset($img->image) }}"/>
             <div style="display:flex; flex-direction:row;justify-content:space-between;margin-top: 20px;align-self:center; max-width:100%; border-top: 15px solid red;border-top-left-radius: 8px;border-top-right-radius: 8px;" class="form-control">
-                @foreach ($chu_de_image as $img)
                 <div class="">
                     Chủ đề: <span style="color: red; font-weight: bolder; font-size: 30px;"> {{$img->chu_de_name}}</span>
                 </div>
@@ -77,7 +77,7 @@
                 @foreach ($questions as $question)
                     <fieldset id="group{{ $question['group_id'] }}" style="display: flex;flex-direction:row; flex-wrap: wrap;justify-content: center; margin-bottom: 10px;">
                         <div>
-                            <img style="max-width: 200px; height:200px; border-radius:20px;" class="str_image_tu_moi" src="" alt="" >
+                            <img style="max-width: 200px; height:200px; border-radius:20px;" class="str_image_tu_moi" src="{{ asset($question['image']) }}" alt="" >
                         </div>
                         <div class="form-control item answers">
 
@@ -168,22 +168,6 @@
         }
         handleEndGame(numCorrect)
     }
-    const get_chu_de_id = window.location.href;
-    const url = new URL(get_chu_de_id);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    immm = @json($chu_de_image);
-
-    const imgElementChuDe = document.getElementById('str_image_chu_de');
-    const firstImageChuDE = immm[0];
-    const imageNameChuDe = firstImageChuDE.image;
-    imgElementChuDe.src = baseUrl+imageNameChuDe;
-
-    const elements = document.getElementsByClassName("str_image_tu_moi");
-
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].src = baseUrl+myQuestions[i].image;
-    }
-
     const submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', showResults);
     //function to close warning modal
