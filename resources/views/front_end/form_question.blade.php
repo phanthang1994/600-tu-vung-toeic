@@ -76,62 +76,40 @@
 
                     </div>
                 </div>
-                <fieldset id="group1" style="display: flex;flex-direction:row; flex-wrap: wrap;justify-content: center; margin-bottom: 10px;">
-                    <div><img style="max-width: 200px; height:200px; border-radius:20px;" src="assets/img/blog/blog-1.jpg" alt="" ></div>
-                    <div class="form-control item answers">
+                @foreach ($questions as $question)
+                    <fieldset id="group{{ $question['group_id'] }}" style="display: flex;flex-direction:row; flex-wrap: wrap;justify-content: center; margin-bottom: 10px;">
+                        <div><img style="max-width: 200px; height:200px; border-radius:20px;" src="assets/img/blog/blog-1.jpg" alt="" ></div>
+                        <div class="form-control item answers">
 
-                        <label>
-                            Would you recommed GeeksforGeeks
-                            to a friend?Would you recommed GeeksforGeeks
-                            to a friend?
-                        </label>
+                            <label>
+                                {{ $question['question'] }}
+                            </label>
 
-                        <!-- Input Type Radio Button -->
-                        <label class = "boiXanh" for="recommed-1">
-                            <input type="radio"
-                                   id="recommed-1"
-                                   name="group1" value="a"/><span>HTML</span>
-                        </label>
-                        <label class = "boiXanh" for="recommed-2">
-                            <input  type="radio"
-                                    id="recommed-2"
-                                    name="group1" value="b"/><span>css</span>
-                        </label>
-                        <label class = "boiXanh" for="recommed-3">
-                            <input  type="radio"
-                                    id="recommed-3"
-                                    name="group1" value="c"/><span>js</span>
-                        </label>
-                    </div>
+                            <!-- Input Type Radio Button -->
+                            <label class = "boiXanh" for="recommed-{{ $question['a_id'] }}">
+                                <input type="radio"
+                                       id="recommed-{{ $question['a_id'] }}"
+                                       name="group{{ $question['group_id'] }}" value="a"/><span>{{ $question['a'] }}</span>
+                            </label>
+                            <label class = "boiXanh" for="recommed-{{ $question['b_id'] }}">
+                                <input  type="radio"
+                                        id="recommed-{{ $question['b_id'] }}"
+                                        name="group{{ $question['group_id'] }}" value="b"/><span>{{ $question['b'] }}</span>
+                            </label>
+                            <label class = "boiXanh" for="recommed-{{ $question['c_id'] }}">
+                                <input  type="radio"
+                                        id="recommed-{{ $question['c_id'] }}"
+                                        name="group{{ $question['group_id'] }}" value="c"/><span>{{ $question['c'] }}</span>
+                            </label>
+                            <label class = "boiXanh" for="recommed-{{ $question['d_id'] }}">
+                                <input  type="radio"
+                                        id="recommed-{{ $question['d_id'] }}"
+                                        name="group{{ $question['group_id'] }}" value="d"/><span>{{ $question['d'] }}</span>
+                            </label>
+                        </div>
 
-                </fieldset>
-
-                <fieldset id="group2" style="display: flex;flex-direction:row; flex-flow: wrap;justify-content: center;">
-                    <div><img style="width: 200px; height:200px; border-radius:20px;" src="assets/img/blog/blog-1.jpg" alt="" ></div>
-                    <div class="form-control item answers">
-                        <label>
-                            Would you recommed GeeksforGeeks
-                            to a friend?
-                        </label>
-
-                        <!-- Input Type Radio Button -->
-                        <label class = "boiXanh" for="recommed-4">
-                            <input type="radio"
-                                   id="recommed-4"
-                                   name="group2" value="a"/><span>HTML</span>
-                        </label>
-                        <label class = "boiXanh" for="recommed-5">
-                            <input  type="radio"
-                                    id="recommed-5"
-                                    name="group2" value="b"/><span>css</span>
-                        </label>
-                        <label class = "boiXanh" for="recommed-6">
-                            <input  type="radio"
-                                    id="recommed-6"
-                                    name="group2" value="c"/><span>js</span>
-                        </label>
-                    </div>
-                </fieldset>
+                    </fieldset>
+                @endforeach
             </div>
 
             <!-- Multi-line Text Input Control -->
@@ -151,7 +129,61 @@
 </div>
 
 @include('front_end.layouts.footer')
-<script src="assets/js/list_cau_hoi.js"></script>
+<script>
+    const myQuestions = @json($questions);
+    console.log(myQuestions)
+    function showResults(){
+        const quizContainer = document.getElementById('form');
+        // gather answer containers from our quiz
+        const answerContainers = quizContainer.querySelectorAll('.answers');
+        let numCorrect = 0;
+
+        // for each question...
+        for (let questionNumber = 0; questionNumber < myQuestions.length; questionNumber++) {
+            const currentQuestion = myQuestions[questionNumber];
+
+            // Find selected answer
+            const answerContainer = answerContainers[questionNumber];
+            const selector = `input[name=group${currentQuestion['group_id']}]:checked`;
+            const selector2 = `input[name=group${currentQuestion['group_id']}]`;
+            const userAnswer = (answerContainer.querySelector(selector) || {});
+            const userAnswer2 = (answerContainer.querySelectorAll(selector2) || {});
+            for (let u = 0; u < userAnswer2.length; u++) {
+                if (userAnswer2[u].value === currentQuestion.correctOption) {
+                    console.log(userAnswer2[u])
+                    userAnswer2[u].parentElement.style.backgroundColor = 'blue';
+                }
+            }
+
+            // Check if the answer is correct
+            if (userAnswer.value === currentQuestion.correctOption) {
+                numCorrect++;
+                answerContainers[questionNumber].style.color = 'Blue'; // Color the answers black
+            } else {
+                answerContainers[questionNumber].style.color = 'red'; // Color the answers red
+            }
+
+            document.querySelector('#resultsContainer').innerHTML = 'Đúng: ' + numCorrect + '/ ' + myQuestions.length;
+        }
+        handleEndGame(numCorrect)
+    }
+
+    const submitButton = document.getElementById('submit');
+    submitButton.addEventListener('click', showResults);
+    //function to close warning modal
+    function closeOptionModal() {
+        document.getElementById('score-modal').style.display = "none"
+        document.getElementById('submit').disabled = true
+    }
+
+    function handleEndGame(numCorrect) {
+        document.getElementById('grade-percentage').innerHTML = numCorrect/myQuestions.length*100
+        document.getElementById('soCauDaHoc').innerHTML = myQuestions.length
+        document.getElementById('wrong-answers').innerHTML = (myQuestions.length)-numCorrect
+        document.getElementById('right-answers').innerHTML = numCorrect
+        document.getElementById('score-modal').style.display = "flex"
+    }
+</script>
 </body>
 
 </html>

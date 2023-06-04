@@ -429,4 +429,78 @@ class TuMoiController extends Controller
 
         return view('front_end.free_text_question', compact('questions'));
     }
+    public function form_question($id_chu_de)
+    {
+        $subjects = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
+            ->get();
+
+        $questions = [];
+        $tu_loai_list = $subjects->pluck('tu_loai')->all();
+        $list_option = ["a","b","c","d"];
+        $increase_number = 0;
+        foreach ($subjects as $subject) {
+            if ($increase_number!=0)
+            {
+                $question = [
+                    'group_id'=> $subject->id,
+                    'question'=> $subject->name,
+                    'a'=> '',
+                    'a_id'=> $subject->id+$increase_number+4,
+                    'b'=> '',
+                    'b_id'=> $subject->id+$increase_number+5,
+                    'c'=> '',
+                    'c_id'=> $subject->id+$increase_number+6,
+                    'd'=> '',
+                    'd_id'=> $subject->id+$increase_number+7,
+                    'correctOption' => '',
+                    'optionChoiced' => '',
+                    'trueOrFlase' => '',
+                    'valueChoiced' => '',
+                    'remeber' => 0,
+                    'image' => $subject->image,
+                    'phien_am' => $subject->phien_am
+                ];
+            }
+            else{
+                $question = [
+                    'group_id'=> $subject->id,
+                    'question'=> $subject->name,
+                    'a'=> '',
+                    'a_id'=> $subject->id,
+                    'b'=> '',
+                    'b_id'=> $subject->id+1,
+                    'c'=> '',
+                    'c_id'=> $subject->id+2,
+                    'd'=> '',
+                    'd_id'=> $subject->id+3,
+                    'correctOption' => '',
+                    'optionChoiced' => '',
+                    'trueOrFlase' => '',
+                    'valueChoiced' => '',
+                    'remeber' => 0,
+                    'image' => $subject->image,
+                    'phien_am' => $subject->phien_am
+                ];
+            }
+
+            $increase_number+=4;
+            $options = $this->generateRandomList($subject->tu_loai, $tu_loai_list);
+
+            $question['a'] = $options[0];
+            $question['b'] = $options[1];
+            $question['c'] = $options[2];
+            $question['d'] = $options[3];
+
+            $index = array_search($subject->tu_loai, $options);
+//            dd($index);
+
+            $question['correctOption'] = $list_option[$index]; // Assign the correct option
+
+            $questions[] = $question;
+        }
+//        dd($questions);
+        return view('front_end.form_question',compact('questions'));
+    }
 }
