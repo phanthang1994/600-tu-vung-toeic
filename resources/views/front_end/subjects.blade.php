@@ -10,7 +10,7 @@
             <div class="rowFlexTest">
                 <div class="rowFlexTestInnerLeft">
                     @if(count($subjects)>0)
-                    <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{$subjects[0]->category_image}}" alt="{{$subjects[0]->category_image}}" srcset=""></div>
+                    <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{ asset($subjects[0]->category_image) }}" alt="{{$subjects[0]->category_image}}" srcset=""></div>
 
                     <div style="text-align:left; margin-left: 10px;">
                         <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
@@ -58,10 +58,10 @@
             <div class="borderClass">
                 <div class="innerWrap" >
                     <a href="event-details.html"><img style="width: 230px;height: 200px;"
-                                                      src="assets/img/event/{{$item->chu_de_image}}" alt="{{$item->chu_de_image}}"></a>
+                                                      src="{{ asset($item->chu_de_image) }}" alt="{{$item->chu_de_image}}"></a>
                     <div class="details-wrapper">
                         <div class="target-photo">
-                            <img src="https://static.memrise.com/uploads/category_photos/en.png" alt="">
+                            <img src="{{ asset('/assets/admin/img/chu_de/en.png') }}" alt="">
                         </div>
 
                         <div class="tiengAnhBoi">

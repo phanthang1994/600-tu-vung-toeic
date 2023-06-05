@@ -53,7 +53,7 @@ Route::get('/category_detail/{category_id}',
 )->name('category_detail');
 
 Route::get('/test_types', [TuMoiController::class,'test_types'])->name('test_types');
-Route::get('/test_type/{category_detail}', [TuMoiController::class,'test_type'])->name('test_type'); // chua viet
+Route::get('/test_type/{category_id}', [TuMoiController::class,'test_type'])->name('test_type'); // chua viet
 
 Route::any('/multiple_choice_question/{id_chu_de}',[TuMoiController::class,'multiple_choice_question'])->name('multiple_choice_question');
 Route::get('/free_text_question/{id_chu_de}', [TuMoiController::class,'free_text_question'])->name('free_text_question');

@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="dpvpxs">
                                     <div class="cumBenPhai" style="margin-top:1rem;">
-                                        <a class="" href="{{route('category_detail',$item->id)}}" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-top: solid blue 2px; background-color:#FCFAF2 ">
+                                        <a class="" href="{{route('test_type',$item->id)}}" style="font-weight:bolder;margin-left: 5px; padding:5px 5px; border-top: solid blue 2px; background-color:#FCFAF2 ">
                                             <i class="fa fa-rocket"></i>
                                             <span style="color: red; font-size: 1.5rem;">Test</span>
                                         </a>

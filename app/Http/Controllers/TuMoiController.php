@@ -336,10 +336,12 @@ class TuMoiController extends Controller
         return view('front_end.test_type', compact('results'));
     }
 
-    public function test_type($chu_de_id)
+    public function test_type($category_id)
     {
         $subjects = DB::table('chu_de')
-            ->where('chu_de.id','=',$chu_de_id)
+            ->where('chu_de.category_id','=',$category_id)
+            -> leftJoin('category','category.id','=','chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
             ->select( 'chu_de.id',
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
@@ -365,7 +367,7 @@ class TuMoiController extends Controller
             return $result;
         });
 //        dd($results);
-        return view('front_end.test_type', compact('results'));
+        return view('front_end.test_type_detail', compact('results'));
     }
     public function multiple_choice_question($id_chu_de)
     {

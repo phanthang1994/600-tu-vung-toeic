@@ -7,8 +7,8 @@
 <div class="" style="background-color:#74D8C1">
     <div class="container" style="display:flex; padding:10px;justify-content: space-between;">
         <h3>
-            <a href="#">Tiếng Anh (600 từ toeic)</a>
-            . Hợp Đồng (agreement).
+            <a href="#"></a>
+
         </h3>
         <a
             href="#">

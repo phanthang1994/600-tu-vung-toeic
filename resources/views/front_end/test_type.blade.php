@@ -9,17 +9,16 @@
     <div class="" style="background-color: #2B3648;border-top: 3px solid red; padding:1rem 1rem; ">
         <div class="container">
             <div class="rowFlexTest">
-                @if(count($results)>0)
                     <div class="rowFlexTestInnerLeft">
-                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{$results[0]->category_image}}" alt="{{$results[0]->category_image}}" srcset=""></div>
+                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="" alt="" srcset=""></div>
 
                         <div style="text-align:left; margin-left: 10px;">
                             <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
-                            <p style="color:white">{{$results[0]->category_name}}<span>
-                    </span> <br>{{$results[0]->category_description}}</p>
+                            <p style="color:white"><span>
+                    </span> <br></p>
                         </div>
                     </div>
-                @endif
+
 
             </div>
         </div>
