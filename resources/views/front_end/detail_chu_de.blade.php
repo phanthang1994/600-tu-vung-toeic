@@ -78,8 +78,8 @@
 
                             </div>
                             <h3>
-                                <a href="#" class="inner"
-                                   title="Tiếng Anh (Anh Quốc) 1" style="font-size: 18px;">
+                                <a href="{{route('new_words',$item->)}}" class="inner" // change cho nay get chu_de_id, tu_moi_id ...
+                                title="Tiếng Anh (Anh Quốc) 1" style="font-size: 18px;">
                                     {{$item->chu_de_name}}
                                 </a>
                             </h3>

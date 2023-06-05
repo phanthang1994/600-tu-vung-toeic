@@ -299,7 +299,7 @@ class TuMoiController extends Controller
         $new_word = DB::table('tu_moi')
             -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
             -> where('tu_moi.chu_de_id','=',$chu_de_id)
-            -> select('tu_moi.*','chu_de.*')->get();
+            -> select('tu_moi.*','chu_de.*')->get(); // change cho nay get chu_de_id, tu_moi_id ... 
         return view('front_end.new_words',compact('new_word'));
     }
 
