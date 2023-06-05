@@ -7,11 +7,11 @@
 <div class="" style="background-color:#74D8C1">
     <div class="container" style="display:flex; padding:10px;justify-content: space-between;">
         <h3>
-            <a href="#"></a>
-
+            <span style="color: orangered">{{$new_word[0]->chu_de_name}}}</span>
+            .{{$new_word[0]->description}}
         </h3>
         <a
-            href="#">
+            href="{{route('home')}}" id = "go_back_home">
 
             <i class="fa fa-close fa-2x "
                style="align-self: center; margin-top: 5px; padding-bottom: 0; padding-top: 0; cursor: pointer;">
@@ -46,7 +46,7 @@
                             <div class="event-img">
                                 <div href="event-details.html">
                                     <img style="max-width: 348px;height: 289px;border-radius: 2rem;" src="" alt=""
-                                         class="imagNewWords">
+                                         id="imagNewWords">
                                 </div>
 
                             </div>
@@ -221,10 +221,11 @@
 
 @include('front_end.layouts.footer')
 <script >
+
     const data = @json($new_word);
     const get_chu_de_id = window.location.href;
     const url = new URL(get_chu_de_id);
-    const baseUrl = `${url.protocol}//${url.host}`;
+    const baseUrl = `${url.protocol}//${url.host}`+"/";
 
     // Check if there is a match
     let slideMinus = 0;
@@ -233,9 +234,9 @@
     document.querySelector('.xemTiep').style.display='none'
     /*nút tiếp kiểu mới*/
     let newWordTh = 0
-    const urle = new URL(document.querySelector('.imagNewWords').src);
+    const urle = new URL(document.querySelector('#imagNewWords').src);
 
-    document.querySelector('.imagNewWords').src = baseUrl+ data[newWordTh].image
+    document.querySelector('#imagNewWords').src = baseUrl+ data[newWordTh].image
     const heading = document.querySelector('.newWords');
     heading.innerHTML = data[newWordTh].name
     const span = document.createElement("span");
@@ -269,7 +270,7 @@
                 slideMinus--;
                 displayMinusIndex++
                 console.log(displayMinusIndex);
-                document.querySelector('.imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
+                document.querySelector('#imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
                 document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
                 document.getElementById("myAudio").setAttribute('src',  baseUrl+data[displayMinusIndex].audio);
                 che_tu_element.innerHTML = data[displayMinusIndex].che_tu
@@ -285,7 +286,7 @@
             if (parseInt(newWordTh) < parseInt(data.length)) {
                 if (slideMinus===0)
                 {
-                    document.querySelector('.imagNewWords').src =  baseUrl+data[newWordTh].image;
+                    document.querySelector('#imagNewWords').src =  baseUrl+data[newWordTh].image;
 
                     heading.innerHTML = data[newWordTh].name
                     span.textContent = data[newWordTh].phien_am;
@@ -322,7 +323,7 @@
                 slideMinus--;
                 displayMinusIndex++
                 console.log(displayMinusIndex);
-                document.querySelector('.imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
+                document.querySelector('#imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
 
                 heading.innerHTML = data[displayMinusIndex].name
                 span.textContent = data[displayMinusIndex].phien_am;
@@ -342,7 +343,7 @@
             if (parseInt(newWordTh) < parseInt(data.length)) {
                 if (slideMinus===0)
                 {
-                    document.querySelector('.imagNewWords').src =  baseUrl+data[newWordTh].image;
+                    document.querySelector('#imagNewWords').src =  baseUrl+data[newWordTh].image;
 
                     heading.innerHTML = data[newWordTh].name
                     span.textContent = data[newWordTh].phien_am;
@@ -376,7 +377,7 @@
         slideMinus++;
         console.log(slideMinus)
         displayMinusIndex = newWordTh-slideMinus
-        document.querySelector('.imagNewWords').src = baseUrl+data[displayMinusIndex].image;
+        document.querySelector('#imagNewWords').src = baseUrl+data[displayMinusIndex].image;
         heading.innerHTML = data[displayMinusIndex].name
         span.textContent = data[displayMinusIndex].phien_am;
         heading.appendChild(span);
@@ -401,7 +402,7 @@
         slideMinus++;
         console.log(slideMinus)
         displayMinusIndex = newWordTh-slideMinus
-        document.querySelector('.imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
+        document.querySelector('#imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
         heading.innerHTML = data[displayMinusIndex].name
         span.textContent = data[displayMinusIndex].phien_am;
         heading.appendChild(span);
@@ -517,6 +518,18 @@
     actionEnd[1].addEventListener('click', function () {
         alert('Kiểm tra')
     }, false);
+    document.getElementById('go_back_home').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+
+        // Display the confirmation message
+        var confirmed = confirm("Bạn có muốn kết thúc học từ mới hay không?");
+
+        if (confirmed) {
+            window.location.href = this.href; // Go to the specified URL (route)
+        }
+    });
+
+
 </script>
 
 </body>
