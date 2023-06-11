@@ -7,8 +7,15 @@
 <div class="" style="background-color:#74D8C1">
     <div class="container" style="display:flex; padding:10px;justify-content: space-between;">
         <h3>
-            <span style="color: orangered">{{$new_word[0]->chu_de_name}}}</span>
+            @if(count($new_word)!=0)
+            <span style="color: orangered">{{$new_word[0]->chu_de_name}}</span>
             .{{$new_word[0]->description}}
+            @else
+                <a
+                    href="{{route('home')}}" id = "go_back_home">
+                    600tutoeic.com
+                </a>
+            @endif
         </h3>
         <a
             href="{{route('home')}}" id = "go_back_home">
@@ -522,7 +529,7 @@
         event.preventDefault(); // Prevent the default behavior of the link
 
         // Display the confirmation message
-        var confirmed = confirm("Bạn có muốn kết thúc học từ mới hay không?");
+        var confirmed = confirm("Bạn có muốn kết thúc HỌC TỪ MỚI hay không?");
 
         if (confirmed) {
             window.location.href = this.href; // Go to the specified URL (route)

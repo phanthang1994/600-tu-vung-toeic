@@ -5,29 +5,32 @@
 <x-HeadComponent css="page_test.css"></x-HeadComponent>
 <body style="background-color:#fcfaf2;"
 @include('front_end.layouts.header')
-<div class="" >
-    <div class="" style="background-color: #2B3648;border-top: 3px solid red; padding-top: 1rem;">
+<div class="">
+    <div class="" style="background-color: #2B3648;border-top: 3px solid red; padding:1rem 1rem; ">
         <div class="container">
             <div class="rowFlexTest">
-                <div class="rowFlexTestInnerLeft">
-                    <div class="loGoImd" style="display: flex;flex-wrap:wrap;">
-                        <div class="logo" style="margin-bottom: 15px; margin-right:5px">
-                            <img style="border-radius:8px;max-width: 50px;max-height: 50px;" src="assets/img/event/event-6.jpg" alt="" srcset="">
+                @if(count($results)>0)
+                    <div class="rowFlexTestInnerLeft">
+                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{ asset($results[0]->category_image) }}" alt="{{$results[0]->category_image}}" srcset=""></div>
+
+                        <div style="text-align:left; margin-left: 10px;">
+                            <a href="{{route('home')}}">
+                                <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                            </a>
+                            <p style="color:white">{{$results[0]->category_name}}<span>
+                    </span> <br>{{$results[0]->category_description}}</p>
                         </div>
-                        <div style=" border-radius:8px;">
-                            <img style="border-radius:8px;max-width: 50px;max-height: 50px;" src="assets/img/event/event-6.jpg" alt="" srcset="">
+                    </div>
+                @else
+                    <div class="rowFlexTestInnerLeft">
+                        <div style="text-align:left; margin-left: 10px;">
+                            <a href="{{route('home')}}">
+                                <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                            </a>
                         </div>
                     </div>
-                    <div style="text-align:left; margin-left: 10px;">
-                        <p style="color:white">600 từ vựng TOEIC<span>
-                        </span> <br> 1Tự giới thiệu bản thân, khám phá xung quanh</p>
-                    </div>
-                </div>
-                <div >
-                    <div class="rowFlexTestInnerRight" style="display:flex; justify-content:center; margin-top: 10px;">
-                        <a style="align-self: center;"><img alt="" style="max-width: 100px;" src="assets/img/logo/logo.png"></a>
-                    </div>
-                </div>
+                @endif
+
             </div>
         </div>
     </div>

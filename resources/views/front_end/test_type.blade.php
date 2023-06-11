@@ -13,7 +13,9 @@
                         <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="" alt="" srcset=""></div>
 
                         <div style="text-align:left; margin-left: 10px;">
-                            <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                           <a href="{{route('home')}}">
+                               <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                           </a>
                             <p style="color:white"><span>
                     </span> <br></p>
                         </div>

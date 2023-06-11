@@ -14,9 +14,19 @@
                         <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{ asset($results[0]->category_image) }}" alt="{{$results[0]->category_image}}" srcset=""></div>
 
                         <div style="text-align:left; margin-left: 10px;">
-                            <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                            <a href="{{route('home')}}">
+                                <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                            </a>
                             <p style="color:white">{{$results[0]->category_name}}<span>
                     </span> <br>{{$results[0]->category_description}}</p>
+                        </div>
+                    </div>
+                @else
+                    <div class="rowFlexTestInnerLeft">
+                        <div style="text-align:left; margin-left: 10px;">
+                            <a href="{{route('home')}}">
+                                <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                            </a>
                         </div>
                     </div>
                 @endif

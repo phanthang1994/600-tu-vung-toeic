@@ -10,8 +10,11 @@
             <div class="rowFlexTest">
                 <div class="rowFlexTestInnerLeft">
 
-                   <div style="text-align:left; margin-left: 10px;">
-                        <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                    <div style="text-align:left; margin-left: 10px;">
+                        <a href="{{route('home')}}">
+                            <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+
+                        </a>
                     </div>
                 </div>
             </div>
@@ -50,16 +53,16 @@
         <div class="styleRow">
             @foreach($subjects as $item)
 
-            <div class="borderClass">
-                <div class="innerWrap" >
-                    <a href="event-details.html"><img style="width: 230px;height: 200px;"
-                                                      src="{{ asset($item->chu_de_image) }}" alt="{{$item->chu_de_image}}"></a>
-                    <div class="details-wrapper">
-                        <div class="target-photo">
-                            <img src="{{ asset('/assets/admin/img/chu_de/en.png') }}" alt="">
-                        </div>
+                <div class="borderClass">
+                    <div class="innerWrap" >
+                        <a href="{{route('new_words',$item->id)}}"><img style="width: 230px;height: 200px;"
+                                                          src="{{ asset($item->chu_de_image) }}" alt="{{$item->chu_de_image}}"></a>
+                        <div class="details-wrapper">
+                            <div class="target-photo">
+                                <img src="{{ asset('/assets/admin/img/chu_de/en.png') }}" alt="">
+                            </div>
 
-                        <div class="tiengAnhBoi">
+                            <div class="tiengAnhBoi">
                                         <span class="author pull-right">
                                             bởi
 
@@ -68,35 +71,35 @@
                                                class="author-link">{{$item->category_name}}</a>
 
                                         </span>
-                            <a href="#" class="category"
-                               title="Tiếng Anh">Chủ đề</a>
+                                <a href="#" class="category"
+                                   title="Tiếng Anh">Chủ đề</a>
 
-                        </div>
-                        <h3>
-                            <a href="#" class="inner"
-                               title="Tiếng Anh (Anh Quốc) 1" style="font-size: 18px;">
-                                {{$item->chu_de_name}}
-                            </a>
-                        </h3>
+                            </div>
+                            <h3>
+                                <a href="{{route('new_words',$item->id)}}" class="inner"
+                                title="Tiếng Anh (Anh Quốc) 1" style="font-size: 18px;">
+                                    {{$item->chu_de_name}}
+                                </a>
+                            </h3>
 
-                        <div class="details">
+                            <div class="details">
 
-                            <div class="stats">
+                                <div class="stats">
                                             <span class="stat1" title="670930 người đang học khóa học này">
                                                 <i class="fa fa-user"></i>{{$item->so_nguoi_theo_hoc}}
                                             </span>
-                                <span class="stat2" title="Khóa học này cần khoảng 3h">
+                                    <span class="stat2" title="Khóa học này cần khoảng 3h">
                                     <i class="fa fa-clock-o"></i>
                                                  {{$item->thoi_gian_hoc}}
                             </span>
+                                </div>
+
                             </div>
 
+
                         </div>
-
-
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
         <div class="pro-pagination-style text-center mt-25">

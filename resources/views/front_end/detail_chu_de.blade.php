@@ -13,11 +13,23 @@
                     <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{ asset($subjects[0]->category_image) }}" alt="{{$subjects[0]->category_image}}" srcset=""></div>
 
                     <div style="text-align:left; margin-left: 10px;">
-                        <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+                        <a href="{{route('home')}}">
+                            <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+
+                        </a>
                         <p style="color:white">{{$subjects[0]->category_name}}<span>
                     </span> <br>{{$subjects[0]->category_description}}</p>
                     </div>
                 </div>
+                @else
+                    <div class="rowFlexTestInnerLeft">
+                        <div style="text-align:left; margin-left: 10px;">
+                            <a href="{{route('home')}}">
+                                <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
+
+                            </a>
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>
@@ -57,7 +69,7 @@
 
                 <div class="borderClass">
                     <div class="innerWrap" >
-                        <a href="event-details.html"><img style="width: 230px;height: 200px;"
+                        <a href="{{route('new_words',$item->id)}}"><img style="width: 230px;height: 200px;"
                                                           src="{{ asset($item->chu_de_image) }}" alt="{{$item->chu_de_image}}"></a>
                         <div class="details-wrapper">
                             <div class="target-photo">
@@ -78,7 +90,7 @@
 
                             </div>
                             <h3>
-                                <a href="{{route('new_words',$item->)}}" class="inner" // change cho nay get chu_de_id, tu_moi_id ...
+                                <a href="{{route('new_words',$item->id)}}" class="inner"
                                 title="Tiếng Anh (Anh Quốc) 1" style="font-size: 18px;">
                                     {{$item->chu_de_name}}
                                 </a>

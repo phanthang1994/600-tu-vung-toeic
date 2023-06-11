@@ -35,7 +35,7 @@ class ChuDeController extends Controller
         return view('admin.chu_de.chu_de',compact('subjects'));
     }
 
-    public function all_courses()
+    public function  all_courses()
     {
         $subjects = DB::table('chu_de')
             -> leftJoin('category','category.id','=','chu_de.category_id')
@@ -49,7 +49,7 @@ class ChuDeController extends Controller
                 'category.image AS category_image',
                 'category.description AS category_description')->get();
 
-        return view('front_end.subjects', compact('subjects'));
+        return view('front_end.courses', compact('subjects'));
     }
 
 
