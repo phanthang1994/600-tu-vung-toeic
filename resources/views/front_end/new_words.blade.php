@@ -9,7 +9,7 @@
         <h3>
             @if(count($new_word)!=0)
             <span style="color: orangered">{{$new_word[0]->chu_de_name}}</span>
-            .{{$new_word[0]->description}}
+            .{{$new_word[0]->chu_de_description}}
             @else
                 <a
                     href="{{route('home')}}" id = "go_back_home">
@@ -276,7 +276,7 @@
             {
                 slideMinus--;
                 displayMinusIndex++
-                console.log(displayMinusIndex);
+                // console.log(displayMinusIndex);
                 document.querySelector('#imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
                 document.querySelector('.newWords').innerHTML = data[displayMinusIndex].nackCount;
                 document.getElementById("myAudio").setAttribute('src',  baseUrl+data[displayMinusIndex].audio);
@@ -289,7 +289,7 @@
                 return;
             }
             newWordTh++;
-            console.log(newWordTh)
+            // console.log(newWordTh)
             if (parseInt(newWordTh) < parseInt(data.length)) {
                 if (slideMinus===0)
                 {
@@ -329,7 +329,7 @@
             {
                 slideMinus--;
                 displayMinusIndex++
-                console.log(displayMinusIndex);
+                // console.log(displayMinusIndex);
                 document.querySelector('#imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
 
                 heading.innerHTML = data[displayMinusIndex].name
@@ -346,7 +346,7 @@
                 return;
             }
             newWordTh++;
-            console.log(newWordTh)
+            // console.log(newWordTh)
             if (parseInt(newWordTh) < parseInt(data.length)) {
                 if (slideMinus===0)
                 {
@@ -382,7 +382,7 @@
     // chuyển slide
     function plusSlides() { // dùng cho web
         slideMinus++;
-        console.log(slideMinus)
+        // console.log(slideMinus)
         displayMinusIndex = newWordTh-slideMinus
         document.querySelector('#imagNewWords').src = baseUrl+data[displayMinusIndex].image;
         heading.innerHTML = data[displayMinusIndex].name
@@ -407,7 +407,7 @@
             document.getElementsByClassName('previousBtnMobile')[0].disabled=true;
         }
         slideMinus++;
-        console.log(slideMinus)
+        // console.log(slideMinus)
         displayMinusIndex = newWordTh-slideMinus
         document.querySelector('#imagNewWords').src =  baseUrl+data[displayMinusIndex].image;
         heading.innerHTML = data[displayMinusIndex].name
