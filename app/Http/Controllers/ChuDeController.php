@@ -294,11 +294,13 @@ class ChuDeController extends Controller
 
     public function che_tu_for_chu_de($chu_de_id)
     {
-        $results = DB::table('chu_de')
-            ->where('chu_de.id', $chu_de_id)
+        $results = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', $chu_de_id)
+            ->rightJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
             ->select(
-                'chu_de.id',
-                'chu_de.chu_de_name',
+                'tu_moi.id AS tu_moi_id',
+                'chu_de.id AS chu_de_id',
+                'chu_de.chu_de_name AS chu_de_name',
                 'chu_de.image AS chu_de_image',
                 'chu_de.so_nguoi_theo_hoc',
                 'chu_de.thoi_gian_hoc',

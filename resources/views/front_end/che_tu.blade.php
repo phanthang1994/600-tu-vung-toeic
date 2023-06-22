@@ -37,7 +37,7 @@
     <style>
         .grid-container {
             display: grid;
-            grid-template-columns: 30% 30% auto ;
+            grid-template-columns: 30% auto ;
             background-color: #2196F3;
             padding: 10px;
         }
