@@ -53,7 +53,7 @@ Route::get('/category_detail/{category_id}',
 )->name('category_detail');
 
 Route::get('/test_types', [TuMoiController::class,'test_types'])->name('test_types');
-Route::get('/test_type/{category_id}', [TuMoiController::class,'test_type'])->name('test_type'); // chua viet
+Route::get('/test_type/{category_id}', [TuMoiController::class,'test_type'])->name('test_type');
 
 Route::any('/multiple_choice_question/{id_chu_de}',[TuMoiController::class,'multiple_choice_question'])->name('multiple_choice_question');
 Route::get('/free_text_question/{id_chu_de}', [TuMoiController::class,'free_text_question'])->name('free_text_question');
@@ -63,14 +63,10 @@ Route::any('/new_words/{chu_de_id}',[TuMoiController::class,'new_words'])->name(
 
 
 
-Route::get('/che_tu', function () {
-    return view('front_end.che_tu');
-})->name('che_tu');
+Route::get('/che_tu_chu_de/{chu_de_id}',[ChuDeController::class,'che_tu_for_chu_de'])->name('che_tu_for_chu_de');
 
 //admin login
 Route::get('panel/login',[LoginController::class,'getLogin'])->name('getLogin');
 Route::post('panel/login',[LoginController::class,'postLogin'])->name('postLogin');
 Route::get('panel/logout',[LoginController::class,'getLogout'])->name('logout');
-
-
 

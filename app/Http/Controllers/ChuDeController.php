@@ -291,4 +291,21 @@ class ChuDeController extends Controller
 
         return view('front_end.detail_chu_de', compact('subjects'));
     }
+
+    public function che_tu_for_chu_de($chu_de_id)
+    {
+        $results = DB::table('chu_de')
+            ->where('chu_de.id', $chu_de_id)
+            ->select(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description AS chu_de_description'
+            )
+            ->get();
+
+        return view('front_end.che_tu_for_chu_de', compact('results'));
+    }
 }
