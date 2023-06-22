@@ -64,6 +64,7 @@ Route::any('/new_words/{chu_de_id}',[TuMoiController::class,'new_words'])->name(
 
 
 Route::get('/che_tu_chu_de/{chu_de_id}',[ChuDeController::class,'che_tu_for_chu_de'])->name('che_tu_for_chu_de');
+Route::get('/che_tu',[ChuDeController::class,'che_tu'])->name('che_tu');
 
 //admin login
 Route::get('panel/login',[LoginController::class,'getLogin'])->name('getLogin');
