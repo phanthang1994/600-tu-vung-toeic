@@ -67,7 +67,7 @@
               <div class="grid-container">
                   <div class="grid-item">Từ</div>
                   <div class="grid-item">chế từ</div>
-                  @foreach($results as $rs)
+                  @foreach($results as $rs) change here
                   <div class="grid-item">
                       <span>agree:</span>
                       (<span>nghĩa</span>)
