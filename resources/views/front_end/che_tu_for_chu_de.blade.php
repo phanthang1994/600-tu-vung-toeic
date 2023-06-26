@@ -67,15 +67,13 @@
               <div class="grid-container">
                   <div class="grid-item">Từ</div>
                   <div class="grid-item">chế từ</div>
-                  @foreach($results as $rs) change here
+                  @foreach($results as $rs)
                   <div class="grid-item">
-                      <span>agree:</span>
-                      (<span>nghĩa</span>)
-                      <span>, phiên âm:</span>
-                      <span>audio ,</span>
-                      (<span>từ loại</span>)
+                      <span>{{$rs->name}}: </span>
+                      (<span>{{$rs->tu_loai}}</span>)
                   </div>
-                  <div class="grid-item">7</div>
+                  <div class="grid-item">{{$rs->che_tu}}</div>
+                  @endforeach
               </div>
           </div>
     </div>

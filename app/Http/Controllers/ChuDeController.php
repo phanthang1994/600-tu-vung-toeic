@@ -298,7 +298,7 @@ class ChuDeController extends Controller
             ->where('tu_moi.chu_de_id', $chu_de_id)
             ->rightJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
             ->select(
-                'tu_moi.id AS tu_moi_id',
+                'tu_moi.*',
                 'chu_de.id AS chu_de_id',
                 'chu_de.chu_de_name AS chu_de_name',
                 'chu_de.image AS chu_de_image',
