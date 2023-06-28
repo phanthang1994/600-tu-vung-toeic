@@ -25,9 +25,9 @@
         <div class="baihoc">
             <p>Chọn chủ đề</p>
             <form action="" method="POST">
-                <select name="category" id="category">
-                    <option value="1">1 - Contracts : Hợp Đồng</option>
-                </select>
+                @foreach($results as $subject)
+                    <option value="{{$subject->id}}">{{$subject->category_name}}</option>
+                @endforeach
             </form>
         </div>
     </div>

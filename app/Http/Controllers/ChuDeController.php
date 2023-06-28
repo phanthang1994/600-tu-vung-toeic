@@ -312,17 +312,11 @@ class ChuDeController extends Controller
     }
     public function che_tu()
     {
-        $results = DB::table('chu_de')
+        $results = DB::table('category')
             ->select(
-                'chu_de.id',
-                'chu_de.chu_de_name',
-                'chu_de.image AS chu_de_image',
-                'chu_de.so_nguoi_theo_hoc',
-                'chu_de.thoi_gian_hoc',
-                'chu_de.description AS chu_de_description'
+      'category.*'
             )
             ->get();
-
         return view('front_end.che_tu', compact('results'));
     }
 }
