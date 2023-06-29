@@ -23,14 +23,17 @@
 <div class="" style="background-color: #FFFFFF;border-bottom: #1b1e21 1px solid;">
     <div class="container" style="padding: 0 10px; text-align:center;">
         <div class="baihoc">
-            <p>Chọn chủ đề</p>
-            <form action="" method="POST">
-                @foreach($results as $subject)
-                    <option value="{{$subject->id}}">{{$subject->category_name}}</option>
-                @endforeach
-            </form>
+            <div class="form-group">
+                <select name="chu_de_id">
+                    <option value="">--select Category--</option>
+                    @foreach($results as $subject)
+                        <option value="{{$subject->id}}">{{$subject->category_name}}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
+
 </div>
 
 <div class="all">
