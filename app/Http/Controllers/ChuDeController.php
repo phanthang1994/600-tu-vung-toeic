@@ -319,4 +319,11 @@ class ChuDeController extends Controller
             ->get();
         return view('front_end.che_tu', compact('results'));
     }
+    public function getChuDeOptions(Request $request)
+    {
+        $categoryId = $request->input('category_id');
+        $chuDeOptions = ChuDe::where('category_id', $categoryId)->get();
+
+        return response()->json($chuDeOptions);
+    }
 }

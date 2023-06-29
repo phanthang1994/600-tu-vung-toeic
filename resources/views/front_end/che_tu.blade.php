@@ -24,16 +24,20 @@
     <div class="container" style="padding: 0 10px; text-align:center;">
         <div class="baihoc">
             <div class="form-group">
-                <select name="chu_de_id">
+                <select name="category_id" id="category_id">
                     <option value="">--select Category--</option>
                     @foreach($results as $subject)
                         <option value="{{$subject->id}}">{{$subject->category_name}}</option>
                     @endforeach
                 </select>
             </div>
+            <div class="form-group">
+                <select name="chu_de_id" id="chu_de_id">
+                    <option value="">--select Chu De--</option>
+                </select>
+            </div>
         </div>
     </div>
-
 </div>
 
 <div class="all">
@@ -57,57 +61,74 @@
         @include('front_end.layouts.ad_l')
     </div>
     <div class="mainContent">
-          <div class="">
-              <div class="grid-container">
-                  <div class="grid-item">Từ</div>
-                  <div class="grid-item">Ví Dụ</div>
-                  <div class="grid-item">chế từ</div>
-                  <div class="grid-item">
-                      <span>agree:</span>
-                      (<span>nghĩa</span>)
-                      <span>, phiên âm:</span>
-                      <span>audio ,</span>
-                      (<span>từ loại</span>)
-                  </div>
-                  <div class="grid-item">7</div>
-                  <div class="grid-item">7</div>
-              </div>
-          </div>
+        <div class="">
+            <div class="grid-container">
+                <div class="grid-item">Từ</div>
+                <div class="grid-item" >chế từ</div>
+                    <div class="grid-item" id="dynamic-grid-item1">
+                        <span id="item_name"></span>
+                        (<span id="item_tu_loai"></span>)
+                    </div>
+                    <div class="grid-item" id="dynamic-grid-item2"></div>
+            </div>
+        </div>
     </div>
     <div class="ad-r ad-r-in-all">
         @include('front_end.layouts.ad_r')
     </div>
 </div>
 @include('front_end.layouts.footer')
+// Add this script in your view or JavaScript file
 <script>
-    var touchtime = 0;
-    document.querySelectorAll('.btnCheckItemGrid').forEach(item => {
-        item.addEventListener('click', event => {
-            let checkboxItemGrid = document.querySelectorAll('.checkboxItemGrid')
-            if (touchtime === 0) {
-                // set first click
-                touchtime = new Date().getTime();
-            } else {
-                // compare first click to this click and see if they occurred within double click threshold
-                if (((new Date().getTime()) - touchtime) < 800) {
-                    // double click occurred
-                    for (let i =0; i<checkboxItemGrid.length;i++)
-                    {
-                        checkboxItemGrid[i].checked = checkboxItemGrid[i].checked !== true;
+    $(document).ready(function () {
+        $('#category_id').on('change', function () {
+            var categoryId = $(this).val();
+            var chuDeSelect = $('#chu_de_id');
+
+            // Clear existing options
+            chuDeSelect.html('<option value="">--select Chu De--</option>');
+
+            if (categoryId !== '') {
+                // Send AJAX request to fetch options based on selected category
+                $.ajax({
+                    url: '/get_chu_de_options',
+                    method: 'GET',
+                    data: { category_id: categoryId },
+                    success: function (chuDeOptions) {
+                        // Add fetched options to the second dropdown
+                        $.each(chuDeOptions, function (index, chuDe) {
+                            chuDeSelect.append('<option value="' + chuDe.id + '">' + chuDe.chu_de_name + '</option>');
+                        });
                     }
-                    touchtime = 0;
-                } else {
-                    // not a double click so set as a new first click
-                    touchtime = new Date().getTime();
-                }
+                });
             }
 
-        })
-    })
-    // viết cho nút bỏ qua
-    function boQUaFunction() {
+        });
+        $('#chu_de_id').on('change', function () {
+            var selectedOption = $(this).val();
+            var dynamicGridItems = $('[id^="dynamic-grid-item"]');
 
-    }
+            // Update the content of all elements with class "grid-item" and id starting with "dynamic-grid-item"
+            dynamicGridItems.each(function () {
+                var gridItem = $(this);
+                var itemName = gridItem.find('#item_name');
+                var itemTuLoai = gridItem.find('#item_tu_loai');
+
+                // Update the content of the specific elements based on the selected option
+                if (selectedOption === 'option1') {
+                    itemName.text('New Content for Option 1');
+                    itemTuLoai.text('New Tu Loai for Option 1');
+                } else if (selectedOption === 'option2') {
+                    itemName.text('New Content for Option 2');
+                    itemTuLoai.text('New Tu Loai for Option 2');
+                } else {
+                    itemName.text('Default Content');
+                    itemTuLoai.text('Default Tu Loai');
+                }
+            });
+        });
+    });
 </script>
+
 </body>
 </html>
