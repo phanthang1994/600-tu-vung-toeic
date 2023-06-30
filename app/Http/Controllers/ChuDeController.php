@@ -326,4 +326,12 @@ class ChuDeController extends Controller
 
         return response()->json($chuDeOptions);
     }
+    public function getTuMoiOptions(Request $request)
+    {
+        $chu_de_id = $request->input('chu_de_id');
+        $tuMoiOptions = TuMoi::where('chu_de_id', $chu_de_id)->get(['name', 'tu_loai', 'che_tu']);
+
+
+        return response()->json($tuMoiOptions);
+    }
 }

@@ -80,6 +80,7 @@
 @include('front_end.layouts.footer')
 // Add this script in your view or JavaScript file
 <script>
+
     $(document).ready(function () {
         $('#category_id').on('change', function () {
             var categoryId = $(this).val();
@@ -106,26 +107,45 @@
         });
         $('#chu_de_id').on('change', function () {
             var selectedOption = $(this).val();
-            var dynamicGridItems = $('[id^="dynamic-grid-item"]');
 
-            // Update the content of all elements with class "grid-item" and id starting with "dynamic-grid-item"
-            dynamicGridItems.each(function () {
-                var gridItem = $(this);
-                var itemName = gridItem.find('#item_name');
-                var itemTuLoai = gridItem.find('#item_tu_loai');
+            // Clear previous content
+            $('#item_name').empty();
+            $('#item_tu_loai').empty();
+            $('#dynamic-grid-item2').empty();
 
-                // Update the content of the specific elements based on the selected option
-                if (selectedOption === 'option1') {
-                    itemName.text('New Content for Option 1');
-                    itemTuLoai.text('New Tu Loai for Option 1');
-                } else if (selectedOption === 'option2') {
-                    itemName.text('New Content for Option 2');
-                    itemTuLoai.text('New Tu Loai for Option 2');
-                } else {
-                    itemName.text('Default Content');
-                    itemTuLoai.text('Default Tu Loai');
-                }
-            });
+            if (selectedOption !== '') {
+                // Send AJAX request to fetch options based on the selected chu_de_id
+                $.ajax({
+                    url: '/get_tu_moi_options', // Update the route name
+                    method: 'GET',
+                    data: { chu_de_id: selectedOption },
+                    success: function (tuMoiOptions) {
+                        // Clear previous content
+                        $('#dynamic-grid-item1').empty();
+                        $('#dynamic-grid-item2').empty();
+
+                        // Update the content of each dynamic grid item
+                        $.each(tuMoiOptions, function (index, option) {
+                            var gridItem1 = $('<div class="grid-item"></div>');
+                            var gridItem2 = $('<div class="grid-item"></div>');
+
+                            // Fill the content of each grid item
+                            var itemName = $('<span></span>').text(option.name);
+                            var itemTuLoai = $('<span></span>').text(option.tu_loai);
+                            var itemCheTu = $('<div></div>').text(option.che_tu);
+
+                            // Append the content to the grid items
+                            gridItem1.append(itemName);
+                            gridItem1.append('(' + itemTuLoai + ')');
+                            gridItem2.append(itemCheTu);
+
+                            // Append the grid items to the container
+                            $('#dynamic-grid-item1').append(gridItem1);
+                            $('#dynamic-grid-item2').append(gridItem2);
+                        });
+                    }
+                });
+            }
         });
     });
 </script>
