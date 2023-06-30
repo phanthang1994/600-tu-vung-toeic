@@ -105,13 +105,12 @@
             }
 
         });
+
         $('#chu_de_id').on('change', function () {
             var selectedOption = $(this).val();
 
-            // Clear previous content
-            $('#item_name').empty();
-            $('#item_tu_loai').empty();
-            $('#dynamic-grid-item2').empty();
+            // Clear previous content except the first two grid items
+            $('.grid-container').find('.grid-item:not(:first-child):not(:nth-child(2))').empty();
 
             if (selectedOption !== '') {
                 // Send AJAX request to fetch options based on the selected chu_de_id
@@ -120,28 +119,23 @@
                     method: 'GET',
                     data: { chu_de_id: selectedOption },
                     success: function (tuMoiOptions) {
-                        // Clear previous content
-                        $('#dynamic-grid-item1').empty();
-                        $('#dynamic-grid-item2').empty();
-
-                        // Update the content of each dynamic grid item
+                        // Iterate over each option and create a pair of grid items
                         $.each(tuMoiOptions, function (index, option) {
-                            var gridItem1 = $('<div class="grid-item"></div>');
-                            var gridItem2 = $('<div class="grid-item"></div>');
+                            var gridItem1 = $('<div class="grid-item" id="dynamic-grid-item1"></div>');
+                            var gridItem2 = $('<div class="grid-item" id="dynamic-grid-item2"></div>');
 
                             // Fill the content of each grid item
-                            var itemName = $('<span></span>').text(option.name);
-                            var itemTuLoai = $('<span></span>').text(option.tu_loai);
-                            var itemCheTu = $('<div></div>').text(option.che_tu);
+                            var itemName = $('<span id="item_name"></span>').text(option.name);
+                            var itemTuLoai = $('<span id="item_tu_loai"></span>').text(option.tu_loai);
 
                             // Append the content to the grid items
                             gridItem1.append(itemName);
                             gridItem1.append('(' + itemTuLoai + ')');
-                            gridItem2.append(itemCheTu);
+                            gridItem2.text(option.che_tu);
 
-                            // Append the grid items to the container
-                            $('#dynamic-grid-item1').append(gridItem1);
-                            $('#dynamic-grid-item2').append(gridItem2);
+                            // Append the grid items to the grid container
+                            $('.grid-container').append(gridItem1);
+                            $('.grid-container').append(gridItem2);
                         });
                     }
                 });
