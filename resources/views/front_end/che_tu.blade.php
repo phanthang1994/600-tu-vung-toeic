@@ -48,6 +48,12 @@
             background-color: #2196F3;
             padding: 10px;
         }
+        .grid-container1 {
+            display: grid;
+            grid-template-columns: 30% auto ;
+            background-color: #2196F3;
+            padding: 10px;
+        }
         .grid-item {
             word-wrap: break-word;
             background-color: rgba(255, 255, 255, 0.8);
@@ -62,11 +68,14 @@
     </div>
     <div class="mainContent">
         <div class="">
-            <div class="grid-container">
+            <div class="grid-container1">
                 <div class="grid-item">Từ</div>
                 <div class="grid-item" >chế từ</div>
+            </div>
+            <div class="grid-container">
                     <div class="grid-item" id="dynamic-grid-item1">
                         <span id="item_name"></span>
+                        /<span id="phien_am"></span>/
                         (<span id="item_tu_loai"></span>)
                     </div>
                     <div class="grid-item" id="dynamic-grid-item2"></div>
@@ -109,8 +118,8 @@
         $('#chu_de_id').on('change', function () {
             var selectedOption = $(this).val();
 
-            // Clear previous content except the first two grid items
-            $('.grid-container').find('.grid-item:not(:first-child):not(:nth-child(2))').empty();
+            // Clear previous content
+            $('.grid-container').empty();
 
             if (selectedOption !== '') {
                 // Send AJAX request to fetch options based on the selected chu_de_id
@@ -127,9 +136,14 @@
                             // Fill the content of each grid item
                             var itemName = $('<span id="item_name"></span>').text(option.name);
                             var itemTuLoai = $('<span id="item_tu_loai"></span>').text(option.tu_loai);
+                            itemTuLoai = itemTuLoai.text();
+                            var itemphien_am = $('<span id="phien_am"></span>').text(option.phien_am);
+                            itemphien_am = itemphien_am.text();
+                            // console.log(option)
 
                             // Append the content to the grid items
                             gridItem1.append(itemName);
+                            gridItem1.append('(' + itemphien_am + ')');
                             gridItem1.append('(' + itemTuLoai + ')');
                             gridItem2.text(option.che_tu);
 
