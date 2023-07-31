@@ -395,10 +395,10 @@ body{
     background-color:#f1f1f1
 }
 .dot {
-    height: 5rem;
+    height: 3.9rem;
     width: 5rem;
-    background-color: #bbb;
     border-radius: 50%;
+    border: #0b0b0b solid 2px;
     display: flex;
     justify-content: space-around;
     flex-flow: row;

@@ -205,20 +205,20 @@
         </div>
         <div class="chosingButton">
             <button type="button" class="continueStudying" data-toggle="modal" data-target="#exampleModalCenter">
-                <img src="seed (64).png" style="height:4rem;" alt="" srcset="">
-                <div> Học tiếp từ mới</div>
+                <div class="dot"><i class="fa fa-arrow-circle-right fa-3x" aria-hidden="true" style="color: #e21f1f;"></i></div>
+                                    <p>Next</p>
             </button>
             <div class="outlineDot">
-                <div class="actionEnd">
-                    <div class="dot"><img src="fertilize (64).png" style="width: 72%;" alt="" srcset=""></div>
+                <div class="actionEnd" style="cursor: pointer">
+                    <div class="dot"><i class="fa fa-repeat fa-3x "  aria-hidden="true" style="color: #e21f1f;"></i></div>
                     <p>Học lại</p>
                 </div>
-                <div class="actionEnd">
-                    <div class="dot"><img src="watering-can (64).png" style="width: 72%;" alt="" srcset=""></div>
-                    <p>Ôn tập</p>
-                </div>
-                <div class="actionEnd">
-                    <div class="dot"><img src="test (64).png" style="width: 72%;" alt="" srcset=""></div>
+{{--                <div class="actionEnd" style="cursor: pointer">--}}
+{{--                    <div class="dot"><i class="fa fa-arrow-circle-right fa-3x" aria-hidden="true" style="color: #e21f1f;"></i></div>--}}
+{{--                    <p>Ôn tập</p>--}}
+{{--                </div>--}}
+                <div class="actionEnd" style="cursor: pointer">
+                    <div class="dot"><i class="fa fa-check-square-o fa-3x" aria-hidden="true" style="color: #e21f1f;"></i></div>
                     <p>Kiểm tra</p>
                 </div>
             </div>
@@ -233,7 +233,11 @@
     const get_chu_de_id = window.location.href;
     const url = new URL(get_chu_de_id);
     const baseUrl = `${url.protocol}//${url.host}`+"/";
+    const path = url.pathname;
+    const parts = path.split('/');
+    const ids = parts[parts.length - 1];
 
+    console.log(ids); // This will log "109"
     // Check if there is a match
     let slideMinus = 0;
     let valuePercent = 0;
@@ -519,11 +523,33 @@
     actionEnd[0].addEventListener('click', function () {
         location.reload();
     }, false)
+    // actionEnd[1].addEventListener('click', function () {
+    //     alert('Ôn tập')
+    // }, false);
+
     actionEnd[1].addEventListener('click', function () {
-        alert('Ôn tập')
-    }, false);
-    actionEnd[1].addEventListener('click', function () {
-        alert('Kiểm tra')
+        // Assuming you have the extracted ID stored in the "ids" variable
+         // If you want to use the extracted ID from the previous code snippet
+        // Construct the URL with the "chu_de_id" parameter
+        const new_words_url = baseUrl + 'new_words/' + ids;
+
+        // Make an AJAX request using the Fetch API
+        fetch(new_words_url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle the response data here
+                // For example, you can use the 'data' object that you receive from the server
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the fetch
+                console.error('Error:', error);
+            });
     }, false);
     document.getElementById('go_back_home').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent the default behavior of the link

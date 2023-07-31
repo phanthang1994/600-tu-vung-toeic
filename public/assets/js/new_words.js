@@ -223,9 +223,9 @@ actionEnd = document.getElementsByClassName('actionEnd')
 actionEnd[0].addEventListener('click', function () {
     location.reload();
 }, false)
-actionEnd[1].addEventListener('click', function () {
-    alert('Ôn tập')
-}, false);
+// actionEnd[1].addEventListener('click', function () {
+//     alert('Ôn tập')
+// }, false);
 actionEnd[1].addEventListener('click', function () {
     alert('Kiểm tra')
 }, false);

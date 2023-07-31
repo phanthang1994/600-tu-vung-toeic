@@ -60,18 +60,18 @@
                                     <li>
                                         <a href="{{route('courses')}}"> Học từ</a>
                                     </li>
-                                    <li>
-                                        <a href="#"> Mẹo thi điểm cao </a>
-                                    </li>
+{{--                                    <li>--}}
+{{--                                        <a href="#"> Mẹo thi điểm cao </a>--}}
+{{--                                    </li>--}}
                                     <li>
                                         <a  href="{{route('test_types')}}"> Test </a>
                                     </li>
-                                    <li>
-                                        <a href="#">ngữ pháp </a>
-                                    </li>
-                                    <li>
-                                        <a href="#"> Tài liệu </a>
-                                    </li>
+{{--                                    <li>--}}
+{{--                                        <a href="#">ngữ pháp </a>--}}
+{{--                                    </li>--}}
+{{--                                    <li>--}}
+{{--                                        <a href="#"> Tài liệu </a>--}}
+{{--                                    </li>--}}
                                 </ul>
                             </nav>
                         </div>
@@ -144,15 +144,15 @@
                                         alt="menu-image"></a></li>
 
                             <li>
-                                <a href="index.html">Trang chủ</a>
+                                <a href="{{route('home')}}"> Home </a>
                             </li>
                             <li>
                                 <a href="{{route('che_tu')}}">Chế từ</a>
                             </li>
 
-                            <li>
-                                <a href="#">Mẹo thi điểm cao</a>
-                            </li>
+{{--                            <li>--}}
+{{--                                <a href="#">Mẹo thi điểm cao</a>--}}
+{{--                            </li>--}}
 
                             <li><a href="{{route('courses')}}">Học Từ</a></li>
 {{--                            <li>--}}
@@ -162,13 +162,13 @@
                                 <a href="{{route('test_types')}}">Test</a>
                             </li>
 
-                            <li>
-                                <a href="#">Ngữ Pháp</a>
-                            </li>
-                            <li>
-                                <a href="#">Tài liệu</a>
+{{--                            <li>--}}
+{{--                                <a href="#">Ngữ Pháp</a>--}}
+{{--                            </li>--}}
+{{--                            <li>--}}
+{{--                                <a href="#">Tài liệu</a>--}}
 
-                            </li>
+{{--                            </li>--}}
 
                         </ul>
                     </nav>

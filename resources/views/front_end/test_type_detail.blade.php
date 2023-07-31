@@ -90,7 +90,7 @@
                             </div>
                             <div class="" style="display:flex;flex-direction:column;">
                                 <div class="cr  cr-orange" style="text-align:left;width:100%;margin: 5px 0;padding: 0 15px;">
-                                    <i style="" class="fa fa-location-arrow"></i>
+                                    <i style="" class="fa fa-location-arrow">Số từ: </i>
                                     <span style="font-weight:bolder;" class="soTu">{{$item->tu_moi_count}}</span>
                                 </div>
                                 <div class="cr  cr-green" style="text-align:right;width: 100%;padding: 0 15px;">
