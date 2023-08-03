@@ -54,6 +54,7 @@ Route::get('/category_detail/{category_id}',
 
 Route::get('/test_types', [TuMoiController::class,'test_types'])->name('test_types');
 Route::get('/test_type/{category_id}', [TuMoiController::class,'test_type'])->name('test_type');
+Route::get('/single_test_type/{chu_de_id}', [TuMoiController::class,'single_test_type'])->name('single_test_type');
 
 Route::any('/multiple_choice_question/{id_chu_de}',[TuMoiController::class,'multiple_choice_question'])->name('multiple_choice_question');
 Route::get('/free_text_question/{id_chu_de}', [TuMoiController::class,'free_text_question'])->name('free_text_question');

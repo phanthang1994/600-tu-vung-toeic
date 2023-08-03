@@ -528,28 +528,7 @@
     // }, false);
 
     actionEnd[1].addEventListener('click', function () {
-        // Assuming you have the extracted ID stored in the "ids" variable
-         // If you want to use the extracted ID from the previous code snippet
-        // Construct the URL with the "chu_de_id" parameter
-        const new_words_url = baseUrl + 'new_words/' + ids;
-
-        // Make an AJAX request using the Fetch API
-        fetch(new_words_url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Handle the response data here
-                // For example, you can use the 'data' object that you receive from the server
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors that occurred during the fetch
-                console.error('Error:', error);
-            });
+        window.location.href = `/single_test_type/${ids}`;
     }, false);
     document.getElementById('go_back_home').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent the default behavior of the link
@@ -561,7 +540,12 @@
             window.location.href = this.href; // Go to the specified URL (route)
         }
     });
+    const continueButton = document.querySelector('.continueStudying');
 
+    // Add a click event listener to the button
+    continueButton.addEventListener('click', function () {
+      alert('tieps')
+    });
 
 </script>
 

@@ -336,6 +336,31 @@ class TuMoiController extends Controller
         return view('front_end.test_type', compact('results'));
     }
 
+    public function single_test_type($chu_de_id)
+    {
+        $results = DB::table('chu_de')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->select('chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description AS chu_de_description',
+                DB::raw("(SELECT COUNT(id) FROM tu_moi WHERE chu_de_id = {$chu_de_id}) AS tu_moi_count")
+            )
+            ->where('chu_de.id', $chu_de_id)
+            ->first();
+
+        if ($results) {
+            $minutes = floor($results->tu_moi_count * 2 / 60);
+            $seconds = $results->tu_moi_count % 60;
+            $timeToTest = sprintf("%02d:%02d", $minutes, $seconds);
+            $results->time_to_test = $timeToTest;
+        }
+
+//        dd($results);
+        return view('front_end.single_test_type', compact('results'));
+    }
     public function test_type($category_id)
     {
         $subjects = DB::table('chu_de')
