@@ -48,9 +48,16 @@ Route::get('/', [CategoryController::class,'home']
 Route::get('/courses',
  [ChuDeController::class,'all_courses']
 )->name('courses');
+
 Route::get('/category_detail/{category_id}',
     [ChuDeController::class,'category_detail']
 )->name('category_detail');
+
+
+Route::get('/new_words_next/{chu_de_id}',
+    [ChuDeController::class,'new_words_next']
+)->name('new_words_next');
+
 
 Route::get('/test_types', [TuMoiController::class,'test_types'])->name('test_types');
 Route::get('/test_type/{category_id}', [TuMoiController::class,'test_type'])->name('test_type');

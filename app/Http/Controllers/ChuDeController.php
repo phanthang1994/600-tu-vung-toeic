@@ -52,8 +52,6 @@ class ChuDeController extends Controller
         return view('front_end.courses', compact('subjects'));
     }
 
-
-
     public function get_many_images(){
         return view('admin.chu_de.upload_many_image');
     }
@@ -273,8 +271,6 @@ class ChuDeController extends Controller
     public function category_detail($category_id)
     {
         $subjects = DB::table('chu_de')
-            ->where('category.id', $category_id)
-            ->leftJoin('category','category.id','=','chu_de.category_id')
             ->select(
                 'chu_de.id',
                 'chu_de.chu_de_name',
@@ -284,12 +280,55 @@ class ChuDeController extends Controller
                 'chu_de.description AS chu_de_description',
                 'category.category_name AS category_name',
                 'category.image AS category_image',
-                'category.description AS category_description'
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
             )
-            ->get();
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->where('category.id', $category_id)
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(3); ;
 //        dd($subjects);
-
         return view('front_end.detail_chu_de', compact('subjects'));
+    }
+
+    public function new_words_next($chu_de_id)
+    {
+        // Get the category_id for the given chu_de_id
+        $category_id = ChuDe::where('id', $chu_de_id)->value('category_id');
+        $subjects = ChuDe::select(
+            'chu_de.id',
+            'chu_de.chu_de_name',
+            'chu_de.image AS chu_de_image',
+            'chu_de.so_nguoi_theo_hoc',
+            'chu_de.thoi_gian_hoc',
+            'chu_de.description AS chu_de_description',
+            'category.category_name AS category_name',
+            'category.image AS category_image',
+            'category.description AS category_description'
+        )
+            ->where('category_id', $category_id)
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->get();
+        dd($subjects);
+        return view('front_end.courses', compact('subjects'));
     }
 
     public function che_tu_for_chu_de($chu_de_id)

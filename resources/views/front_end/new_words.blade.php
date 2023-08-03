@@ -544,7 +544,7 @@
 
     // Add a click event listener to the button
     continueButton.addEventListener('click', function () {
-      alert('tieps')
+        window.location.href = `/new_words_next/${ids}`;
     });
 
 </script>

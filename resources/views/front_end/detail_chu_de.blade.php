@@ -99,13 +99,14 @@
                             <div class="details">
 
                                 <div class="stats">
-                                            <span class="stat1" title="670930 người đang học khóa học này">
-                                                <i class="fa fa-user"></i>{{$item->so_nguoi_theo_hoc}}
+                                             <span class="stat1" title="Khóa học này cần khoảng 3h">
+                                                <i class="fa fa-book" aria-hidden="true">:</i>
+                                                         {{$item->tu_moi_count}}
                                             </span>
-                                    <span class="stat2" title="Khóa học này cần khoảng 3h">
-                                    <i class="fa fa-clock-o"></i>
-                                                 {{$item->thoi_gian_hoc}}
-                            </span>
+                                            <span class="stat2" title="670930 người đang học khóa học này">
+                                                <i class="fa fa-user">: </i>{{$item->so_nguoi_theo_hoc}}
+                                            </span>
+
                                 </div>
 
                             </div>
@@ -118,17 +119,60 @@
         </div>
         <div class="pro-pagination-style text-center mt-25">
             <ul>
-                <li><a class="prev" href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                <li><a class="active" href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a class="next" href="#"><i class="fa fa-angle-double-right"></i></a></li>
+                @if($subjects->onFirstPage())
+                    <li class="disabled"><a class="prev" href="#"><i class="fa fa-angle-double-left"></i></a></li>
+                @else
+                    <li><a class="prev" href="{{ $subjects->previousPageUrl() }}"><i class="fa fa-angle-double-left"></i></a></li>
+                @endif
+
+                @for($page = 1; $page <= $subjects->lastPage(); $page++)
+                    @if($page == $subjects->currentPage())
+                        <li><a class="active" href="#">{{ $page }}</a></li>
+                    @else
+                        <li><a href="{{ $subjects->url($page) }}">{{ $page }}</a></li>
+                    @endif
+                @endfor
+
+                @if($subjects->hasMorePages())
+                    <li><a class="next" href="{{ $subjects->nextPageUrl() }}"><i class="fa fa-angle-double-right"></i></a></li>
+                @else
+                    <li class="disabled"><a class="next" href="#"><i class="fa fa-angle-double-right"></i></a></li>
+                @endif
+
             </ul>
+
         </div>
     </div>
     <div class="ad-r ad-r-in-all" style="flex: 0.5">
         @include('front_end.layouts.ad_r')
     </div>
 </div>
+
 @include('front_end.layouts.footer')
+    <script>
+        // pagination.js
+
+        $(document).on('click', '.pro-pagination-style ul li a', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                success: function (data) {
+                    // Update the content of the page with the new data
+                    $('#your-data-container').html(data);
+
+                    // Scroll to the top of the data container after loading new content
+                    $('html, body').animate({ scrollTop: $('#your-data-container').offset().top }, 'slow');
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+    </script>
 </body>
 </html>
