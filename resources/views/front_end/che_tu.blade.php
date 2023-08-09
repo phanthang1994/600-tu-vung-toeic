@@ -87,7 +87,7 @@
     </div>
 </div>
 @include('front_end.layouts.footer')
-// Add this script in your view or JavaScript file
+
 <script>
 
     $(document).ready(function () {

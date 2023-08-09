@@ -38,8 +38,8 @@ class ChuDeController extends Controller
     public function  all_courses()
     {
         $subjects = DB::table('chu_de')
-            -> leftJoin('category','category.id','=','chu_de.category_id')
-            ->select( 'chu_de.id',
+            ->select(
+                'chu_de.id',
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
                 'chu_de.so_nguoi_theo_hoc',
@@ -47,7 +47,30 @@ class ChuDeController extends Controller
                 'chu_de.description AS chu_de_description',
                 'category.category_name AS category_name',
                 'category.image AS category_image',
-                'category.description AS category_description')->get();
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+            )
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(3); ;
 
         return view('front_end.courses', compact('subjects'));
     }
@@ -304,7 +327,7 @@ class ChuDeController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(3); ;
+            ->paginate(1); ;
 //        dd($subjects);
         return view('front_end.detail_chu_de', compact('subjects'));
     }
@@ -313,21 +336,42 @@ class ChuDeController extends Controller
     {
         // Get the category_id for the given chu_de_id
         $category_id = ChuDe::where('id', $chu_de_id)->value('category_id');
-        $subjects = ChuDe::select(
-            'chu_de.id',
-            'chu_de.chu_de_name',
-            'chu_de.image AS chu_de_image',
-            'chu_de.so_nguoi_theo_hoc',
-            'chu_de.thoi_gian_hoc',
-            'chu_de.description AS chu_de_description',
-            'category.category_name AS category_name',
-            'category.image AS category_image',
-            'category.description AS category_description'
-        )
-            ->where('category_id', $category_id)
+        $subjects = DB::table('chu_de')
+            ->select(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description AS chu_de_description',
+                'category.category_name AS category_name',
+                'category.image AS category_image',
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+            )
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
-            ->get();
-        dd($subjects);
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->where('category.id', $category_id)
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(3); ;
+//        dd($subjects);
         return view('front_end.courses', compact('subjects'));
     }
 
@@ -352,16 +396,20 @@ class ChuDeController extends Controller
     public function che_tu()
     {
         $results = DB::table('category')
-            ->select(
-      'category.*'
-            )
+            ->select('category.*')
+            ->join('chu_de', 'category.id', '=', 'chu_de.category_id')
+            ->distinct()
             ->get();
         return view('front_end.che_tu', compact('results'));
     }
     public function getChuDeOptions(Request $request)
     {
         $categoryId = $request->input('category_id');
-        $chuDeOptions = ChuDe::where('category_id', $categoryId)->get();
+        $chuDeOptions = ChuDe::join('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->where('chu_de.category_id', $categoryId)
+            ->select('chu_de.*')
+            ->distinct()
+            ->get();
 
         return response()->json($chuDeOptions);
     }

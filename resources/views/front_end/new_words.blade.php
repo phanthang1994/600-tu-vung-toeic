@@ -116,8 +116,7 @@
 
                                                 </div>
                                             </div>
-                                            <button type="button" class="cheTuVaCauTruc" data-toggle="modal"
-                                                    data-target="#exampleModalCenter">
+                                            <button id="cheTuButton" type="button" class="cheTuVaCauTruc" data-toggle="modal" data-target="#exampleModalCenter">
                                                 <div id="tron_ngon_ngu">Trộn ngôn ngữ</div>
                                             </button>
                                         </div>
@@ -545,6 +544,9 @@
     // Add a click event listener to the button
     continueButton.addEventListener('click', function () {
         window.location.href = `/new_words_next/${ids}`;
+    });
+    document.getElementById('cheTuButton').addEventListener('click', function() {
+        window.location.href = "/che_tu_chu_de/" + ids;
     });
 
 </script>
