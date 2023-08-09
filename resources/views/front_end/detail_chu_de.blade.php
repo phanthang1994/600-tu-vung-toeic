@@ -117,31 +117,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="pro-pagination-style text-center mt-25">
-            <ul>
-                @if($subjects->onFirstPage())
-                    <li class="disabled"><a class="prev" href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                @else
-                    <li><a class="prev" href="{{ $subjects->previousPageUrl() }}"><i class="fa fa-angle-double-left"></i></a></li>
-                @endif
-
-                @for($page = 1; $page <= $subjects->lastPage(); $page++)
-                    @if($page == $subjects->currentPage())
-                        <li><a class="active" href="#">{{ $page }}</a></li>
-                    @else
-                        <li><a href="{{ $subjects->url($page) }}">{{ $page }}</a></li>
-                    @endif
-                @endfor
-
-                @if($subjects->hasMorePages())
-                    <li><a class="next" href="{{ $subjects->nextPageUrl() }}"><i class="fa fa-angle-double-right"></i></a></li>
-                @else
-                    <li class="disabled"><a class="next" href="#"><i class="fa fa-angle-double-right"></i></a></li>
-                @endif
-
-            </ul>
-
-        </div>
+        @include('front_end.layouts.pagination-links', ['subjects' => $subjects])
     </div>
     <div class="ad-r ad-r-in-all" style="flex: 0.5">
         @include('front_end.layouts.ad_r')
@@ -152,6 +128,8 @@
     <script>
         // pagination.js
 
+        // pagination_ajax.js
+
         $(document).on('click', '.pro-pagination-style ul li a', function (e) {
             e.preventDefault();
             var url = $(this).attr('href');
@@ -161,11 +139,11 @@
                 type: 'GET',
                 dataType: 'html',
                 success: function (data) {
-                    // Update the content of the page with the new data
-                    $('#your-data-container').html(data);
-
-                    // Scroll to the top of the data container after loading new content
-                    $('html, body').animate({ scrollTop: $('#your-data-container').offset().top }, 'slow');
+                    // Update the content of the mainContent section with the new data
+                    $('.mainContent .styleRow').html($(data).find('.styleRow').html());
+                    $('.mainContent .pro-pagination-style').html($(data).find('.pro-pagination-style').html());
+                    // Scroll to the top of the mainContent section after loading new content
+                    $('html, body').animate({ scrollTop: $('.mainContent').offset().top }, 'slow');
                 },
                 error: function (xhr, status, error) {
                     console.log(xhr.responseText);
