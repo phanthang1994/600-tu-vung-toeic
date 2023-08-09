@@ -54,7 +54,7 @@
     </div>
     <div class="mainContent" style="display:flex;flex-direction:column;">
         <div class="col-thang" style="margin-top:2rem">
-            @foreach($results as $item)
+            @foreach($subjects as $item)
             <div class="borderClassTest">
                 <div class="borderInnerTest">
                     <div class="khuyetXuong" style="width:40px;height:40px;border-radius: 50% 50%; background-color:red;">
@@ -95,6 +95,7 @@
             @endforeach
 
         </div>
+        @include('front_end.layouts.pagination-links', ['subjects' => $subjects])
 
     </div>
     <div class="ad-r ad-r-in-all" >
@@ -102,6 +103,33 @@
     </div>
 </div>
 @include('front_end.layouts.footer')
+<script>
+    // pagination.js
+
+    // pagination_ajax.js
+
+    $(document).on('click', '.pro-pagination-style ul li a', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        console.log(url)
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+            success: function (data) {
+                // Update the content of the mainContent section with the new data
+                $('.mainContent .col-thang').html($(data).find('.col-thang').html());
+                $('.mainContent .pro-pagination-style').html($(data).find('.pro-pagination-style').html());
+                // Scroll to the top of the mainContent section after loading new content
+                $('html, body').animate({ scrollTop: $('.mainContent').offset().top }, 'slow');
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    });
+
+</script>
 </body>
 
 </html>

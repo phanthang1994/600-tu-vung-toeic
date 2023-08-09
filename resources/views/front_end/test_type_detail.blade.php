@@ -9,16 +9,16 @@
     <div class="" style="background-color: #2B3648;border-top: 3px solid red; padding:1rem 1rem; ">
         <div class="container">
             <div class="rowFlexTest">
-                @if(count($results)>0)
+                @if(count($subjects)>0)
                     <div class="rowFlexTestInnerLeft">
-                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{ asset($results[0]->category_image) }}" alt="{{$results[0]->category_image}}" srcset=""></div>
+                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="{{ asset($subjects[0]->category_image) }}" alt="{{$subjects[0]->category_image}}" srcset=""></div>
 
                         <div style="text-align:left; margin-left: 10px;">
                             <a href="{{route('home')}}">
                                 <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
                             </a>
-                            <p style="color:white">{{$results[0]->category_name}}<span>
-                    </span> <br>{{$results[0]->category_description}}</p>
+                            <p style="color:white">{{$subjects[0]->category_name}}<span>
+                    </span> <br>{{$subjects[0]->category_description}}</p>
                         </div>
                     </div>
                 @else
@@ -63,7 +63,7 @@
     </div>
     <div class="mainContent" style="display:flex;flex-direction:column;">
         <div class="col-thang" style="margin-top:2rem">
-            @foreach($results as $item)
+            @foreach($subjects as $item)
                 <div class="borderClassTest">
                     <div class="borderInnerTest">
                         <div class="khuyetXuong" style="width:40px;height:40px;border-radius: 50% 50%; background-color:red;">
@@ -106,6 +106,7 @@
             @endforeach
 
         </div>
+        @include('front_end.layouts.pagination-links', ['subjects' => $subjects])
 
     </div>
     <div class="ad-r ad-r-in-all" >
@@ -113,6 +114,33 @@
     </div>
 </div>
 @include('front_end.layouts.footer')
+<script>
+    // pagination.js
+
+    // pagination_ajax.js
+
+    $(document).on('click', '.pro-pagination-style ul li a', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        console.log(url)
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+            success: function (data) {
+                // Update the content of the mainContent section with the new data
+                $('.mainContent .col-thang').html($(data).find('.col-thang').html());
+                $('.mainContent .pro-pagination-style').html($(data).find('.pro-pagination-style').html());
+                // Scroll to the top of the mainContent section after loading new content
+                $('html, body').animate({ scrollTop: $('.mainContent').offset().top }, 'slow');
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    });
+
+</script>
 </body>
 
 </html>

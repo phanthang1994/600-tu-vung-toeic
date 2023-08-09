@@ -338,9 +338,10 @@ class TuMoiController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(3); ;
-        $results = $subjects->map(function ($result) {
-            $minutes = floor($result->tu_moi_count*2 / 60);
+            ->paginate(1);
+//        dd($subject);
+        $subjects->getCollection()->transform(function ($result) {
+            $minutes = floor($result->tu_moi_count * 2 / 60);
             $seconds = $result->tu_moi_count % 60;
             $timeToTest = sprintf("%02d:%02d", $minutes, $seconds);
 
@@ -348,8 +349,8 @@ class TuMoiController extends Controller
             $result->time_to_test = $timeToTest;
             return $result;
         });
-//        dd($results);
-        return view('front_end.test_type', compact('results'));
+//        dd($subject);
+        return view('front_end.test_type', compact('subjects'));
     }
 
     public function single_test_type($chu_de_id)
@@ -380,10 +381,8 @@ class TuMoiController extends Controller
     public function test_type($category_id)
     {
         $subjects = DB::table('chu_de')
-            ->where('chu_de.category_id','=',$category_id)
-            -> leftJoin('category','category.id','=','chu_de.category_id')
-            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
-            ->select( 'chu_de.id',
+            ->select(
+                'chu_de.id',
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
                 'chu_de.so_nguoi_theo_hoc',
@@ -392,14 +391,32 @@ class TuMoiController extends Controller
                 'category.category_name AS category_name',
                 'category.image AS category_image',
                 'category.description AS category_description',
-                DB::raw('COUNT(tu_moi.id) AS tu_moi_count')
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
             )
-            ->groupBy('chu_de.id', 'chu_de.chu_de_name',
-                'chu_de.image', 'chu_de.so_nguoi_theo_hoc', 'chu_de.thoi_gian_hoc',
-                'chu_de.description', 'category.category_name', 'category.image',
-                'category.description')->get();
-        $results = $subjects->map(function ($result) {
-            $minutes = floor($result->tu_moi_count*2 / 60);
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.thoi_gian_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(1);
+//        dd($subject);
+        $subjects->getCollection()->transform(function ($result) {
+            $minutes = floor($result->tu_moi_count * 2 / 60);
             $seconds = $result->tu_moi_count % 60;
             $timeToTest = sprintf("%02d:%02d", $minutes, $seconds);
 
@@ -407,8 +424,8 @@ class TuMoiController extends Controller
             $result->time_to_test = $timeToTest;
             return $result;
         });
-//        dd($results);
-        return view('front_end.test_type_detail', compact('results'));
+//        dd($subjects);
+        return view('front_end.test_type_detail', compact('subjects'));
     }
     public function multiple_choice_question($id_chu_de)
     {

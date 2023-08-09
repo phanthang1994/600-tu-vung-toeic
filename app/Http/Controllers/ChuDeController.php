@@ -70,7 +70,7 @@ class ChuDeController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(3); ;
+            ->paginate(1); ;
 
         return view('front_end.courses', compact('subjects'));
     }
