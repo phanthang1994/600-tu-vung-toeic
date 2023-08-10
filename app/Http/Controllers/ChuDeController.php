@@ -70,7 +70,7 @@ class ChuDeController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(1); ;
+            ->paginate(5); ;
 
         return view('front_end.courses', compact('subjects'));
     }
@@ -327,7 +327,7 @@ class ChuDeController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(1); ;
+            ->paginate(5); ;
 //        dd($subjects);
         return view('front_end.detail_chu_de', compact('subjects'));
     }
@@ -370,7 +370,7 @@ class ChuDeController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(3); ;
+            ->paginate(5); ;
 //        dd($subjects);
         return view('front_end.courses', compact('subjects'));
     }

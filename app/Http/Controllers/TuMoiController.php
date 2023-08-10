@@ -338,7 +338,7 @@ class TuMoiController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(1);
+            ->paginate(5);
 //        dd($subject);
         $subjects->getCollection()->transform(function ($result) {
             $minutes = floor($result->tu_moi_count * 2 / 60);
@@ -413,7 +413,7 @@ class TuMoiController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(1);
+            ->paginate(5);
 //        dd($subject);
         $subjects->getCollection()->transform(function ($result) {
             $minutes = floor($result->tu_moi_count * 2 / 60);
