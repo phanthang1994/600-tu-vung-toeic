@@ -194,6 +194,12 @@
             <i class="fa fa-forward fa-3x" ></i>
             <p class="nextButton">Tiếp</p>
         </button>
+
+    </div>
+    <div class="row" >
+        <div class="video-container">
+            <iframe width="500" height="320" src="https://www.youtube.com/embed/W5_MaR6cSEg" title="600 Từ vựng luyện thi TOEIC (Phụ đề+ Hình Ảnh) Part 1/50: Hợp Đồng" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
     </div>
 </div>
 <!-- Newsletter Popup Start -->
