@@ -242,7 +242,6 @@
     const parts = path.split('/');
     const ids = parts[parts.length - 1];
 
-    console.log(ids); // This will log "109"
     // Check if there is a match
     let slideMinus = 0;
     let valuePercent = 0;
@@ -556,7 +555,5 @@
     });
 
 </script>
-
 </body>
-
 </html>
