@@ -30,9 +30,11 @@ class ChuDeController extends Controller
     public function index()
     {
         $subjects = DB::table('chu_de')
-            -> leftJoin('category','category.id','=','chu_de.category_id')
-            ->select('chu_de.*','category.category_name')->get();
-        return view('admin.chu_de.chu_de',compact('subjects'));
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->select('chu_de.*', 'category.category_name')
+            ->get();
+//        dd($subjects);
+        return view('admin.chu_de.chu_de', compact('subjects'));
     }
 
     public function  all_courses()
@@ -70,7 +72,7 @@ class ChuDeController extends Controller
                         ->whereRaw('tu_moi.chu_de_id = chu_de.id');
                 });
             })
-            ->paginate(5); ;
+            ->paginate(5);
 
         return view('front_end.courses', compact('subjects'));
     }
@@ -132,7 +134,7 @@ class ChuDeController extends Controller
 
         }
         ChuDe::create($request->all());
-        return redirect()->route('category');
+        return redirect()->route('chu_de');
     }
 
 
