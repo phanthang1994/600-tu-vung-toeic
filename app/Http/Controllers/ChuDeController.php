@@ -32,8 +32,9 @@ class ChuDeController extends Controller
         $subjects = DB::table('chu_de')
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->select('chu_de.*', 'category.category_name')
+            ->orderBy('created_at', 'desc') // Order by created_time in descending order
             ->get();
-//        dd($subjects);
+
         return view('admin.chu_de.chu_de', compact('subjects'));
     }
 
@@ -122,20 +123,26 @@ class ChuDeController extends Controller
      */
     public function save(Request $request)
     {
-        if($request->has('file_upload'))
-        {
-            $file =  $request->file_upload;
-            $file_name =  $file->getClientoriginalName();
-            $extension = $file ->extension();
+        if ($request->has('file_upload')) {
+            $file = $request->file_upload;
+            $file_name = $file->getClientOriginalName();
+            $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'chu_de-'.$x.'.'.$extension;
-            $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
-
+            $file_name = 'chu_de-' . $x . '.' . $extension;
+            $file->move(public_path($this->path_file_image), $file_name);
+            $request->merge(['image' => $file_name]);
         }
+
+        // Generate a random integer for so_nguoi_theo_hoc within the specified range
+        $randomStudents = rand(30001, 100000);
+
+        // Add the random integer value to the request data
+        $request->merge(['so_nguoi_theo_hoc' => $randomStudents]);
+
         ChuDe::create($request->all());
         return redirect()->route('chu_de');
     }
+
 
 
     /**
