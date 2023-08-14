@@ -6,6 +6,28 @@
 <body style="background-color:#FCFAF2;">
 @include('front_end.layouts.header')
 @include('front_end.layouts.under_header')
+<div class="">
+    <div class="" style="background-color: #FFFFFF;border-bottom: #1b1e21 1px solid;">
+        <div class="container" style="padding: 0 10px; text-align:left;">
+
+
+
+            <div class="" style="width:100%;height:58px;display: flex;justify-content: flex-start; align-items: center;">
+
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
 <div class="all" style="display: flex;justify-content: center; min-height: 100px; box-sizing: content-box;">
     <div class="ad-l ad-l-in-all" >
         @include('front_end.layouts.ad_l')

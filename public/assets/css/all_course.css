@@ -58,7 +58,6 @@ p {
     position: relative;
     top: 10px;
     background-color: #fff;
-    background-image: url("/garden/img/backgrounds/striped-grey-light.png?flags2020");
     background-size: 200px 200px;
     border-radius: 0 10px 0 0;
     width: 39px;
@@ -79,6 +78,8 @@ p {
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 80px;
+    font-weight: bolder;
+    color: #00a651;
 }
 .author {
     color: #aaa;

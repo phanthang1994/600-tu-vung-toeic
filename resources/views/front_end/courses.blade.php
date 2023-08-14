@@ -17,9 +17,7 @@
 
                 </div>
                 <div>
-                    <a id="tuKho" style=" visibility:hidden;display:block; width:100px;">
-                        <i class="fa fa-bolt"></i>
-                    </a>
+
                 </div>
 
             </div>
@@ -48,20 +46,17 @@
 
                             <div class="tiengAnhBoi">
                                         <span class="author pull-right">
-                                            bởi
+                                            nhóm:
 
-                                            <a href="#" data-role="hovercard"
-                                               data-user-id="2224242" data-direction="bottom"
-                                               class="author-link">{{$item->category_name}}</a>
+                                            <span title="{{$item->category_name}}" style="color: #006cfa">{{$item->category_name}}</span>
 
                                         </span>
-                                <a href="#" class="category"
-                                   title="Tiếng Anh">Chủ đề</a>
+                                <div  class="category">Chủ đề</div>
 
                             </div>
                             <h3>
                                 <a href="{{route('new_words',$item->id)}}" class="inner"
-                                title="Tiếng Anh (Anh Quốc) 1" style="font-size: 18px;">
+                                title=" {{$item->chu_de_name}}" style="font-size: 18px;">
                                     {{$item->chu_de_name}}
                                 </a>
                             </h3>
@@ -69,11 +64,11 @@
                             <div class="details">
 
                                 <div class="stats">
-                                             <span class="stat1" title="Khóa học này cần khoảng 3h">
+                                             <span class="stat1" title="Nhóm này có {{$item->tu_moi_count}} từ mới">
                                                 <i class="fa fa-book" aria-hidden="true">:</i>
                                                          {{$item->tu_moi_count}}
                                             </span>
-                                    <span class="stat2" title="670930 người đang học khóa học này">
+                                    <span class="stat2" title="{{$item->so_nguoi_theo_hoc}} người đang học khóa học này">
                                                 <i class="fa fa-user">: </i>{{$item->so_nguoi_theo_hoc}}
                                             </span>
 

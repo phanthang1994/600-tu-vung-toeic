@@ -2,86 +2,46 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="related-title mb-35">
-                    <h3>Bài viết liên quan</h3>
+                <div class="related-title mb-35" style="visibility: hidden">
+                    <h3>Nhà tài trợ</h3>
                 </div>
-                <div class="blog-active">
+                <div class="blog-active" style="visibility: hidden">
                     <div class="single-blog">
                         <div class="blog-content-wrap">
-                            <span>Ngữ Pháp</span>
                             <div class="blog-content">
-                                <h4><a href="blog-details.html">Testing is a great thing.</a></h4>
-                                <p>doloremque laudan tium, totam ersps uns iste natus</p>
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><i class="fa fa-eye"></i> Adrin Azra</li>
-                                        <li><i class="fa fa-comments-o"></i> 22</li>
-                                    </ul>
-                                </div>
+
                             </div>
 
                         </div>
                     </div>
                     <div class="single-blog">
                         <div class="blog-content-wrap">
-                            <span>Ngữ Pháp</span>
                             <div class="blog-content">
-                                <h4><a href="blog-details.html">Testing is a great thing.</a></h4>
-                                <p>doloremque laudan tium, totam ersps uns iste natus</p>
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><i class="fa fa-eye"></i> Adrin Azra</li>
-                                        <li><i class="fa fa-comments-o"></i> 22</li>
-                                    </ul>
-                                </div>
+
                             </div>
 
                         </div>
                     </div>
                     <div class="single-blog">
                         <div class="blog-content-wrap">
-                            <span>Ngữ Pháp</span>
                             <div class="blog-content">
-                                <h4><a href="blog-details.html">Testing is a great thing.</a></h4>
-                                <p>doloremque laudan tium, totam ersps uns iste natus</p>
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><i class="fa fa-eye"></i> Adrin Azra</li>
-                                        <li><i class="fa fa-comments-o"></i> 22</li>
-                                    </ul>
-                                </div>
+
                             </div>
 
                         </div>
                     </div>
                     <div class="single-blog">
                         <div class="blog-content-wrap">
-                            <span>Ngữ Pháp</span>
                             <div class="blog-content">
-                                <h4><a href="blog-details.html">Testing is a great thing.</a></h4>
-                                <p>doloremque laudan tium, totam ersps uns iste natus</p>
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><i class="fa fa-eye"></i> Adrin Azra</li>
-                                        <li><i class="fa fa-comments-o"></i> 22</li>
-                                    </ul>
-                                </div>
+
                             </div>
 
                         </div>
                     </div>
                     <div class="single-blog">
                         <div class="blog-content-wrap">
-                            <span>Ngữ Pháp</span>
                             <div class="blog-content">
-                                <h4><a href="blog-details.html">Testing is a great thing.</a></h4>
-                                <p>doloremque laudan tium, totam ersps uns iste natus</p>
-                                <div class="blog-meta">
-                                    <ul>
-                                        <li><i class="fa fa-eye"></i> Adrin Azra</li>
-                                        <li><i class="fa fa-comments-o"></i> 22</li>
-                                    </ul>
-                                </div>
+
                             </div>
 
                         </div>
