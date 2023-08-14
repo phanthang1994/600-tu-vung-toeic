@@ -83,7 +83,6 @@
                                             <a href="#" data-role="hovercard"
                                                data-user-id="2224242" data-direction="bottom"
                                                class="author-link">{{$item->category_name}}</a>
-
                                         </span>
                                 <a href="#" class="category"
                                    title="Tiếng Anh">Chủ đề</a>

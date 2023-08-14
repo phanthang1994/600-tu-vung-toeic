@@ -311,7 +311,6 @@ class TuMoiController extends Controller
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
                 'chu_de.so_nguoi_theo_hoc',
-                'chu_de.thoi_gian_hoc',
                 'chu_de.description AS chu_de_description',
                 'category.category_name AS category_name',
                 'category.image AS category_image',
@@ -325,7 +324,6 @@ class TuMoiController extends Controller
                 'chu_de.chu_de_name',
                 'chu_de.image',
                 'chu_de.so_nguoi_theo_hoc',
-                'chu_de.thoi_gian_hoc',
                 'chu_de.description',
                 'category.category_name',
                 'category.image',
@@ -361,7 +359,6 @@ class TuMoiController extends Controller
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
                 'chu_de.so_nguoi_theo_hoc',
-                'chu_de.thoi_gian_hoc',
                 'chu_de.description AS chu_de_description',
                 DB::raw("(SELECT COUNT(id) FROM tu_moi WHERE chu_de_id = {$chu_de_id}) AS tu_moi_count")
             )
@@ -386,7 +383,6 @@ class TuMoiController extends Controller
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
                 'chu_de.so_nguoi_theo_hoc',
-                'chu_de.thoi_gian_hoc',
                 'chu_de.description AS chu_de_description',
                 'category.category_name AS category_name',
                 'category.image AS category_image',
@@ -400,7 +396,6 @@ class TuMoiController extends Controller
                 'chu_de.chu_de_name',
                 'chu_de.image',
                 'chu_de.so_nguoi_theo_hoc',
-                'chu_de.thoi_gian_hoc',
                 'chu_de.description',
                 'category.category_name',
                 'category.image',
@@ -472,7 +467,7 @@ class TuMoiController extends Controller
     }
     private function generateRandomList($fixedValue,$possibleValues) {
         $items = [$fixedValue];
-
+//        dd($fixedValue);
         $remainingValues = array_diff($possibleValues, [$fixedValue]);
         $randomValues = array_rand($remainingValues, 3);
 

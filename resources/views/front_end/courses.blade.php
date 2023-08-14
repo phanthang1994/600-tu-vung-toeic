@@ -4,23 +4,7 @@
 <x-HeadComponent css="page_test.css"></x-HeadComponent>
 <body style="background-color:#fcfaf2;"
 @include('front_end.layouts.header')
-<div class="">
-    <div class="" style="background-color: #2B3648;border-top: 3px solid red; padding:1rem 1rem; ">
-        <div class="container">
-            <div class="rowFlexTest">
-                <div class="rowFlexTestInnerLeft">
-
-                    <div style="text-align:left; margin-left: 10px;">
-                        <a href="{{route('home')}}">
-                            <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
-
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@include('front_end.layouts.under_header')
 <div class="">
     <div class="" style="background-color: #FFFFFF;border-bottom: #1b1e21 1px solid;">
         <div class="container" style="padding: 0 10px; text-align:left;">
@@ -85,13 +69,14 @@
                             <div class="details">
 
                                 <div class="stats">
-                                            <span class="stat1" title="670930 người đang học khóa học này">
-                                                <i class="fa fa-user"></i>{{$item->so_nguoi_theo_hoc}}
+                                             <span class="stat1" title="Khóa học này cần khoảng 3h">
+                                                <i class="fa fa-book" aria-hidden="true">:</i>
+                                                         {{$item->tu_moi_count}}
                                             </span>
-                                    <span class="stat2" title="Khóa học này cần khoảng 3h">
-                                    <i class="fa fa-clock-o"></i>
-                                                 {{$item->thoi_gian_hoc}}
-                            </span>
+                                    <span class="stat2" title="670930 người đang học khóa học này">
+                                                <i class="fa fa-user">: </i>{{$item->so_nguoi_theo_hoc}}
+                                            </span>
+
                                 </div>
 
                             </div>

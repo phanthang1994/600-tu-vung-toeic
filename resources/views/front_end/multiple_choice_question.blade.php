@@ -11,12 +11,9 @@
                 <a href="#">Tiếng Anh (600 từ toeic)</a>
                 . Hợp Đồng (agreement).
             </h3>
-            <a
-                href="file:///E:/template/My%20Web%20Sites/glaxdu/demo.hasthemes.com/glaxdu-v1/glaxdu/index_chuan_2.html">
-
+            <a>
                 <i class="fa fa-close fa-2x "
                    style="align-self: center; margin-top: 5px; padding-bottom: 0; padding-top: 0; cursor: pointer;">
-
                 </i>
             </a>
         </div>

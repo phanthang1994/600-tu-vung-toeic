@@ -64,6 +64,7 @@
     <div class="mainContent" style="display:flex;flex-direction:column;">
         <div class="col-thang" style="margin-top:2rem">
             @foreach($subjects as $item)
+                @if($item->tu_moi_count>3)
                 <div class="borderClassTest">
                     <div class="borderInnerTest">
                         <div class="khuyetXuong" style="width:40px;height:40px;border-radius: 50% 50%; background-color:red;">
@@ -88,7 +89,7 @@
                         </div>
                         <div class="" style="">
                             <div class>
-                                <aside class='arrow' style="width: 130px;margin: 10px auto;">{{$item->chu_de_name}}</aside>
+                                <aside class='arrow' style="width: auto;margin: 10px auto;">{{$item->chu_de_name}}</aside>
                             </div>
                             <div class="" style="display:flex;flex-direction:column;">
                                 <div class="cr  cr-orange" style="text-align:left;width:100%;margin: 5px 0;padding: 0 15px;">
@@ -103,6 +104,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             @endforeach
 
         </div>

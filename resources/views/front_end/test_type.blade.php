@@ -5,49 +5,7 @@
 <x-HeadComponent css="page_test.css"></x-HeadComponent>
 <body style="background-color:#FCFAF2;">
 @include('front_end.layouts.header')
-<div class="">
-    <div class="" style="background-color: #2B3648;border-top: 3px solid red; padding:1rem 1rem; ">
-        <div class="container">
-            <div class="rowFlexTest">
-                    <div class="rowFlexTestInnerLeft">
-                        <div class="imgLeft" style="border:white solid 1px; border-radius:8px;"><img style="border-radius:8px;max-width: 200px;max-height: 200px;" src="" alt="" srcset=""></div>
-
-                        <div style="text-align:left; margin-left: 10px;">
-                           <a href="{{route('home')}}">
-                               <p style="color:white; border-bottom: white solid 2px;">600tutoeic.com</p>
-                           </a>
-                            <p style="color:white"><span>
-                    </span> <br></p>
-                        </div>
-                    </div>
-
-
-            </div>
-        </div>
-    </div>
-</div>
-<div class="">
-    <div class="" style="background-color: #FFFFFF;border-bottom: #1b1e21 1px solid;">
-        <div class="container" style="padding: 0 10px; text-align:left;">
-
-
-
-            <div class="" style="width:100%;height:58px;display: flex;justify-content: flex-start; align-items: center;">
-
-                <div>
-
-                </div>
-                <div>
-
-                </div>
-
-            </div>
-
-
-
-        </div>
-    </div>
-</div>
+@include('front_end.layouts.under_header')
 <div class="all" style="display: flex;justify-content: center; min-height: 100px; box-sizing: content-box;">
     <div class="ad-l ad-l-in-all" >
         @include('front_end.layouts.ad_l')
@@ -55,7 +13,8 @@
     <div class="mainContent" style="display:flex;flex-direction:column;">
         <div class="col-thang" style="margin-top:2rem">
             @foreach($subjects as $item)
-            <div class="borderClassTest">
+                @if($item->tu_moi_count>3)
+                <div class="borderClassTest">
                 <div class="borderInnerTest">
                     <div class="khuyetXuong" style="width:40px;height:40px;border-radius: 50% 50%; background-color:red;">
                     </div>
@@ -77,7 +36,7 @@
                     </div>
                     <div class="" style="">
                         <div class>
-                            <aside class='arrow' style="width: 130px;margin: 10px auto;">{{$item->chu_de_name}}</aside>
+                            <aside class='arrow' style="width: auto;margin: 10px auto;">{{$item->chu_de_name}}</aside>
                         </div>
                         <div class="" style="display:flex;flex-direction:column;">
                             <div class="cr  cr-orange" style="text-align:left;width:100%;margin: 5px 0;padding: 0 15px;">
@@ -92,6 +51,7 @@
                     </div>
                 </div>
             </div>
+                @endif
             @endforeach
 
         </div>
