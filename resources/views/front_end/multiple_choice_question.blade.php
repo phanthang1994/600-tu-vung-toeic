@@ -42,11 +42,11 @@
                         </div>
                         <div class="buttonPopUp" style="display:flex; flex-direction:row; justify-content:space-around;background-color:#F1F1F1; width: 100%;border-top: 5px solid red;  border-bottom-left-radius: 25px;border-bottom-right-radius: 25px;">
                             <div class="actionEnd" >
-                                <div class="dot"><img src="fertilize (64).png" style="width: 72%;" alt="" srcset=""></div>
+                                <div class="dot"><i class="fa fa-repeat fa-3x "  aria-hidden="true" style="color: #e21f1f;"></i></div>
                                 <p>Test Lại</p>
                             </div>
                             <div class="actionEnd">
-                                <div class="dot"><img src="test (64).png" style="width: 72%;" alt="" srcset=""></div>
+                                <div class="dot"><i class="fa fa-arrow-circle-right fa-3x" aria-hidden="true" style="color: #e21f1f;"></i></div>
                                 <p>Tiếp Tục</p>
                             </div>
                         </div>
@@ -346,7 +346,14 @@
     function closeOptionModal() {
         document.getElementById('score-modal').style.display = "none"
     }
+    // viết cho Học tiếp từ mới, học lại, ôn tập, kiểm tra
+    const actionEndElement = document.querySelectorAll('.actionEnd');
 
+    // Add a click event listener to the element
+    actionEndElement[0].addEventListener('click', () => {
+        // Reload the page
+        location.reload();
+    });
 </script>
 </body>
 </html>
