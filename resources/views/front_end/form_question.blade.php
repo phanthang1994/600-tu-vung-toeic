@@ -11,15 +11,17 @@
 <div class="" style="background-color:#74D8C1">
     <div class="container" style="display:flex; padding:10px;justify-content: space-between;">
         <h3>
-            <a href="#">Tiếng Anh (600 từ toeic)</a>
-            . Hợp Đồng (agreement).
+            <a
+                href="{{route('home')}}">
+                600tutoeic.com
+            </a>
+
         </h3>
         <a
-            href="file:///E:/template/My%20Web%20Sites/glaxdu/demo.hasthemes.com/glaxdu-v1/glaxdu/index_chuan_2.html">
+            href="{{route('home')}}" id = "go_back_home">
 
             <i class="fa fa-close fa-2x "
                style="align-self: center; margin-top: 5px; padding-bottom: 0; padding-top: 0; cursor: pointer;">
-
             </i>
         </a>
     </div>
@@ -58,15 +60,15 @@
                         </div>
                         <div class="buttonPopUp" style="display:flex; flex-direction:row; justify-content:space-around;background-color:#F1F1F1; width: 100%;border-top: 5px solid red;  border-bottom-left-radius: 25px;border-bottom-right-radius: 25px;">
                             <div class="actionEnd" >
-                                <div class="dot"><img src="fertilize (64).png" style="width: 72%;" alt="" srcset=""></div>
+                                <div class="dot"><i class="fa fa-repeat fa-3x "  aria-hidden="true" style="color: #e21f1f;"></i></div>
                                 <p>Test Lại</p>
                             </div>
                             <div class="actionEnd">
-                                <div class="dot"><img src="test (64).png" style="width: 72%;" alt="" srcset=""></div>
+                                <div class="dot"><i class="fa fa-arrow-circle-right fa-3x" aria-hidden="true" style="color: #e21f1f;"></i></div>
                                 <p>Tiếp Tục</p>
                             </div>
                             <div class="actionEnd"  onclick="closeOptionModal()" >
-                                <div class="dot"><img src="watering-can (64).png" style="width: 72%;" alt="" srcset=""></div>
+                                <div class="dot"><i style="color: #52ff67" class="fa fa-angellist fa-3x" aria-hidden="true"></i></div>
                                 <p>Xem câu trả lời</p>
                             </div>
                         </div>
@@ -82,8 +84,8 @@
                         <div class="form-control item answers">
 
                             <div>
-                                {{ $question['question'] }}
-                                <span style="color: red">
+                                <span style="color: black; font-weight: bolder;">{{ $question['question'] }}</span>
+                                <span style="color: red; font-weight: bolder">
                                      {{ $question['phien_am'] }}
                                 </span>
 
@@ -196,7 +198,34 @@
             radioButton.checked = false;
         });
     });
+    const questions = @json($questions);
+    const get_chu_de_id = window.location.href;
+    const url = new URL(get_chu_de_id);
+    const path = url.pathname;
+    const parts = path.split('/');
+    const ids = parts[parts.length - 1];
+    const actionEndElement = document.querySelectorAll('.actionEnd');
 
+    // Add a click event listener to the element
+    actionEndElement[0].addEventListener('click', () => {
+        location.reload();
+    });
+    actionEndElement[1].addEventListener('click', function () {
+        window.location.href = "/next_test_type/" + ids;
+    });
+    // actionEndElement[2].addEventListener('click', function () {
+    //     window.location.href = "/next_test_type/" + ids;
+    // });
+    document.getElementById('go_back_home').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+
+        // Display the confirmation message
+        var confirmed = confirm("Bạn có muốn kết thúc BAIF TEST hay không?");
+
+        if (confirmed) {
+            window.location.href = this.href; // Go to the specified URL (route)
+        }
+    });
 </script>
 </body>
 

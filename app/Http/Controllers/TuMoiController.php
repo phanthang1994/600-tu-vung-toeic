@@ -375,7 +375,7 @@ class TuMoiController extends Controller
 //        dd($results);
         return view('front_end.single_test_type', compact('results'));
     }
-    public function test_type($category_id)
+    public function test_type()
     {
         $subjects = DB::table('chu_de')
             ->select(
@@ -421,6 +421,11 @@ class TuMoiController extends Controller
         });
 //        dd($subjects);
         return view('front_end.test_type_detail', compact('subjects'));
+    }
+    public function next_test_type($chu_de_id)
+    {
+        $category_id = ChuDe::where('id', $chu_de_id)->value('category_id');
+        return $this->test_type($category_id);
     }
     public function multiple_choice_question($id_chu_de)
     {

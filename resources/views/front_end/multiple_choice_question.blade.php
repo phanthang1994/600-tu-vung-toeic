@@ -8,10 +8,15 @@
     <div class="" style="background-color:#74D8C1">
         <div class="container" style="display:flex; padding:10px;justify-content: space-between;">
             <h3>
-                <a href="#">Tiếng Anh (600 từ toeic)</a>
-                . Hợp Đồng (agreement).
+                <a
+                        href="{{route('home')}}">
+                        600tutoeic.com
+                    </a>
+
             </h3>
-            <a>
+            <a
+                href="{{route('home')}}" id = "go_back_home">
+
                 <i class="fa fa-close fa-2x "
                    style="align-self: center; margin-top: 5px; padding-bottom: 0; padding-top: 0; cursor: pointer;">
                 </i>
@@ -111,6 +116,9 @@
     const get_chu_de_id = window.location.href;
     const url = new URL(get_chu_de_id);
     const baseUrl = `${url.protocol}//${url.host}`;
+    const path = url.pathname;
+    const parts = path.split('/');
+    const ids = parts[parts.length - 1];
     let shuffledQuestions = questions
     shuffledQuestionsBackUp = questions
     // console.log(shuffledQuestionsBackUp)
@@ -126,7 +134,7 @@
         document.getElementById("question-number").innerHTML = index+1;
         document.getElementById("player-score").innerHTML = countPlayerScore();
         document.querySelector('#str_imgQuestion').src = baseUrl+ currentQuestion.image
-        document.getElementById("display-question").innerHTML = currentQuestion.question+currentQuestion.phien_am;
+        document.getElementById("display-question").innerHTML = currentQuestion.question + '<span style="color: red;">' + currentQuestion.phien_am + '</span>';
         document.getElementById("option-one-label").innerHTML = currentQuestion.optionA;
         document.getElementById("option-two-label").innerHTML = currentQuestion.optionB;
         document.getElementById("option-three-label").innerHTML = currentQuestion.optionC;
@@ -351,8 +359,21 @@
 
     // Add a click event listener to the element
     actionEndElement[0].addEventListener('click', () => {
-        // Reload the page
         location.reload();
+    });
+    actionEndElement[1].addEventListener('click', function () {
+        window.location.href = "/next_test_type/" + ids;
+    });
+    // Dispaly inform when you click in close button
+    document.getElementById('go_back_home').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+
+        // Display the confirmation message
+        var confirmed = confirm("Bạn có muốn kết thúc BAIF TEST hay không?");
+
+        if (confirmed) {
+            window.location.href = this.href; // Go to the specified URL (route)
+        }
     });
 </script>
 </body>
