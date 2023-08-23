@@ -96,7 +96,7 @@ label span:before {
 }
 button[type=submit]
 {
-    width: 95px; height:36px; padding:0 24px;
+    width: auto; height:36px; padding:0 24px;
     background-color: #E71A1A;
     color: white;
     font-weight: bold;

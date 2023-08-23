@@ -121,9 +121,9 @@
             <!-- Multi-line Text Input Control -->
             <div class="submitAndClear" style="margin-top: 10px">
                 <button  type="submit" value="submit" style=""  id="submit">
-                    Submit
+                    Nộp Bài
                 </button>
-                <span id="clear_form" style="align-self: flex-end;">Clear form</span>
+                <span id="clear_form" style="align-self: flex-end;">Xóa Đáp Án</span>
             </div>
         </form>
     </div>
@@ -175,7 +175,38 @@
     //function to close warning modal
     function closeOptionModal() {
         document.getElementById('score-modal').style.display = "none"
-        document.getElementById('submit').disabled = true
+
+        // Get the parent element
+        var parentElement = document.querySelector('.submitAndClear');
+
+        // Remove all child elements
+        while (parentElement.firstChild) {
+            parentElement.removeChild(parentElement.firstChild);
+        }
+
+        // Create and add the "Test Lại" <div> element
+        var testAgainDiv = document.createElement('div');
+        testAgainDiv.className = 'actionEnd';
+        testAgainDiv.innerHTML = `
+        <div class="dot"><i class="fa fa-repeat fa-3x" aria-hidden="true" style="color: #e21f1f;"></i></div>
+        <p>Test Lại</p>
+    `;
+        testAgainDiv.setAttribute('onclick', 'location.reload()');
+
+        // Create and add the "Tiếp Tục" <div> element
+        var continueDiv = document.createElement('div');
+        continueDiv.className = 'actionEnd';
+        continueDiv.innerHTML = `
+        <div class="dot"><i class="fa fa-arrow-circle-right fa-3x" aria-hidden="true" style="color: #e21f1f;"></i></div>
+        <p>Tiếp Tục</p>
+    `;
+        var ids = "your_ids_here"; // Replace with actual ids
+        continueDiv.setAttribute('onclick', `window.location.href = "/next_test_type/${ids}"`);
+
+        // Append the new <div> elements
+        parentElement.appendChild(testAgainDiv);
+        parentElement.appendChild(continueDiv);
+
     }
 
     function handleEndGame(numCorrect) {
@@ -225,6 +256,7 @@
             window.location.href = this.href; // Go to the specified URL (route)
         }
     });
+
 </script>
 </body>
 
