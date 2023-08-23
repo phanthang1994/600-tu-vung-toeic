@@ -1,4 +1,4 @@
-const myQuestions = @json($questions);
+// const myQuestions = @json($questions);
 function showResults(){
     const quizContainer = document.getElementById('form');
     // gather answer containers from our quiz
@@ -62,7 +62,7 @@ clearFormButton.addEventListener('click', () => {
         radioButton.checked = false;
     });
 });
-const questions = @json($questions);
+// const questions = @json($questions);
 const get_chu_de_id = window.location.href;
 const url = new URL(get_chu_de_id);
 const path = url.pathname;
