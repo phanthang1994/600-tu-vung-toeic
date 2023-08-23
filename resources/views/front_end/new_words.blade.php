@@ -196,11 +196,35 @@
         </button>
 
     </div>
-    <div class="row" >
-        <div class="video-container">
-            <iframe  src="https://www.youtube.com/embed/W5_MaR6cSEg" title="600 Từ vựng luyện thi TOEIC (Phụ đề+ Hình Ảnh) Part 1/50: Hợp Đồng" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    @php
+        $videoInfo = explode(" ", $new_word[0]->youtube_code);
+
+        $src = null;
+        $title = null;
+
+        foreach ($videoInfo as $info) {
+            $parts = explode("=", $info);
+            if (count($parts) == 2) {
+                $attribute = $parts[0];
+                $value = $parts[1];
+
+                if ($attribute == "src") {
+                    $src = $value;
+                } elseif ($attribute == "title") {
+                    $title = $value;
+                }
+            }
+        }
+    @endphp
+
+    @if($src && $title)
+        <div class="row">
+            <div class="video-container">
+                <iframe src="{{ $src }}" title="{{ $title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
         </div>
-    </div>
+    @endif
+
 </div>
 <!-- Newsletter Popup Start -->
 <div id="id01" class="modal">

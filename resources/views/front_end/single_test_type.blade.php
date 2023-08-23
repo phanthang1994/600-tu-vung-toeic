@@ -88,7 +88,7 @@
                                     <i style="" class="fa fa-location-arrow">Số từ: </i>
                                     <span style="font-weight:bolder;" class="soTu">{{$results->tu_moi_count}}</span>
                                 </div>
-                                <div class="cr  cr-green" style="text-align:right;width: 100%;padding: 0 15px;" title="Thời gian làm test {{($item->time_to_test)}}">
+                                <div class="cr  cr-green" style="text-align:right;width: 100%;padding: 0 15px;" title="Thời gian làm test {{($results->time_to_test)}}">
                                     <i style="" class="fa fa-clock-o"></i>
                                     <span style="font-weight:bolder;" class="tongThoiGian">{{($results->time_to_test)}}</span>
                                 </div>
