@@ -198,7 +198,6 @@
             radioButton.checked = false;
         });
     });
-    const questions = @json($questions);
     const get_chu_de_id = window.location.href;
     const url = new URL(get_chu_de_id);
     const path = url.pathname;
