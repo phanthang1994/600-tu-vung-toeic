@@ -7,6 +7,7 @@ use App\Models\ChuDe;
 use App\Models\TuMoi;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Exception\ReaderNotOpenedException;
+use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -96,7 +97,7 @@ class ChuDeController extends Controller
                 $imageName = $image->getClientOriginalName();
                 $extension = $image ->extension();
                 $x = pathinfo($imageName, PATHINFO_FILENAME);
-                $file_name = 'chu_de-'.$x.'.'.$extension;
+                $file_name = $x.'.'.$extension;
                 $image->move(public_path($this->path_file_image),$file_name);
                 $request->merge(['image'=> $file_name]);
             }
@@ -126,7 +127,9 @@ class ChuDeController extends Controller
             $file_name = $file->getClientOriginalName();
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'chu_de-' . $x . '.' . $extension;
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
+            $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image), $file_name);
             $request->merge(['image' => $file_name]);
         }
@@ -186,7 +189,9 @@ class ChuDeController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'chu_de-'.$x.'.'.$extension;
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
+            $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;

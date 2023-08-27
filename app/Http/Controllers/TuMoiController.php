@@ -5,6 +5,7 @@ use App\Models\ChuDe;
 use App\Models\TuMoi;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Exception\ReaderNotOpenedException;
+use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -55,11 +56,13 @@ class TuMoiController extends Controller
     {
         if($request->has('file_upload'))
         {
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'tu_moi-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
@@ -114,11 +117,13 @@ class TuMoiController extends Controller
 //        dd($request->all());
         if($request->has('file_upload'))
         {
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'tu_moi-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
@@ -200,6 +205,7 @@ class TuMoiController extends Controller
     //https://www.nidup.io/blog/manipulate-excel-files-in-php
     public function readExcelFile($filePath)
     {
+//        dd($filePath);
         if (file_exists($filePath)) {
             # open the file
             $reader = ReaderEntityFactory::createXLSXReader();
@@ -271,7 +277,7 @@ class TuMoiController extends Controller
                 $imageName = $image->getClientOriginalName();
                 $extension = $image ->extension();
                 $x = pathinfo($imageName, PATHINFO_FILENAME);
-                $file_name = 'tu_moi-'.$x.'.'.$extension;
+                $file_name = $x.'.'.$extension;
                 $image->move(public_path($this->path_file_image),$file_name);
                 $request->merge(['image'=> $file_name]);
             }
@@ -284,7 +290,7 @@ class TuMoiController extends Controller
                 $imageName = $image->getClientOriginalName();
                 $extension = $image ->extension();
                 $x = pathinfo($imageName, PATHINFO_FILENAME);
-                $file_name = 'tu_moi-'.$x.'.'.$extension;
+                $file_name = $x.'.'.$extension;
                 $image->move(public_path($this->path_file_audio),$file_name);
                 $request->merge(['audio'=> $file_name]);
             }
