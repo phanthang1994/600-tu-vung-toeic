@@ -264,7 +264,78 @@ class TuMoiController extends Controller
         $this->readExcelFile($filePath);
         return redirect()->route('tu_moi');
     }
+    public function process_update_excel($filePath)
+    {
 
+        if (file_exists($filePath)) {
+            # open the file
+            $reader = ReaderEntityFactory::createXLSXReader();
+            $reader->open($filePath);
+            $isFirstRow = true;
+            # read each cell of each row of each sheet
+            try {
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    foreach ($sheet->getRowIterator() as $row) {
+                        if ($isFirstRow) {
+                            $isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+                        $rowData = $row->toArray();
+//                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                        $model = TuMoi::find($rowData[0]);
+                        if ($model)
+                        {
+                            if ($rowData[1]!='Null')
+                            $model->name = $rowData[1];
+                            if ($rowData[2]!='Null')
+                            $model->image = $this->path_file_image.'/'.$rowData[2];
+                            if ($rowData[3]!='Null')
+                            $model->tu_loai = $rowData[3];
+                            if ($rowData[4]!='Null')
+                            $model->phien_am = $rowData[4];
+                            if ($rowData[5]!='Null')
+                            $model->vi_du = $rowData[5];
+                            if ($rowData[6]!='Null')
+                            $model->audio = $this->path_file_audio.'/'.$rowData[6];
+                            if ($rowData[7]!='Null')
+                            $model->che_tu = $rowData[7];
+                            if ($rowData[8]!='Null')
+                            $model->cau_truc_cau = $rowData[8];
+                            if ($rowData[9]!='Null')
+                            $model->chu_de_id = intval($rowData[9]);
+//                        dd($model);
+                            $model->save();
+                        }
+                    }
+                }
+            } catch (ReaderNotOpenedException $e) {
+            } finally {
+                $reader->close();
+                unlink($filePath); // delete excel file from server
+            }
+        }
+
+        header("File Not Not Found");
+        echo "File Not Not Found";
+    }
+    public function upload_update_excel (Request $request)
+    {
+
+        $filePath = '';
+        if ($request->has('file_upload')) {
+            $file = $request->file_upload;
+            $file_name = $file->getClientoriginalName();
+            $extension = $file->extension();
+            $x = pathinfo($file_name, PATHINFO_FILENAME);
+            $file_name = 'tu-moi-'. $x . '.' . $extension;
+            $file->move(public_path($this->path_file_excel), $file_name);
+            $request->merge(['image' => $file_name]);
+            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
+            $filePath = str_replace('/', '\\', $filePath);
+        }
+        $this->process_update_excel($filePath);
+        return redirect()->route('tu_moi');
+    }
     public function get_many_images(){
         return view('admin.tu_moi.upload_many_image');
     }

@@ -39,6 +39,8 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::delete('/panel/tu_moi/{tu_moi_id}/delete',[TuMoiController::class,'destroy'])->name('tu_moi.delete');
     Route::get('/panel/tu_moi/get_create_many_records',[TuMoiController::class,'get_create_many_records'])->name('tu_moi.get_create_many_records');
     Route::post('/panel/tu_moi/post_create_many_records',[TuMoiController::class,'upload_excel'])->name('tu_moi.post_create_many_records');
+    Route::get('/panel/tu_moi/get_update_many_records',[TuMoiController::class,'get_create_many_records'])->name('tu_moi.get_create_many_records');
+    Route::post('/panel/tu_moi/post_update_many_records',[TuMoiController::class,'upload_update_excel'])->name('tu_moi.post_create_many_records');
     Route::get('/panel/tu_moi/get_many_images',[TuMoiController::class,'get_many_images'])->name('tu_moi.get_many_images');
     Route::post('/panel/tu_moi/upload_many_images',[TuMoiController::class,'upload_many_images'])->name('tu_moi.upload_many_images');
 

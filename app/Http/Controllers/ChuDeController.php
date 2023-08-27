@@ -321,11 +321,15 @@ class ChuDeController extends Controller
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
                         $chuDe = ChuDe::find($rowData[0]);
                         if ($chuDe) {
+                            if($rowData[1] !='Null' )
                             $chuDe->chu_de_name = $rowData[1];
+                            if($rowData[2] !='Null' )
                             $chuDe->image = $rowData[2];
+                            if($rowData[3] !='Null' )
                             $chuDe->so_nguoi_theo_hoc = $rowData[3];
                             if($rowData[5] !='Null' )
                                 $chuDe->description = $rowData[5];
+                            if($rowData[4] !='Null' )
                             $chuDe->category_id = $rowData[4];
                             if( $rowData[6] != 'Null' )
                             $chuDe->youtube_code= $rowData[6];
