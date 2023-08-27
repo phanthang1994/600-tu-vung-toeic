@@ -324,8 +324,10 @@ class ChuDeController extends Controller
                             $chuDe->chu_de_name = $rowData[1];
                             $chuDe->image = $rowData[2];
                             $chuDe->so_nguoi_theo_hoc = $rowData[3];
-                            $chuDe->description = $rowData[4];
-                            $chuDe->category_id = $rowData[5];
+                            if($rowData[5] !='Null' )
+                                $chuDe->description = $rowData[5];
+                            $chuDe->category_id = $rowData[4];
+                            if( $rowData[6] != 'Null' )
                             $chuDe->youtube_code= $rowData[6];
                             $chuDe->save();
                         }
@@ -337,7 +339,27 @@ class ChuDeController extends Controller
                 unlink($filePath); // delete excel file from server
             }
         }
+        header("File Not Not Found");
+        echo "File Not Not Found";
+    }
 
+    public function process_update_excel(Request $request)
+    {
+
+        $filePath = '';
+        if ($request->has('file_upload')) {
+            $file = $request->file_upload;
+            $file_name = $file->getClientoriginalName();
+            $extension = $file->extension();
+            $x = pathinfo($file_name, PATHINFO_FILENAME);
+            $file_name = 'chu_de-'. $x . '.' . $extension;
+            $file->move(public_path($this->path_file_excel), $file_name);
+            $request->merge(['image' => $file_name]);
+            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
+            $filePath = str_replace('/', '\\', $filePath);
+        }
+        $this->readUpdateExelFile($filePath);
+        return redirect()->route('chu_de');
     }
     public function category_detail($category_id)
     {
