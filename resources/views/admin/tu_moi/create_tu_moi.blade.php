@@ -45,13 +45,6 @@
                 </select>
 
             </div>
-{{--            <label for="status">Trạng Thái:</label><br>--}}
-{{--            <div class="">--}}
-{{--                <input type="radio" id="AN" name="STATUS" value="0">--}}
-{{--                <label for="AN">ẨN</label>--}}
-{{--                <input type="radio" id="HIEN" name="STATUS" value="1">--}}
-{{--                <label for="HIEN">HIỆN</label><br>--}}
-{{--            </div>--}}
             <input type="submit" value="Submit">
         </div>
     </form>

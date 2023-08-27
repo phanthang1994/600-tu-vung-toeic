@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,10 @@ class CategoryController extends Controller
     {   $categories = Category::all();
         return view('admin.category.category',compact('categories'));
     }
-
+    public function home()
+    {   $categories = Category::all();
+        return view('front_end.home',compact('categories'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -35,19 +39,12 @@ class CategoryController extends Controller
         return view('admin.category.create_category');
     }
 
-    public function fetch()
-    {
-        $categories = Category::all();
-        return response()->json([
-            'categories' => $categories,
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function save(Request $request)
     {
@@ -57,8 +54,7 @@ class CategoryController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'category-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
@@ -66,38 +62,6 @@ class CategoryController extends Controller
 
         Category::create($request->all());
         return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
-    }
-    public function store(Request $request)
-    {
-
-        $validator = Validator::make($request->all(), [
-            'category_name' => 'required',
-            'image' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages()
-            ]);
-        } else {
-            $fields = ["category_name","image"];
-            $data = [
-                "category_name"=>$request->input('category_name'),
-                "image" => $request->input('image')
-            ];
-
-            Category::upsert(
-                $data,$fields
-            );
-            $file =  $request->input('image');
-            $file_name =  basename($file);
-//            dd($file_name);
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Added Successfully.'
-            ]);
-        }
     }
 
     /**
@@ -115,23 +79,8 @@ class CategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param $category_id
-     * @return JsonResponse
+     * @return Application|Factory|View
      */
-    public function edit($category_id)
-    {
-        $category = Category::find($category_id);
-        if ($category) {
-            return response()->json([
-                'status' => 200,
-                'student' => $category,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Student Found.'
-            ]);
-        }
-    }
     public function edits($category_id)
     {
 
@@ -146,49 +95,8 @@ class CategoryController extends Controller
      *
      * @param Request $request
      * @param int $category_id
-     * @return JsonResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $category_id)
-    {
-        if($request->input('image'))
-        {
-            if($request->has('file_upload'))
-            {
-                $file =  $request->file_upload;
-                $file_name =  $file->getClientoriginalName();
-                $extension = $file ->extension();
-                $x = pathinfo($file_name, PATHINFO_FILENAME);
-                $file_name = 'category-'.$x.'.'.$extension;
-                $file->move(public_path("admin/img/category"),$file_name);
-                $request->merge(['image'=> $file_name]);
-
-            }
-            $data =  [
-                'category_name'=>$request->input('category_name'),
-                "image" => $request->input('image'),
-
-            ];
-        }
-        else
-            $data =  [
-                'category_name'=>$request->input('category_name')
-            ];
-        $u = Category::where('id',$category_id)->update(
-            $data
-        );
-        if ($u)
-        {
-            return response()->json([
-                        'status' => 200,
-                        'message' => 'Student Updated Successfully.'
-                    ]);
-        }
-        else
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Error deleted'
-                ]);
-    }
     public function updates(Request $request, $category_id)
     {
         if($request->has('file_upload'))
@@ -197,8 +105,7 @@ class CategoryController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'category-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'category-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
@@ -219,7 +126,7 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $category_id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
 
     public function destroy($category_id)
@@ -239,4 +146,6 @@ class CategoryController extends Controller
         $u = Category::where('id', $category_id)->delete();
         return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
     }
+
+
 }

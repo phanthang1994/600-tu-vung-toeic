@@ -2,60 +2,112 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+namespace App\Http\Controllers;
 use App\Models\ChuDe;
+use App\Models\TuMoi;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
+use Box\Spout\Reader\Exception\ReaderNotOpenedException;
+use DateTime;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use function Symfony\Component\Translation\t;
+use App\Models\Category;
 
 class ChuDeController extends Controller
 {
     private $path_file_image = "admin/img/chu_de";
+    private $path_file_excel = "assets/admin/excel/chu_de";
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
         $subjects = DB::table('chu_de')
-            -> leftJoin('category','category.id','=','chu_de.category_id')
-            ->select('chu_de.*','category.category_name')->get();
-        ;
-        return view('admin.chu_de.chu_de',compact('subjects'));
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->select('chu_de.*', 'category.category_name')
+            ->orderBy('created_at', 'desc') // Order by created_time in descending order
+            ->get();
+
+        return view('admin.chu_de.chu_de', compact('subjects'));
     }
+
+    public function  all_courses()
+    {
+        $subjects = DB::table('chu_de')
+            ->select(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description AS chu_de_description',
+                'category.category_name AS category_name',
+                'category.image AS category_image',
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+            )
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(5);
+
+        return view('front_end.courses', compact('subjects'));
+    }
+
+    public function get_many_images(){
+        return view('admin.chu_de.upload_many_image');
+    }
+
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return JsonResponse
+     * @param Request $request
+     * @return string
      */
-    public function fetch()
+    public function upload_many_images(Request $request)
     {
-        $categories = DB::table('chu_de')
-            -> leftJoin('category','category.id','=','chu_de.category_id')
-            ->select('chu_de.*','category.category_name')->get();
-        return response()->json([
-            'categories' => $categories,
-        ]);
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+
+            foreach ($images as $image) {
+                $imageName = $image->getClientOriginalName();
+                $extension = $image ->extension();
+                $x = pathinfo($imageName, PATHINFO_FILENAME);
+                $file_name = $x.'.'.$extension;
+                $image->move(public_path($this->path_file_image),$file_name);
+                $request->merge(['image'=> $file_name]);
+            }
+
+            return redirect()->route('chu_de');
+        }
+
+        return 'No images selected for upload.';
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return JsonResponse
-     */
-    public function create()
-    {
-        $cats = Category::select('id',"category_name")->get();
-        return response()->json([
-            'categories' => $cats,
-        ]);
-    }
     public function creates()
     {
         $cats = Category::select('id',"category_name")->get();
@@ -66,97 +118,50 @@ class ChuDeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function save(Request $request)
     {
-        if($request->has('file_upload'))
-        {
-            $file =  $request->file_upload;
-            $file_name =  $file->getClientoriginalName();
-            $extension = $file ->extension();
+        if ($request->has('file_upload')) {
+            $file = $request->file_upload;
+            $file_name = $file->getClientOriginalName();
+            $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
-            $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
-
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
+            $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
+            $file->move(public_path($this->path_file_image), $file_name);
+            $request->merge(['image' => $file_name]);
         }
+
+        // Generate a random integer for so_nguoi_theo_hoc within the specified range
+        $randomStudents = rand(30001, 100000);
+
+        // Add the random integer value to the request data
+        $request->merge(['so_nguoi_theo_hoc' => $randomStudents]);
+
         ChuDe::create($request->all());
-        return redirect()->route('category');
+        return redirect()->route('chu_de');
     }
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'chu_de_name' => 'required',
-            'image' => 'required',
-            'status' => 'required'
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages()
-            ]);
-        } else {
-            $fields = ["chu_de_name","image","category_id","trang_thai"];
-            $data = [
-                "chu_de_name"=>$request->input('chu_de_name'),
-                "image" => $request->input('image'),
-                "category_id"=>$request->input('category_id'),
-                "status" => $request->input('status')
-            ];
-//            dd($data);
-            ChuDe::upsert(
-                $data,$fields
-            );
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Added Successfully.'
-            ]);
-        }
-
-    }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return JsonResponse
+     * @param int $id
+     * @return void
      */
     public function show($id)
     {
-        $categories = ChuDe::all();
-        return response()->json([
-            'categories' => $categories,
-        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param $chu_de_id
-     * @return JsonResponse
+     * @return Application|Factory|View
      */
-    public function edit($chu_de_id)
-    {
-        $category_query = ChuDe::find($chu_de_id);
-        $category_id = $category_query->CATEGORY_ID;
-        $category_name_query = Category::find($category_id);
-        if ($category_query) {
-            return response()->json([
-                'status' => 200,
-                'student' =>$category_query,
-                'category_name'=>$category_name_query->CATEGORY_NAME
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Student Found.'
-            ]);
-        }
-    }
     public function edits($chu_de_id)
     {
         $edits = DB::table('chu_de')
@@ -166,37 +171,14 @@ class ChuDeController extends Controller
         $categories = Category::select('id',"category_name")->get();
         return view('admin.chu_de.edit_chu_de',compact('edits','categories'));
     }
+
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param $category_id
-     * @return JsonResponse
+     * @param $chu_de_id
+     * @return RedirectResponse
      */
-    public function update(Request $request, $category_id)
-    {
-        $data =  [
-
-            'category_id'=>$request->input('category_id'),
-            'chu_de_name'=>$request->input('chu_de_name'),
-            "image" => $request->input('image'),
-        ];
-        $u = ChuDe::where('id',$category_id)->update(
-            $data
-        );
-        if ($u)
-        {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Updated Successfully.'
-            ]);
-        }
-        else
-            return response()->json([
-                'status' => 404,
-                'message' => 'Error deleted'
-            ]);
-    }
 
     public function updates(Request $request, $chu_de_id)
     {
@@ -207,8 +189,9 @@ class ChuDeController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'chu_de-'.$dateTime.'-'.$x.'.'.$extension;
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
+            $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
@@ -239,7 +222,7 @@ class ChuDeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $category_id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($category_id)
     {
@@ -258,4 +241,191 @@ class ChuDeController extends Controller
         return redirect()->route('chu_de');
     }
 
+    public function get_excel_file(Request $request)
+    {
+        return view('admin.chu_de.upload_many_excel');
+    }
+
+    //https://www.nidup.io/blog/manipulate-excel-files-in-php
+    public function readExcelFile($filePath)
+    {
+        if (file_exists($filePath)) {
+            # open the file
+            $reader = ReaderEntityFactory::createXLSXReader();
+            $reader->open($filePath);
+            $isFirstRow = true;
+            # read each cell of each row of each sheet
+            try {
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    foreach ($sheet->getRowIterator() as $row) {
+                        if ($isFirstRow) {
+                            $isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+                        $rowData = $row->toArray();
+//                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                        $model = new ChuDe();
+                        $model->chu_de_name = $rowData[0];
+                        $model->image = $rowData[1];
+                        $model->so_nguoi_theo_hoc = $rowData[2];
+                        $model->category_id = intval($rowData[3]);
+//                        dd($model);
+                        $model->save();
+                    }
+                }
+            } catch (ReaderNotOpenedException $e) {
+            } finally {
+                $reader->close();
+                unlink($filePath); // delete excel file from server
+            }
+        }
+
+        header("File Not Not Found");
+        echo "File Not Not Found";
+
+    }
+    public function upload_excel(Request $request)
+    {
+
+        $filePath = '';
+        if ($request->has('file_upload')) {
+            $file = $request->file_upload;
+            $file_name = $file->getClientoriginalName();
+            $extension = $file->extension();
+            $x = pathinfo($file_name, PATHINFO_FILENAME);
+            $file_name = 'chu_de-'. $x . '.' . $extension;
+            $file->move(public_path($this->path_file_excel), $file_name);
+            $request->merge(['image' => $file_name]);
+            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
+            $filePath = str_replace('/', '\\', $filePath);
+        }
+        $this->readExcelFile($filePath);
+        return redirect()->route('chu_de');
+    }
+
+    public function category_detail($category_id)
+    {
+        $subjects = DB::table('chu_de')
+            ->select(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description AS chu_de_description',
+                'category.category_name AS category_name',
+                'category.image AS category_image',
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+            )
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->where('category.id', $category_id)
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(5); ;
+//        dd($subjects);
+        return view('front_end.detail_chu_de', compact('subjects'));
+    }
+
+    public function new_words_next($chu_de_id)
+    {
+        // Get the category_id for the given chu_de_id
+        $category_id = ChuDe::where('id', $chu_de_id)->value('category_id');
+        $subjects = DB::table('chu_de')
+            ->select(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description AS chu_de_description',
+                'category.category_name AS category_name',
+                'category.image AS category_image',
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+            )
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->where('category.id', $category_id)
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(5); ;
+//        dd($subjects);
+        return view('front_end.courses', compact('subjects'));
+    }
+
+    public function che_tu_for_chu_de($chu_de_id)
+    {
+        $results = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', $chu_de_id)
+            ->rightJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
+            ->select(
+                'tu_moi.*',
+                'chu_de.id AS chu_de_id',
+                'chu_de.chu_de_name AS chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description AS chu_de_description'
+            )
+            ->get();
+
+        return view('front_end.che_tu_for_chu_de', compact('results'));
+    }
+    public function che_tu()
+    {
+        $results = DB::table('category')
+            ->select('category.*')
+            ->join('chu_de', 'category.id', '=', 'chu_de.category_id')
+            ->distinct()
+            ->get();
+        return view('front_end.che_tu', compact('results'));
+    }
+    public function getChuDeOptions(Request $request)
+    {
+        $categoryId = $request->input('category_id');
+        $chuDeOptions = ChuDe::join('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->where('chu_de.category_id', $categoryId)
+            ->select('chu_de.*')
+            ->distinct()
+            ->get();
+
+        return response()->json($chuDeOptions);
+    }
+    public function getTuMoiOptions(Request $request)
+    {
+        $chu_de_id = $request->input('chu_de_id');
+        $tuMoiOptions = TuMoi::where('chu_de_id', $chu_de_id)->get(['name', 'tu_loai', 'che_tu','phien_am']);
+
+
+        return response()->json($tuMoiOptions);
+    }
 }

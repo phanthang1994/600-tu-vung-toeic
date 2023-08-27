@@ -5,20 +5,21 @@ use App\Models\ChuDe;
 use App\Models\TuMoi;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Exception\ReaderNotOpenedException;
+use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
+
 
 class TuMoiController extends Controller
 {
     private $path_file_image = "assets/admin/img/tu_moi";
     private $path_file_audio = "assets/admin/audio/tu_moi";
+    private $path_file_excel = "assets/admin/excel/tu_moi";
 
     /**
      * Display a listing of the resource.
@@ -36,36 +37,7 @@ class TuMoiController extends Controller
         return view('admin.tu_moi.tu_moi',compact('new_words'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return JsonResponse
-     */
-    public function fetch()
-    {
 
-        $categories = DB::table('tu_moi')
-            -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
-            ->select('tu_moi.*','chu_de.chu_de_name')->get();
-
-//        dd($categories);
-        return response()->json([
-            'categories' => $categories,
-        ]);
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return JsonResponse
-     */
-    public function create()
-    {
-        $cats = ChuDe::select('id',"chu_de_name")->get();
-//        dd($cats);
-        return response()->json([
-            'categories' => $cats,
-        ]);
-    }
     public function creates()
     {
         $subjects = ChuDe::select('id',"chu_de_name")->get();
@@ -73,30 +45,24 @@ class TuMoiController extends Controller
         return view('admin.tu_moi.create_tu_moi',compact('subjects'));
     }
 
-    public function create_many()
-    {
-        return view('admin.tu_moi.create_many');
-    }
-    public function upload_many()
-    {
-        return view('admin.tu_moi.upload_many');
-    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function save(Request $request)
     {
         if($request->has('file_upload'))
         {
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
-            $dateTime = date('dmYHis');
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
 
@@ -107,8 +73,7 @@ class TuMoiController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_audio),$file_name);
             $request->merge(['audio'=> $file_name]);
 
@@ -119,88 +84,9 @@ class TuMoiController extends Controller
 
             return redirect()->route('tu_moi')->with('success','Thêm sản phẩm thành công');
         }
+        return redirect()->route('tu_moi')->with('success','Thêm sản phẩm không thành công');
     }
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'image' => 'required',
-            'phien_am' => 'required',
-            'tu_loai' => 'required',
-            'audio' => 'required',
-            'status' => 'required'
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages()
-            ]);
-        } else {
-            $fields = ["NAME, PHIEN_AM","AUDIO","TU_LOAI","VI_DU",	"IMAGE",	"CHE_TU",	"CAU_TRUC_CAU",	"CHU_DE_ID","STATUS"];
-            $data = [
-                "name"=>$request->input('name'),
-                "phien_am"=>$request->input('phien_am'),
-                "audio"=>$request->input('audio'),
-                "tu_loai"=>$request->input('tu_loai'),
-                "vi_du"=>$request->input('vi_du'),
-                "image" => $request->input('image'),
-                "che_tu" => $request->input('che_tu'),
-                "cau_truc_cau" => $request->input('cau_truc_cau'),
-                "chu_de_id" => $request->input('chu_de_id'),
-//                "status" => $request->input('status')
-            ];
-            TuMoi::upsert(
-                $data,$fields
-            );
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Added Successfully.'
-            ]);
-        }
-
-    }
-    public function store_many(Request $request)
-    {
-       request()->validate([
-
-            'uploadFile' => 'required',
-
-        ]);
-
-//        dd($request->file('uploadFile'));
-        $files = $request->file('uploadFile');
-        foreach ($files as $file) {
-//            dd($value);
-            $file_name =  $file->getClientoriginalName();
-            $extension = $file ->extension();
-//            dd($extension);
-            if($extension =='wav' || $extension== 'mp3')
-            {
-                $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-                $file_name = 'tu_moi-'.$x.'.'.$extension;
-//            dd($file_name);
-                $file->move(public_path("admin/audio/tu_moi"),$file_name);
-            }
-            else
-            {
-                $x = pathinfo($file_name, PATHINFO_FILENAME);
-//            dd($x);
-                $file_name = 'tu_moi-'.$x.'.'.$extension;
-//            dd($file_name);
-                $file->move(public_path("admin/img/tu_moi"),$file_name);
-            }
-
-
-        }
-
-
-
-        return response()->json(['success'=>'Images Uploaded Successfully.']);
-
-
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -224,19 +110,20 @@ class TuMoiController extends Controller
      *
      * @param Request $request
      * @param $tu_moi_id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function updates(Request $request, $tu_moi_id)
     {
 //        dd($request->all());
         if($request->has('file_upload'))
         {
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
             $request->merge(['image'=> $file_name]);
             $oldest_image = $request->old_image;
@@ -254,8 +141,7 @@ class TuMoiController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'tu_moi-'.$dateTime.'-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_audio),$file_name);
             $request->merge(['audio'=> $file_name]);
             $oldest_audio = $request->old_audio;
@@ -291,7 +177,7 @@ class TuMoiController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
@@ -315,21 +201,11 @@ class TuMoiController extends Controller
     {
         return view('admin.tu_moi.create_many');
     }
-    public function post_create_many_records(Request $request)
-    {
-        $data = $request->input('data');
-        // Process the received data as needed (e.g., save to database)
-        $data1 = $request->input('data');
-        echo($data1);
-        return response()->json(['success' => $data]);
-    }
-    public function displayReadExcevlFile(Request $request)
-    {
-        return view('admin.tu_moi.read_excel_file');
-    }
+
     //https://www.nidup.io/blog/manipulate-excel-files-in-php
     public function readExcelFile($filePath)
     {
+//        dd($filePath);
         if (file_exists($filePath)) {
             # open the file
             $reader = ReaderEntityFactory::createXLSXReader();
@@ -347,11 +223,11 @@ class TuMoiController extends Controller
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
                         $model = new TuMoi();
                         $model->name = $rowData[0];
-                        $model->image = $rowData[1];
+                        $model->image = $this->path_file_image.'/'.$rowData[1];
                         $model->tu_loai = $rowData[2];
                         $model->phien_am = $rowData[3];
                         $model->vi_du = $rowData[4];
-                        $model->audio = $rowData[5];
+                        $model->audio = $this->path_file_audio.'/'.$rowData[5];
                         $model->che_tu = $rowData[6];
                         $model->cau_truc_cau = $rowData[7];
                         $model->chu_de_id = intval($rowData[8]);
@@ -362,7 +238,7 @@ class TuMoiController extends Controller
             } catch (ReaderNotOpenedException $e) {
             } finally {
                 $reader->close();
-                unlink($filePath);
+                unlink($filePath); // delete excel file from server
             }
         }
 
@@ -379,14 +255,353 @@ class TuMoiController extends Controller
             $file_name = $file->getClientoriginalName();
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $dateTime = date('dmYHis');
-            $file_name = 'chu_de-' . $dateTime . '-' . $x . '.' . $extension;
-            $file->move(public_path($this->path_file_image), $file_name);
+            $file_name = 'tu-moi-'. $x . '.' . $extension;
+            $file->move(public_path($this->path_file_excel), $file_name);
             $request->merge(['image' => $file_name]);
-            $filePath = public_path($this->path_file_image) .'/'. $file_name;
+            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
             $filePath = str_replace('/', '\\', $filePath);
         }
         $this->readExcelFile($filePath);
         return redirect()->route('tu_moi');
+    }
+
+    public function get_many_images(){
+        return view('admin.tu_moi.upload_many_image');
+    }
+    public function upload_many_images(Request $request)
+    {
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+
+            foreach ($images as $image) {
+                $imageName = $image->getClientOriginalName();
+                $extension = $image ->extension();
+                $x = pathinfo($imageName, PATHINFO_FILENAME);
+                $file_name = $x.'.'.$extension;
+                $image->move(public_path($this->path_file_image),$file_name);
+                $request->merge(['image'=> $file_name]);
+            }
+
+        }
+        if ($request->hasFile('audios')) {
+            $images = $request->file('audios');
+
+            foreach ($images as $image) {
+                $imageName = $image->getClientOriginalName();
+                $extension = $image ->extension();
+                $x = pathinfo($imageName, PATHINFO_FILENAME);
+                $file_name = $x.'.'.$extension;
+                $image->move(public_path($this->path_file_audio),$file_name);
+                $request->merge(['audio'=> $file_name]);
+            }
+
+            return redirect()->route('tu_moi');
+        }
+
+        return 'No images selected for upload.';
+    }
+    public function new_words($chu_de_id)
+    {
+        $new_word = DB::table('tu_moi')
+            -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
+            -> where('tu_moi.chu_de_id','=',$chu_de_id)
+            -> select('tu_moi.*','chu_de.chu_de_name','chu_de.description as chu_de_description','chu_de.youtube_code')->get();
+//        return dd($new_word);
+        return view('front_end.new_words',compact('new_word'));
+    }
+
+    public function test_types()
+    {
+        $subjects = DB::table('chu_de')
+            ->select(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description AS chu_de_description',
+                'category.category_name AS category_name',
+                'category.image AS category_image',
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+            )
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(5);
+//        dd($subject);
+        $subjects->getCollection()->transform(function ($result) {
+            $minutes = floor($result->tu_moi_count * 2 / 60);
+            $seconds = $result->tu_moi_count % 60;
+            $timeToTest = sprintf("%02d:%02d", $minutes, $seconds);
+
+            // Add the 'time_to_test' field to the result object
+            $result->time_to_test = $timeToTest;
+            return $result;
+        });
+//        dd($subject);
+        return view('front_end.test_type', compact('subjects'));
+    }
+
+    public function single_test_type($chu_de_id)
+    {
+        $results = DB::table('chu_de')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->select('chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description AS chu_de_description',
+                DB::raw("(SELECT COUNT(id) FROM tu_moi WHERE chu_de_id = {$chu_de_id}) AS tu_moi_count")
+            )
+            ->where('chu_de.id', $chu_de_id)
+            ->first();
+
+        if ($results) {
+            $minutes = floor($results->tu_moi_count * 2 / 60);
+            $seconds = $results->tu_moi_count % 60;
+            $timeToTest = sprintf("%02d:%02d", $minutes, $seconds);
+            $results->time_to_test = $timeToTest;
+        }
+
+//        dd($results);
+        return view('front_end.single_test_type', compact('results'));
+    }
+    public function test_type()
+    {
+        $subjects = DB::table('chu_de')
+            ->select(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image AS chu_de_image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description AS chu_de_description',
+                'category.category_name AS category_name',
+                'category.image AS category_image',
+                'category.description AS category_description',
+                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+            )
+            ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
+            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->groupBy(
+                'chu_de.id',
+                'chu_de.chu_de_name',
+                'chu_de.image',
+                'chu_de.so_nguoi_theo_hoc',
+                'chu_de.description',
+                'category.category_name',
+                'category.image',
+                'category.description'
+            )
+            ->where(function ($query) {
+                $query->whereExists(function ($subquery) {
+                    $subquery->select(DB::raw(1))
+                        ->from('tu_moi')
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                });
+            })
+            ->paginate(5);
+//        dd($subject);
+        $subjects->getCollection()->transform(function ($result) {
+            $minutes = floor($result->tu_moi_count * 2 / 60);
+            $seconds = $result->tu_moi_count % 60;
+            $timeToTest = sprintf("%02d:%02d", $minutes, $seconds);
+
+            // Add the 'time_to_test' field to the result object
+            $result->time_to_test = $timeToTest;
+            return $result;
+        });
+//        dd($subjects);
+        return view('front_end.test_type_detail', compact('subjects'));
+    }
+    public function next_test_type($chu_de_id)
+    {
+        $category_id = ChuDe::where('id', $chu_de_id)->value('category_id');
+        return $this->test_type($category_id);
+    }
+    public function multiple_choice_question($id_chu_de)
+    {
+        $subjects = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
+            ->get();
+
+        $questions = [];
+        $tu_loai_list = $subjects->pluck('tu_loai')->all();
+        $list_option = ["optionA","optionB","optionC","optionD"];
+        foreach ($subjects as $subject) {
+            $question = [
+                'question' => $subject->name,
+                'optionA' => '',
+                'optionB' => '',
+                'optionC' => '',
+                'optionD' => '',
+                'correctOption' => '',
+                'optionChoiced' => '',
+                'trueOrFlase' => 0,
+                'valueChoiced' => '',
+                'remeber' => 0,
+                'image' => $subject->image,
+                'phien_am' => $subject->phien_am
+            ];
+
+            $options = $this->generateRandomList($subject->tu_loai, $tu_loai_list);
+
+            $question['optionA'] = $options[0];
+            $question['optionB'] = $options[1];
+            $question['optionC'] = $options[2];
+            $question['optionD'] = $options[3];
+
+            $index = array_search($subject->tu_loai, $options);
+//            dd($index);
+
+            $question['correctOption'] = $list_option[$index]; // Assign the correct option
+
+            $questions[] = $question;
+        }
+//        dd($questions);
+        return view('front_end.multiple_choice_question', compact('questions'));
+    }
+    private function generateRandomList($fixedValue,$possibleValues) {
+        $items = [$fixedValue];
+//        dd($fixedValue);
+        $remainingValues = array_diff($possibleValues, [$fixedValue]);
+        $randomValues = array_rand($remainingValues, 3);
+
+        if (!is_array($randomValues)) {
+            $randomValues = [$randomValues];
+        }
+
+        foreach ($randomValues as $randomIndex) {
+            $items[] = $remainingValues[$randomIndex];
+            unset($remainingValues[$randomIndex]);
+        }
+
+        shuffle($items);
+
+        return $items;
+    }
+    public function free_text_question($id_chu_de)
+    {
+        $subjects = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
+            ->get();
+
+        $questions = []; // Initialize an empty array for questions
+
+        foreach ($subjects as $subject) {
+            $nameParts = explode(' ', $subject->tu_loai); // Split the name by space into an array
+            shuffle($nameParts); // Randomize the array
+
+            $question = [
+                'question' => $subject->name,
+                'suggestion' => $nameParts,
+                'correctOption' => $subject->tu_loai,
+                'optionChoiced' => '',
+                'trueOrFlase' => '',
+                'valueChoiced' => '',
+                'remeber' => '',
+                'image' => $subject->image,
+                'phien_am' => $subject->phien_am
+
+            ];
+
+            $questions[] = $question; // Add each question to the array of questions
+        }
+
+        return view('front_end.free_text_question', compact('questions'));
+    }
+    public function form_question($id_chu_de)
+    {
+        $subjects = DB::table('tu_moi')
+            ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
+            ->get();
+        $chu_de_image = DB::table('chu_de')
+            ->where('chu_de.id', '=', $id_chu_de)
+            ->select('chu_de.image','chu_de.chu_de_name')
+            ->get();
+        $questions = [];
+        $tu_loai_list = $subjects->pluck('tu_loai')->all();
+        $list_option = ["a","b","c","d"];
+        $increase_number = 0;
+        foreach ($subjects as $subject) {
+            if ($increase_number!=0)
+            {
+                $question = [
+                    'group_id'=> $subject->id,
+                    'question'=> $subject->name,
+                    'a'=> '',
+                    'a_id'=> $subject->id+$increase_number+4,
+                    'b'=> '',
+                    'b_id'=> $subject->id+$increase_number+5,
+                    'c'=> '',
+                    'c_id'=> $subject->id+$increase_number+6,
+                    'd'=> '',
+                    'd_id'=> $subject->id+$increase_number+7,
+                    'correctOption' => '',
+                    'optionChoiced' => '',
+                    'trueOrFlase' => '',
+                    'valueChoiced' => '',
+                    'remeber' => 0,
+                    'image' => $subject->image,
+                    'phien_am' => $subject->phien_am
+                ];
+            }
+            else{
+                $question = [
+                    'group_id'=> $subject->id,
+                    'question'=> $subject->name,
+                    'a'=> '',
+                    'a_id'=> $subject->id,
+                    'b'=> '',
+                    'b_id'=> $subject->id+1,
+                    'c'=> '',
+                    'c_id'=> $subject->id+2,
+                    'd'=> '',
+                    'd_id'=> $subject->id+3,
+                    'correctOption' => '',
+                    'optionChoiced' => '',
+                    'trueOrFlase' => '',
+                    'valueChoiced' => '',
+                    'remeber' => 0,
+                    'image' => $subject->image,
+                    'phien_am' => $subject->phien_am
+                ];
+            }
+
+            $increase_number+=4;
+            $options = $this->generateRandomList($subject->tu_loai, $tu_loai_list);
+
+            $question['a'] = $options[0];
+            $question['b'] = $options[1];
+            $question['c'] = $options[2];
+            $question['d'] = $options[3];
+
+            $index = array_search($subject->tu_loai, $options);
+//            dd($index);
+
+            $question['correctOption'] = $list_option[$index]; // Assign the correct option
+
+            $questions[] = $question;
+        }
+//        dd($chu_de_image);
+        return view('front_end.form_question',compact('questions','chu_de_image'));
     }
 }

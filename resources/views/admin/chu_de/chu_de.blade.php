@@ -23,9 +23,8 @@
                                 <th>Description</th>
                                 <th>Image</th>
                                 <th>CATEGORY NAME</th>
-                                <th>Tổng số từ</th>                                <th>Số Người Theo Học</th>
-
-
+                                <th>YOUTUBE CODE</th>
+                                <th>Số Người Theo Học</th>
                                 <th>Created At</th>
                                 <th>Updateed At</th>
                                 <th>Sửa</th>
@@ -38,7 +37,8 @@
                                 <td> {{$item->description}} </td>
                                 <td> {{$item->image}} </td>
                                 <td> {{$item->category_name}}</td>
-                                <td> {{$item->tong_so_tu}}</td>
+                                <td>{{$item->youtube_code}}</td> <!-- Display YouTube Code -->
+
                                 <td> {{$item->so_nguoi_theo_hoc}} </td>
                                 <td> {{$item->created_at}} </td>
                                 <td> {{$item->updated_at}} </td>

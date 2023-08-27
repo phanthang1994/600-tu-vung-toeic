@@ -21,6 +21,8 @@
                     @endforeach
                 </select>
             </div>
+            <label for="youtube_code">YouTube Video Code</label>
+            <input type="text" class="form-control" name="youtube_code" id="youtube_code" placeholder="Input YouTube video code">
             <input type="submit" value="Submit">
         </div>
     </form>

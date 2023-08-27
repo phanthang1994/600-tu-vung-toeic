@@ -20,7 +20,6 @@ class CreateTableChuDeTable extends Migration
             $table->string('image',2000);
             $table->integer('so_nguoi_theo_hoc')->nullable();
             $table->integer('thoi_gian_hoc')->nullable();
-            $table->integer('tong_so_tu')->nullable();
             $table->string('description',255)->nullable();
             $table->integer('category_id')->unsigned()->nullable();
             $table->foreign('category_id')->references('id')->on('category')->onDelete('cascade');

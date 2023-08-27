@@ -100,7 +100,8 @@ img.avatar {
 }
 .tatCaKhoaHocCon{
     padding: 10px 10px;
-    display:flex;justify-content: space-between;
+    display:flex;
+    justify-content: space-between;
     flex-wrap: wrap;
     border-radius: 25px;
     border: 3px solid #E3E7EF;
@@ -219,7 +220,7 @@ img.avatar {
 }
 .dpvpxs{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     /*margin-top:0.5rem;*/
 }
 

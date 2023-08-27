@@ -392,9 +392,11 @@
     $('.blog-active').slick({
         infinite: true,
         slidesToShow: 4,
+        autoplay: true,       // Bật chế độ autoplay
+        autoplaySpeed: 5000 ,  // Đặt tốc độ autoplay thành 3000ms (3 giây)
         slidesToScroll: 1,
-        prevArrow: '<span class="b-navigation b-navigation-prev "><i class="fa fa-angle-left"></i></span>',
-        nextArrow: '<span class="b-navigation b-navigation-next active"><i class="fa fa-angle-right"></i></span>',
+        prevArrow: '<span class="b-navigation b-navigation-prev " style="visibility: hidden"><i class="fa fa-angle-left"></i></span>',
+        nextArrow: '<span class="b-navigation b-navigation-next active" style="visibility: hidden"><i class="fa fa-angle-right"></i></span>',
         responsive: [
             {
                 breakpoint: 1199,
@@ -584,17 +586,17 @@
 
     /*--
     Menu Stick
-    -----------------------------------*/
-    var header = $('.sticky-bar');
-    var win = $(window);
-    win.on('scroll', function() {
-        var scroll = win.scrollTop();
-        if (scroll < 200) {
-            header.removeClass('stick');
-        } else {
-            header.addClass('stick');
-        }
-    });
+    // -----------------------------------*/
+    // var header = $('.sticky-bar');
+    // var win = $(window);
+    // win.on('scroll', function() {
+    //     var scroll = win.scrollTop();
+    //     if (scroll < 200) {
+    //         header.removeClass('stick');
+    //     } else {
+    //         header.addClass('stick');
+    //     }
+    // });
 
     /* jQuery MeanMenu */
     $('#mobile-menu-active').meanmenu({
