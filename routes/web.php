@@ -25,6 +25,8 @@ Route::group(['middleware' => 'auth.admin'], function() {
     Route::delete('/panel/chu_de/{chu_de_id}/delete',[ChuDeController::class,'destroy'])->name('chu_de.delete');
     Route::get('/panel/chu_de/get_create_many_records',[ChuDeController::class,'get_excel_file'])->name('chu_de.get_excel_file');
     Route::post('/panel/chu_de/post_create_many_records',[ChuDeController::class,'upload_excel'])->name('chu_de.upload_excel');
+    Route::get('/panel/chu_de/get_update_many_records',[ChuDeController::class,'get_excel_file'])->name('chu_de.get_excel_file');
+    Route::post('/panel/chu_de/post_update_many_records',[ChuDeController::class,'upload_excel'])->name('chu_de.upload_excel');
     Route::get('/panel/chu_de/get_many_images',[ChuDeController::class,'get_many_images'])->name('chu_de.get_many_images');
     Route::post('/panel/chu_de/upload_many_images',[ChuDeController::class,'upload_many_images'])->name('chu_de.upload_many_images');
 

@@ -302,7 +302,43 @@ class ChuDeController extends Controller
         $this->readExcelFile($filePath);
         return redirect()->route('chu_de');
     }
+    public function readUpdateExelFile($filePath)
+    {
+        if (file_exists($filePath)) {
+            # open the file
+            $reader = ReaderEntityFactory::createXLSXReader();
+            $reader->open($filePath);
+            $isFirstRow = true;
+            # read each cell of each row of each sheet
+            try {
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    foreach ($sheet->getRowIterator() as $row) {
+                        if ($isFirstRow) {
+                            $isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+                        $rowData = $row->toArray();
+//                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                        $chuDe = ChuDe::find($rowData[0]);
+                        if ($chuDe) {
+                            $chuDe->chu_de_name = $rowData[1];
+                            $chuDe->image = $rowData[2];
+                            $chuDe->so_nguoi_theo_hoc = $rowData[3];
+                            $chuDe->description = $rowData[4];
+                            $chuDe->category_id = $rowData[5];
+                            $chuDe->youtube_code= $rowData[6];
+                            $chuDe->save();
+                        }
+                    }
+                }
+            } catch (ReaderNotOpenedException $e) {
+            } finally {
+                $reader->close();
+                unlink($filePath); // delete excel file from server
+            }
+        }
 
+    }
     public function category_detail($category_id)
     {
         $subjects = DB::table('chu_de')
