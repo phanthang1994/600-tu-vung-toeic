@@ -21,7 +21,7 @@ use App\Models\Category;
 
 class ChuDeController extends Controller
 {
-    private $path_file_image = "admin/img/chu_de";
+    private $path_file_image = "assets/admin/img/chu_de";
     private $path_file_excel = "assets/admin/excel/chu_de";
     /**
      * Display a listing of the resource.
@@ -131,7 +131,8 @@ class ChuDeController extends Controller
             $formattedDatetime = $currentDatetime->format('dmyHis');
             $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image), $file_name);
-            $request->merge(['image' => $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+            $request->merge(['image'=> $full_file_path]);
         }
 
         // Generate a random integer for so_nguoi_theo_hoc within the specified range
@@ -245,6 +246,10 @@ class ChuDeController extends Controller
     {
         return view('admin.chu_de.upload_many_excel');
     }
+    public function get_excel_file_updates(Request $request)
+    {
+        return view('admin.chu_de.update_many_excel');
+    }
 
     //https://www.nidup.io/blog/manipulate-excel-files-in-php
     public function readExcelFile($filePath)
@@ -322,17 +327,17 @@ class ChuDeController extends Controller
                         $chuDe = ChuDe::find($rowData[0]);
                         if ($chuDe) {
                             if($rowData[1] !='Null' )
-                            $chuDe->chu_de_name = $rowData[1];
+                                $chuDe->chu_de_name = $rowData[1];
                             if($rowData[2] !='Null' )
-                            $chuDe->image = $rowData[2];
+                                $chuDe->image = $rowData[2];
                             if($rowData[3] !='Null' )
-                            $chuDe->so_nguoi_theo_hoc = $rowData[3];
+                                 $chuDe->so_nguoi_theo_hoc = $rowData[3];
                             if($rowData[5] !='Null' )
                                 $chuDe->description = $rowData[5];
                             if($rowData[4] !='Null' )
-                            $chuDe->category_id = $rowData[4];
+                                $chuDe->category_id = $rowData[4];
                             if( $rowData[6] != 'Null' )
-                            $chuDe->youtube_code= $rowData[6];
+                                $chuDe->youtube_code= $rowData[6];
                             $chuDe->save();
                         }
                     }

@@ -64,7 +64,8 @@ class TuMoiController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $file_name = 'tu_moi-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+            $request->merge(['image'=> $full_file_path]);
 
         }
         if($request->has('file_upload_audio'))
@@ -75,7 +76,8 @@ class TuMoiController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $file_name = 'tu_moi-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_audio),$file_name);
-            $request->merge(['audio'=> $file_name]);
+            $full_file_path = $this-> path_file_audio . '/' . $file_name;
+            $request->merge(['audio'=> $full_file_path]);
 
         }
 
@@ -200,6 +202,10 @@ class TuMoiController extends Controller
     public function get_create_many_records(Request $request)
     {
         return view('admin.tu_moi.create_many');
+    }
+    public function get_update_many_records(Request $request)
+    {
+        return view('admin.tu_moi.update_many');
     }
 
     //https://www.nidup.io/blog/manipulate-excel-files-in-php
