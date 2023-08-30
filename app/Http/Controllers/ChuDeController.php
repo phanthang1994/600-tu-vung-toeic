@@ -194,7 +194,8 @@ class ChuDeController extends Controller
             $formattedDatetime = $currentDatetime->format('dmyHis');
             $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+            $request->merge(['image'=> $full_file_path]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
             File::delete(public_path($path_to_remove));

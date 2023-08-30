@@ -116,25 +116,27 @@ class TuMoiController extends Controller
      */
     public function updates(Request $request, $tu_moi_id)
     {
+        $currentDatetime = new DateTime();
+        $formattedDatetime = $currentDatetime->format('dmyHis');
 //        dd($request->all());
         if($request->has('file_upload'))
         {
-            $currentDatetime = new DateTime();
-            $formattedDatetime = $currentDatetime->format('dmyHis');
+
             $file =  $request->file_upload;
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $file_name = 'tu_moi-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+            $request->merge(['image'=> $full_file_path]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
-            if(File::exists(public_path($path_to_remove))){
-                File::delete(public_path($path_to_remove));
-            }else{
-                dd('File does not exists image.');
-            }
+//            if(File::exists(public_path($path_to_remove))){
+//                File::delete(public_path($path_to_remove));
+//            }else{
+//                dd('File does not exists image.');
+//            }
         }
 
         if($request->has('file_upload_audio'))
@@ -143,17 +145,18 @@ class TuMoiController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'tu_moi-'.$x.'.'.$extension;
+            $file_name = 'tu_moi-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_audio),$file_name);
-            $request->merge(['audio'=> $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+            $request->merge(['audio'=> $full_file_path]);
             $oldest_audio = $request->old_audio;
             $path_audio_to_remove=$this->path_file_audio.'/'.$oldest_audio;
-            if(File::exists(public_path($path_audio_to_remove))){
-                File::delete(public_path($path_audio_to_remove));
-            }
-            else{
-                dd('File does not exists audio.');
-            }
+//            if(File::exists(public_path($path_audio_to_remove))){
+//                File::delete(public_path($path_audio_to_remove));
+//            }
+//            else{
+//                dd('File does not exists audio.');
+//            }
         }
 
         if( request()->chu_de_id==NULL)
@@ -349,7 +352,6 @@ class TuMoiController extends Controller
     {
         if ($request->hasFile('images')) {
             $images = $request->file('images');
-
             foreach ($images as $image) {
                 $imageName = $image->getClientOriginalName();
                 $extension = $image ->extension();
