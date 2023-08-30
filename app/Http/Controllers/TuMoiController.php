@@ -132,11 +132,11 @@ class TuMoiController extends Controller
             $request->merge(['image'=> $full_file_path]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
-//            if(File::exists(public_path($path_to_remove))){
-//                File::delete(public_path($path_to_remove));
-//            }else{
-//                dd('File does not exists image.');
-//            }
+            if(File::exists(public_path($path_to_remove))){
+                File::delete(public_path($path_to_remove));
+            }else{
+                dd('File does not exists image.');
+            }
         }
 
         if($request->has('file_upload_audio'))
@@ -151,12 +151,12 @@ class TuMoiController extends Controller
             $request->merge(['audio'=> $full_file_path]);
             $oldest_audio = $request->old_audio;
             $path_audio_to_remove=$this->path_file_audio.'/'.$oldest_audio;
-//            if(File::exists(public_path($path_audio_to_remove))){
-//                File::delete(public_path($path_audio_to_remove));
-//            }
-//            else{
-//                dd('File does not exists audio.');
-//            }
+            if(File::exists(public_path($path_audio_to_remove))){
+                File::delete(public_path($path_audio_to_remove));
+            }
+            else{
+                dd('File does not exists audio.');
+            }
         }
 
         if( request()->chu_de_id==NULL)
