@@ -271,7 +271,7 @@ class ChuDeController extends Controller
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
                         $model = new ChuDe();
                         $model->chu_de_name = $rowData[0];
-                        $model->image = $rowData[1];
+                        $model->image = $this-> path_file_image . '/' .$rowData[1];
                         $model->so_nguoi_theo_hoc = $rowData[2];
                         $model->category_id = intval($rowData[3]);
 //                        dd($model);
