@@ -37,8 +37,8 @@
 
                 <div class="borderClass">
                     <div class="innerWrap" >
-                        <a href="{{route('new_words',$item->id)}}"><img style="width: 230px;height: 200px;"
-                                                          src="{{ asset($item->chu_de_image) }}" alt="{{$item->chu_de_image}}"></a>
+                        <a href="{{route('new_words',$item->id)}}">
+                            <img style="width: 230px;height: 200px;" src="{{ asset($item->chu_de_image) }}" alt="{{$item->chu_de_image}}"></a>
                         <div class="details-wrapper">
                             <div class="target-photo">
                                 <img src="{{ asset('/assets/admin/img/chu_de/en.png') }}" alt="">

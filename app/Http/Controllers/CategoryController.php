@@ -22,8 +22,8 @@ class CategoryController extends Controller
      * @return Application|Factory|View
      */
     public function index()
-    {   $categories = Category::all();
-        return view('admin.category.category',compact('categories'));
+    {    $categories = Category::orderBy('id', 'desc')->get();
+        return view('admin.category.category', compact('categories'));
     }
     public function home()
     {   $categories = Category::all();
@@ -56,7 +56,9 @@ class CategoryController extends Controller
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $file_name = 'category-'.$x.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+//            dd($full_file_path);
+            $request->merge(['image'=> $full_file_path]);
 
         }
 

@@ -21,7 +21,7 @@ use App\Models\Category;
 
 class ChuDeController extends Controller
 {
-    private $path_file_image = "admin/img/chu_de";
+    private $path_file_image = "assets/admin/img/chu_de";
     private $path_file_excel = "assets/admin/excel/chu_de";
     /**
      * Display a listing of the resource.
@@ -33,7 +33,7 @@ class ChuDeController extends Controller
         $subjects = DB::table('chu_de')
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->select('chu_de.*', 'category.category_name')
-            ->orderBy('created_at', 'desc') // Order by created_time in descending order
+            ->orderBy('id', 'desc') // Order by created_time in descending order
             ->get();
 
         return view('admin.chu_de.chu_de', compact('subjects'));
@@ -131,7 +131,8 @@ class ChuDeController extends Controller
             $formattedDatetime = $currentDatetime->format('dmyHis');
             $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image), $file_name);
-            $request->merge(['image' => $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+            $request->merge(['image'=> $full_file_path]);
         }
 
         // Generate a random integer for so_nguoi_theo_hoc within the specified range
@@ -193,10 +194,13 @@ class ChuDeController extends Controller
             $formattedDatetime = $currentDatetime->format('dmyHis');
             $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
             $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
+            $full_file_path = $this-> path_file_image . '/' . $file_name;
+            $request->merge(['image'=> $full_file_path]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
-            File::delete(public_path($path_to_remove));
+            if(File::exists(public_path($path_to_remove))){
+                File::delete(public_path($path_to_remove));
+            }
 
         }
         if (request()->category_id==null)
@@ -245,6 +249,10 @@ class ChuDeController extends Controller
     {
         return view('admin.chu_de.upload_many_excel');
     }
+    public function get_excel_file_updates(Request $request)
+    {
+        return view('admin.chu_de.update_many_excel');
+    }
 
     //https://www.nidup.io/blog/manipulate-excel-files-in-php
     public function readExcelFile($filePath)
@@ -266,7 +274,7 @@ class ChuDeController extends Controller
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
                         $model = new ChuDe();
                         $model->chu_de_name = $rowData[0];
-                        $model->image = $rowData[1];
+                        $model->image = $this-> path_file_image . '/' .$rowData[1];
                         $model->so_nguoi_theo_hoc = $rowData[2];
                         $model->category_id = intval($rowData[3]);
 //                        dd($model);
@@ -302,7 +310,74 @@ class ChuDeController extends Controller
         $this->readExcelFile($filePath);
         return redirect()->route('chu_de');
     }
+    public function readUpdateExelFile($filePath)
+    {
+        if (file_exists($filePath)) {
+            # open the file
+            $reader = ReaderEntityFactory::createXLSXReader();
+            $reader->open($filePath);
+            $isFirstRow = true;
+            # read each cell of each row of each sheet
+            try {
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    foreach ($sheet->getRowIterator() as $row) {
+                        if ($isFirstRow) {
+                            $isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+                        $rowData = $row->toArray();
+//                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                        if ($rowData[0])
+                        {
+                            $chuDe = ChuDe::find($rowData[0]);
+//                            dd($chuDe);
+                        }
+                        else continue;
+                        if ($chuDe) {
+                            if($rowData[1] !='Null' )
+                                $chuDe->chu_de_name = $rowData[1];
+                            if($rowData[2] !='Null' )
+                                $chuDe->image = $rowData[2];
+                            if($rowData[3] !='Null' )
+                                $chuDe->so_nguoi_theo_hoc = $rowData[3];
+                            if($rowData[5] !='Null' )
+                                $chuDe->description = $rowData[5];
+                            if($rowData[4] !='Null' )
+                                $chuDe->category_id = $rowData[4];
+                            if( $rowData[6] != 'Null' )
+                                $chuDe->youtube_code= $rowData[6];
+                            $chuDe->save();
+                        }
+                    }
+                }
+            } catch (ReaderNotOpenedException $e) {
+            } finally {
+                $reader->close();
+                unlink($filePath); // delete excel file from server
+            }
+        }
+        header("File Not Not Found");
+        echo "File Not Not Found";
+    }
 
+    public function process_update_excel(Request $request)
+    {
+
+        $filePath = '';
+        if ($request->has('file_upload')) {
+            $file = $request->file_upload;
+            $file_name = $file->getClientoriginalName();
+            $extension = $file->extension();
+            $x = pathinfo($file_name, PATHINFO_FILENAME);
+            $file_name = 'chu_de-'. $x . '.' . $extension;
+            $file->move(public_path($this->path_file_excel), $file_name);
+            $request->merge(['image' => $file_name]);
+            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
+            $filePath = str_replace('/', '\\', $filePath);
+        }
+        $this->readUpdateExelFile($filePath);
+        return redirect()->route('chu_de');
+    }
     public function category_detail($category_id)
     {
         $subjects = DB::table('chu_de')
