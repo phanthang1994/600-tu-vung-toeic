@@ -292,24 +292,25 @@ class TuMoiController extends Controller
                             continue;
                         if ($model)
                         {
-                            if ($rowData[1])
-                            $model->name = $rowData[1];
-                            if ($rowData[2])
-                            $model->image = $this->path_file_image.'/'.$rowData[2];
-                            if ($rowData[3])
-                            $model->tu_loai = $rowData[3];
-                            if ($rowData[4])
-                            $model->phien_am = $rowData[4];
-                            if ($rowData[5])
-                            $model->vi_du = $rowData[5];
-                            if ($rowData[6])
-                            $model->audio = $this->path_file_audio.'/'.$rowData[6];
-                            if ($rowData[7])
-                            $model->che_tu = $rowData[7];
-                            if ($rowData[8])
-                            $model->cau_truc_cau = $rowData[8];
-                            if ($rowData[9])
-                            $model->chu_de_id = intval($rowData[9]);
+                            if ($rowData[1]!='Null')
+                                $model->name = $rowData[1];
+                            if ($rowData[2]!='Null')
+                                $model->image = $this->path_file_image.'/'.$rowData[2];
+                            if ($rowData[3]!='Null')
+                                $model->tu_loai = $rowData[3];
+                            if ($rowData[4]!='Null')
+                                $model->phien_am = $rowData[4];
+                            if ($rowData[5]!='Null')
+                                $model->vi_du = $rowData[5];
+                            if ($rowData[6]!='Null')
+                                $model->audio = $this->path_file_audio.'/'.$rowData[6];
+                            if ($rowData[7]!='Null')
+                                $model->che_tu = $rowData[7];
+                            if ($rowData[8]!='Null')
+                                $model->cau_truc_cau = $rowData[8];
+                            if ($rowData[9]!='Null')
+                                $model->chu_de_id = intval($rowData[9]);
+
 //                        dd($model);
                             $model->save();
                         }

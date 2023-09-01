@@ -22,8 +22,8 @@ class CategoryController extends Controller
      * @return Application|Factory|View
      */
     public function index()
-    {   $categories = Category::all();
-        return view('admin.category.category',compact('categories'));
+    {    $categories = Category::orderBy('id', 'desc')->get();
+        return view('admin.category.category', compact('categories'));
     }
     public function home()
     {   $categories = Category::all();
