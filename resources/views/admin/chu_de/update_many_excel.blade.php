@@ -1,6 +1,6 @@
 @extends('admin.layout.main')
 @section('body')
-    <form action="{{route('chu_de.upload_excel')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('chu_de.process_update_excel')}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="card">
             <div class="card-header"><b>Select Excel File</b></div>

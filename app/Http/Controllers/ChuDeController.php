@@ -33,7 +33,7 @@ class ChuDeController extends Controller
         $subjects = DB::table('chu_de')
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->select('chu_de.*', 'category.category_name')
-            ->orderBy('created_at', 'desc') // Order by created_time in descending order
+            ->orderBy('id', 'desc') // Order by created_time in descending order
             ->get();
 
         return view('admin.chu_de.chu_de', compact('subjects'));
@@ -198,7 +198,9 @@ class ChuDeController extends Controller
             $request->merge(['image'=> $full_file_path]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
-            File::delete(public_path($path_to_remove));
+            if(File::exists(public_path($path_to_remove))){
+                File::delete(public_path($path_to_remove));
+            }
 
         }
         if (request()->category_id==null)
@@ -325,19 +327,25 @@ class ChuDeController extends Controller
                         }
                         $rowData = $row->toArray();
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
-                        $chuDe = ChuDe::find($rowData[0]);
+                        if ($rowData[0])
+                        {
+                            $chuDe = ChuDe::find($rowData[0]);
+//                            dd($chuDe);
+                        }
+
+                        else continue;
                         if ($chuDe) {
-                            if($rowData[1] !='Null' )
+                            if($rowData[1]  )
                                 $chuDe->chu_de_name = $rowData[1];
-                            if($rowData[2] !='Null' )
-                                $chuDe->image = $rowData[2];
-                            if($rowData[3] !='Null' )
-                                 $chuDe->so_nguoi_theo_hoc = $rowData[3];
-                            if($rowData[5] !='Null' )
+                            if($rowData[2] )
+                                $chuDe->image = $this->path_file_image.'/'.$rowData[2];
+                            if($rowData[3] )
+                                 $chuDe->so_nguoi_theo_hoc = intval($rowData[3]);
+                            if($rowData[5])
                                 $chuDe->description = $rowData[5];
-                            if($rowData[4] !='Null' )
-                                $chuDe->category_id = $rowData[4];
-                            if( $rowData[6] != 'Null' )
+                            if($rowData[4]  )
+                                $chuDe->category_id = intval($rowData[4]);
+                            if( $rowData[6]  )
                                 $chuDe->youtube_code= $rowData[6];
                             $chuDe->save();
                         }

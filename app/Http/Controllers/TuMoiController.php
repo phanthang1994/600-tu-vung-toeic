@@ -134,8 +134,6 @@ class TuMoiController extends Controller
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
             if(File::exists(public_path($path_to_remove))){
                 File::delete(public_path($path_to_remove));
-            }else{
-                dd('File does not exists image.');
             }
         }
 
@@ -153,9 +151,6 @@ class TuMoiController extends Controller
             $path_audio_to_remove=$this->path_file_audio.'/'.$oldest_audio;
             if(File::exists(public_path($path_audio_to_remove))){
                 File::delete(public_path($path_audio_to_remove));
-            }
-            else{
-                dd('File does not exists audio.');
             }
         }
 
@@ -291,26 +286,29 @@ class TuMoiController extends Controller
                         }
                         $rowData = $row->toArray();
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
+                        if($rowData[0])
                         $model = TuMoi::find($rowData[0]);
+                        else
+                            continue;
                         if ($model)
                         {
-                            if ($rowData[1]!='Null')
+                            if ($rowData[1])
                             $model->name = $rowData[1];
-                            if ($rowData[2]!='Null')
+                            if ($rowData[2])
                             $model->image = $this->path_file_image.'/'.$rowData[2];
-                            if ($rowData[3]!='Null')
+                            if ($rowData[3])
                             $model->tu_loai = $rowData[3];
-                            if ($rowData[4]!='Null')
+                            if ($rowData[4])
                             $model->phien_am = $rowData[4];
-                            if ($rowData[5]!='Null')
+                            if ($rowData[5])
                             $model->vi_du = $rowData[5];
-                            if ($rowData[6]!='Null')
+                            if ($rowData[6])
                             $model->audio = $this->path_file_audio.'/'.$rowData[6];
-                            if ($rowData[7]!='Null')
+                            if ($rowData[7])
                             $model->che_tu = $rowData[7];
-                            if ($rowData[8]!='Null')
+                            if ($rowData[8])
                             $model->cau_truc_cau = $rowData[8];
-                            if ($rowData[9]!='Null')
+                            if ($rowData[9])
                             $model->chu_de_id = intval($rowData[9]);
 //                        dd($model);
                             $model->save();
