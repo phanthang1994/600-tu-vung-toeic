@@ -9,7 +9,7 @@ class Category extends Model
 {
     use HasFactory;
     protected $table = "category";
-    protected $fillable = ['category_name',"image"];
+    protected $fillable = ['category_name',"image","status", "description"];
     public function totalChuDe()
     {
         return $this->hasOne(ChuDe::class,'category_id','id');

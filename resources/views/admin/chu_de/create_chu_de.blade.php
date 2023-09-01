@@ -21,8 +21,21 @@
                     @endforeach
                 </select>
             </div>
-            <label for="youtube_code">YouTube Video Code</label>
-            <input type="text" class="form-control" name="youtube_code" id="youtube_code" placeholder="Input YouTube video code">
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="youtube_code">YouTube Video Code</label>
+                <input type="text" class="form-control" name="youtube_code" id="youtube_code" placeholder="Input YouTube video code">
+            </div>
+               <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="description" placeholder="Input description"></textarea>
+            </div>
             <input type="submit" value="Submit">
         </div>
     </form>

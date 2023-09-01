@@ -122,30 +122,43 @@ class ChuDeController extends Controller
      */
     public function save(Request $request)
     {
-        if ($request->has('file_upload')) {
+        // Validate the form data
+        $request->validate([
+            'chu_de_name' => 'required|string|max:255',
+            'file_upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required|boolean',
+        ]);
+
+        // Handle file upload
+        if ($request->hasFile('file_upload')) {
             $file = $request->file_upload;
             $file_name = $file->getClientOriginalName();
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $currentDatetime = new DateTime();
             $formattedDatetime = $currentDatetime->format('dmyHis');
-            $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
+            $file_name = 'chu_de-' . $x . '-' . $formattedDatetime . '.' . $extension;
             $file->move(public_path($this->path_file_image), $file_name);
-            $full_file_path = $this-> path_file_image . '/' . $file_name;
-            $request->merge(['image'=> $full_file_path]);
+            $full_file_path = $this->path_file_image . '/' . $file_name;
+            $request->merge(['image' => $full_file_path]);
         }
 
         // Generate a random integer for so_nguoi_theo_hoc within the specified range
         $randomStudents = rand(30001, 100000);
 
-        // Add the random integer value to the request data
-        $request->merge(['so_nguoi_theo_hoc' => $randomStudents]);
+        // Create a new ChuDe instance with the form data
+        $chuDe = new ChuDe();
+        $chuDe->chu_de_name = $request->input('chu_de_name');
+        $chuDe->description = $request->input('description'); // Include 'description' from the form
+        $chuDe->category_id = $request->input('category_id'); // Include 'description' from the form
+        $chuDe->youtube_code = $request->input('youtube_code'); // Include 'description' from the form
+        $chuDe->image = $full_file_path; // Set the 'image' field
+        $chuDe->so_nguoi_theo_hoc = $randomStudents;
+        $chuDe->status = $request->input('status'); // Set the 'status' field
+        $chuDe->save();
 
-        ChuDe::create($request->all());
         return redirect()->route('chu_de');
     }
-
-
 
     /**
      * Display the specified resource.

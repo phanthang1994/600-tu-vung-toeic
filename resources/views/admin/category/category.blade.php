@@ -27,24 +27,35 @@
                                 <th>Updated at</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
+                                <th>Status</th>
                             </tr>
                             @foreach($categories as $item)
-                            <tr>
-                                <td>{{$item->id}}</td>
-                                <td>{{$item->category_name}}</td>
-                                <td>{{$item->description}}</td>
-                                <td>{{$item->image}}'</td>
-                                <td>{{$item->created_at}}'</td>
-                                <td>{{$item->updated_at}}'</td>
-                                <td><a href="{{ route('category.edits', $item->id) }}" class="btn btn-primary editbtn btn-sm">Edit</a></td>
-                                <td>
-                                    <form action="{{ route('category.delete', $item->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>{{$item->id}}</td>
+                                    <td>{{$item->category_name}}</td>
+                                    <td>{{$item->description}}</td>
+                                    <td>{{$item->image}}</td>
+                                    <td>{{$item->created_at}}</td>
+                                    <td>{{$item->updated_at}}</td>
+                                    <td>
+                                        <a href="{{ route('category.edits', $item->id) }}" class="btn btn-primary editbtn btn-sm">Edit</a>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('category.delete', $item->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                        </form>
+                                    </td>
+                                    <!-- Add this <td> element to display the status -->
+                                    <td>
+                                        @if($item->status)
+                                            <span class="badge bg-success">Active</span>
+                                        @else
+                                            <span class="badge bg-danger">Inactive</span>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endforeach
                             </thead>
                             <tbody>
