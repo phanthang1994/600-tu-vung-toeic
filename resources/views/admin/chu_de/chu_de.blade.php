@@ -29,6 +29,7 @@
                                 <th>Updateed At</th>
                                 <th>Sửa</th>
                                 <th>Xóa</th>
+                                <th>Status</th>
                             </tr>
                             @foreach($subjects as $item)
                             <tr>
@@ -49,6 +50,13 @@
                                         @method('DELETE')
                                         <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                                     </form>
+                                </td>
+                                <td>
+                                    @if($item->status)
+                                        <span class="badge bg-success">Active</span>
+                                    @else
+                                        <span class="badge bg-danger">Inactive</span>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

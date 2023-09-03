@@ -26,7 +26,7 @@ class CategoryController extends Controller
         return view('admin.category.category', compact('categories'));
     }
     public function home()
-    {   $categories = Category::all();
+    {   $categories = Category::where('status', 1)->get();
         return view('front_end.home',compact('categories'));
     }
     /**
@@ -48,23 +48,34 @@ class CategoryController extends Controller
      */
     public function save(Request $request)
     {
-        if($request->has('file_upload'))
-        {
-            $file =  $request->file_upload;
-            $file_name =  $file->getClientoriginalName();
-            $extension = $file ->extension();
-            $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'category-'.$x.'.'.$extension;
-            $file->move(public_path($this->path_file_image),$file_name);
-            $full_file_path = $this-> path_file_image . '/' . $file_name;
-//            dd($full_file_path);
-            $request->merge(['image'=> $full_file_path]);
+        // Validate the form data
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'description' => 'nullable|string', // Add validation for 'description' as it's optional
+            'file_upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required|boolean',
+        ]);
 
+        // Handle file upload
+        if ($request->hasFile('file_upload')) {
+            // Upload and store the image
+            $imagePath = $request->file('file_upload')->store('images/categories', 'public');
         }
 
-        Category::create($request->all());
-        return redirect()->route('category')->with('success','Thêm sản phẩm thành công');
+        // Create a new Category instance with the form data
+        $category = new Category();
+        $category->category_name = $request->input('category_name');
+        $category->description = $request->input('description'); // Set the 'description' field
+        $category->image = $imagePath;
+        $category->status = $request->input('status'); // Set the 'status' field
+
+        // Save the new category to the database
+        $category->save();
+
+        // Redirect back with a success message or to a confirmation page
+        return redirect()->route('category')->with('success', 'Category created successfully');
     }
+
 
     /**
      * Display the specified resource.

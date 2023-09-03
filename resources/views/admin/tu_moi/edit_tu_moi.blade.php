@@ -72,6 +72,13 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select class="form-control" name="status" id="status">
+                    <option value="1" @if($nw->status == 1) selected @endif>Active</option>
+                    <option value="0" @if($nw->status == 0) selected @endif>Inactive</option>
+                </select>
+            </div>
             <input type="submit" value="Submit">
         </div>
     </form>

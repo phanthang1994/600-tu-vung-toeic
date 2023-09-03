@@ -39,9 +39,10 @@ class ChuDeController extends Controller
         return view('admin.chu_de.chu_de', compact('subjects'));
     }
 
-    public function  all_courses()
+    public function all_courses()
     {
         $subjects = DB::table('chu_de')
+            ->where('chu_de.status', '=', 1)
             ->select(
                 'chu_de.id',
                 'chu_de.chu_de_name',
@@ -51,7 +52,7 @@ class ChuDeController extends Controller
                 'category.category_name AS category_name',
                 'category.image AS category_image',
                 'category.description AS category_description',
-                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+                DB::raw('COUNT(IF(tu_moi.status = 1, tu_moi.id, NULL)) AS tu_moi_count')
             )
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
@@ -69,13 +70,15 @@ class ChuDeController extends Controller
                 $query->whereExists(function ($subquery) {
                     $subquery->select(DB::raw(1))
                         ->from('tu_moi')
-                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id')
+                        ->where('tu_moi.status', '=', 1);
                 });
             })
             ->paginate(5);
 
         return view('front_end.courses', compact('subjects'));
     }
+
 
     public function get_many_images(){
         return view('admin.chu_de.upload_many_image');
@@ -122,30 +125,43 @@ class ChuDeController extends Controller
      */
     public function save(Request $request)
     {
-        if ($request->has('file_upload')) {
+        // Validate the form data
+        $request->validate([
+            'chu_de_name' => 'required|string|max:255',
+            'file_upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required|boolean',
+        ]);
+
+        // Handle file upload
+        if ($request->hasFile('file_upload')) {
             $file = $request->file_upload;
             $file_name = $file->getClientOriginalName();
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
             $currentDatetime = new DateTime();
             $formattedDatetime = $currentDatetime->format('dmyHis');
-            $file_name = 'chu_de-'.$x.'-'.$formattedDatetime.'.'.$extension;
+            $file_name = 'chu_de-' . $x . '-' . $formattedDatetime . '.' . $extension;
             $file->move(public_path($this->path_file_image), $file_name);
-            $full_file_path = $this-> path_file_image . '/' . $file_name;
-            $request->merge(['image'=> $full_file_path]);
+            $full_file_path = $this->path_file_image . '/' . $file_name;
+            $request->merge(['image' => $full_file_path]);
         }
 
         // Generate a random integer for so_nguoi_theo_hoc within the specified range
         $randomStudents = rand(30001, 100000);
 
-        // Add the random integer value to the request data
-        $request->merge(['so_nguoi_theo_hoc' => $randomStudents]);
+        // Create a new ChuDe instance with the form data
+        $chuDe = new ChuDe();
+        $chuDe->chu_de_name = $request->input('chu_de_name');
+        $chuDe->description = $request->input('description'); // Include 'description' from the form
+        $chuDe->category_id = $request->input('category_id'); // Include 'description' from the form
+        $chuDe->youtube_code = $request->input('youtube_code'); // Include 'description' from the form
+        $chuDe->image = $full_file_path; // Set the 'image' field
+        $chuDe->so_nguoi_theo_hoc = $randomStudents;
+        $chuDe->status = $request->input('status'); // Set the 'status' field
+        $chuDe->save();
 
-        ChuDe::create($request->all());
         return redirect()->route('chu_de');
     }
-
-
 
     /**
      * Display the specified resource.
@@ -381,6 +397,7 @@ class ChuDeController extends Controller
     public function category_detail($category_id)
     {
         $subjects = DB::table('chu_de')
+            ->where('chu_de.status', '=', 1)
             ->select(
                 'chu_de.id',
                 'chu_de.chu_de_name',
@@ -390,7 +407,7 @@ class ChuDeController extends Controller
                 'category.category_name AS category_name',
                 'category.image AS category_image',
                 'category.description AS category_description',
-                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+                DB::raw('COUNT(IF(tu_moi.status = 1, tu_moi.id, NULL)) AS tu_moi_count')
             )
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
@@ -409,7 +426,8 @@ class ChuDeController extends Controller
                 $query->whereExists(function ($subquery) {
                     $subquery->select(DB::raw(1))
                         ->from('tu_moi')
-                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id')
+                        ->where('tu_moi.status', '=', 1);
                 });
             })
             ->paginate(5); ;
@@ -420,7 +438,10 @@ class ChuDeController extends Controller
     public function new_words_next($chu_de_id)
     {
         // Get the category_id for the given chu_de_id
-        $category_id = ChuDe::where('id', $chu_de_id)->value('category_id');
+        $category_id = ChuDe::where('id', $chu_de_id)
+            ->where('status', 1) // Add this condition for status = 1
+            ->value('category_id');
+
         $subjects = DB::table('chu_de')
             ->select(
                 'chu_de.id',
@@ -431,11 +452,12 @@ class ChuDeController extends Controller
                 'category.category_name AS category_name',
                 'category.image AS category_image',
                 'category.description AS category_description',
-                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+                DB::raw('COUNT(IF(tu_moi.status = 1, tu_moi.id, NULL)) AS tu_moi_count')
             )
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
             ->where('category.id', $category_id)
+            ->where('chu_de.status', 1) // Add this condition for status = 1
             ->groupBy(
                 'chu_de.id',
                 'chu_de.chu_de_name',
@@ -450,19 +472,23 @@ class ChuDeController extends Controller
                 $query->whereExists(function ($subquery) {
                     $subquery->select(DB::raw(1))
                         ->from('tu_moi')
-                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id')
+                    ->where('tu_moi.status', '=', 1);
                 });
             })
-            ->paginate(5); ;
-//        dd($subjects);
+            ->paginate(5);
+
         return view('front_end.courses', compact('subjects'));
     }
+
 
     public function che_tu_for_chu_de($chu_de_id)
     {
         $results = DB::table('tu_moi')
             ->where('tu_moi.chu_de_id', $chu_de_id)
-            ->rightJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
+            ->where('tu_moi.status', '=', 1)
+            ->rightJoin('chu_de', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->where('chu_de.status', '=', 1)
             ->select(
                 'tu_moi.*',
                 'chu_de.id AS chu_de_id',
@@ -475,9 +501,11 @@ class ChuDeController extends Controller
 
         return view('front_end.che_tu_for_chu_de', compact('results'));
     }
+
     public function che_tu()
     {
         $results = DB::table('category')
+            ->where('category.status','=',1)
             ->select('category.*')
             ->join('chu_de', 'category.id', '=', 'chu_de.category_id')
             ->distinct()
@@ -487,8 +515,10 @@ class ChuDeController extends Controller
     public function getChuDeOptions(Request $request)
     {
         $categoryId = $request->input('category_id');
+
         $chuDeOptions = ChuDe::join('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
             ->where('chu_de.category_id', $categoryId)
+            ->where('chu_de.status', '=', 1) // Add this condition
             ->select('chu_de.*')
             ->distinct()
             ->get();
@@ -498,9 +528,9 @@ class ChuDeController extends Controller
     public function getTuMoiOptions(Request $request)
     {
         $chu_de_id = $request->input('chu_de_id');
-        $tuMoiOptions = TuMoi::where('chu_de_id', $chu_de_id)->get(['name', 'tu_loai', 'che_tu','phien_am']);
-
-
+        $tuMoiOptions = TuMoi::where('chu_de_id', $chu_de_id)
+            ->where('tu_moi.status', '=', 1) // Add this condition
+            ->get(['name', 'tu_loai', 'che_tu','phien_am']);
         return response()->json($tuMoiOptions);
     }
 }

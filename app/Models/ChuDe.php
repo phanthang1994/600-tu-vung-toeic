@@ -9,7 +9,7 @@ class ChuDe extends Model
 {
     use HasFactory;
     protected $table = 'chu_de';
-    protected $fillable = ["id","chu_de_name","image","so_nguoi_theo_hoc","category_id","youtube_code"];
+    protected $fillable = ["id","chu_de_name","image","so_nguoi_theo_hoc","category_id","youtube_code", "status", "description"];
     //Joint 1 - 1
     public function cat()
     {

@@ -45,6 +45,13 @@
                 </select>
 
             </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
             <input type="submit" value="Submit">
         </div>
     </form>
