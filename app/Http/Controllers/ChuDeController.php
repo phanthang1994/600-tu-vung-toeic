@@ -531,8 +531,6 @@ class ChuDeController extends Controller
         $tuMoiOptions = TuMoi::where('chu_de_id', $chu_de_id)
             ->where('tu_moi.status', '=', 1) // Add this condition
             ->get(['name', 'tu_loai', 'che_tu','phien_am']);
-
-
         return response()->json($tuMoiOptions);
     }
 }
