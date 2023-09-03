@@ -26,7 +26,7 @@ class CategoryController extends Controller
         return view('admin.category.category', compact('categories'));
     }
     public function home()
-    {   $categories = Category::all();
+    {   $categories = Category::where('status', 1)->get();
         return view('front_end.home',compact('categories'));
     }
     /**

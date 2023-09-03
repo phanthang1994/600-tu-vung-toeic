@@ -383,6 +383,7 @@ class TuMoiController extends Controller
         $new_word = DB::table('tu_moi')
             -> leftJoin('chu_de','chu_de.id','=','tu_moi.chu_de_id')
             -> where('tu_moi.chu_de_id','=',$chu_de_id)
+            ->where('tu_moi.status', '=', 1)
             -> select('tu_moi.*','chu_de.chu_de_name','chu_de.description as chu_de_description','chu_de.youtube_code')->get();
 //        return dd($new_word);
         return view('front_end.new_words',compact('new_word'));
@@ -391,6 +392,7 @@ class TuMoiController extends Controller
     public function test_types()
     {
         $subjects = DB::table('chu_de')
+            ->where('chu_de.status', '=', 1) // Add this line to filter by status = 1
             ->select(
                 'chu_de.id',
                 'chu_de.chu_de_name',
@@ -400,7 +402,8 @@ class TuMoiController extends Controller
                 'category.category_name AS category_name',
                 'category.image AS category_image',
                 'category.description AS category_description',
-                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+                DB::raw('COUNT(IF(tu_moi.status = 1, tu_moi.id, NULL)) AS tu_moi_count')
+
             )
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
@@ -418,8 +421,8 @@ class TuMoiController extends Controller
                 $query->whereExists(function ($subquery) {
                     $subquery->select(DB::raw(1))
                         ->from('tu_moi')
-                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
-                });
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id')
+                        ->where('tu_moi.status', '=', 1);                });
             })
             ->paginate(5);
 //        dd($subject);
@@ -439,16 +442,21 @@ class TuMoiController extends Controller
     public function single_test_type($chu_de_id)
     {
         $results = DB::table('chu_de')
-            ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
+            ->leftJoin('tu_moi', function($join) {
+                $join->on('chu_de.id', '=', 'tu_moi.chu_de_id')
+                    ->where('tu_moi.status', '=', 1); // Filter tu_moi records with status = 1
+            })
             ->select('chu_de.id',
                 'chu_de.chu_de_name',
                 'chu_de.image AS chu_de_image',
                 'chu_de.so_nguoi_theo_hoc',
                 'chu_de.description AS chu_de_description',
-                DB::raw("(SELECT COUNT(id) FROM tu_moi WHERE chu_de_id = {$chu_de_id}) AS tu_moi_count")
+                DB::raw("(SELECT COUNT(id) FROM tu_moi WHERE chu_de_id = {$chu_de_id} AND status = 1) AS tu_moi_count")
             )
             ->where('chu_de.id', $chu_de_id)
+            ->where('chu_de.status', '=', 1)
             ->first();
+
 
         if ($results) {
             $minutes = floor($results->tu_moi_count * 2 / 60);
@@ -463,6 +471,7 @@ class TuMoiController extends Controller
     public function test_type()
     {
         $subjects = DB::table('chu_de')
+            ->where('chu_de.status', '=', 1) // Add this line to filter by status = 1
             ->select(
                 'chu_de.id',
                 'chu_de.chu_de_name',
@@ -472,7 +481,7 @@ class TuMoiController extends Controller
                 'category.category_name AS category_name',
                 'category.image AS category_image',
                 'category.description AS category_description',
-                DB::raw('COUNT(IFNULL(tu_moi.id, 0)) AS tu_moi_count')
+                DB::raw('COUNT(IF(tu_moi.status = 1, tu_moi.id, NULL)) AS tu_moi_count')
             )
             ->leftJoin('category', 'category.id', '=', 'chu_de.category_id')
             ->leftJoin('tu_moi', 'chu_de.id', '=', 'tu_moi.chu_de_id')
@@ -490,7 +499,8 @@ class TuMoiController extends Controller
                 $query->whereExists(function ($subquery) {
                     $subquery->select(DB::raw(1))
                         ->from('tu_moi')
-                        ->whereRaw('tu_moi.chu_de_id = chu_de.id');
+                        ->whereRaw('tu_moi.chu_de_id = chu_de.id')
+                        ->where('tu_moi.status', '=', 1);
                 });
             })
             ->paginate(5);
@@ -509,13 +519,16 @@ class TuMoiController extends Controller
     }
     public function next_test_type($chu_de_id)
     {
-        $category_id = ChuDe::where('id', $chu_de_id)->value('category_id');
+        $category_id = ChuDe::where('id', $chu_de_id)
+            ->where('status', 1)
+            ->value('category_id');
         return $this->test_type($category_id);
     }
     public function multiple_choice_question($id_chu_de)
     {
         $subjects = DB::table('tu_moi')
             ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->where('tu_moi.status', '=', 1) // Add this condition to filter by status
             ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
             ->get();
 
@@ -578,6 +591,7 @@ class TuMoiController extends Controller
     {
         $subjects = DB::table('tu_moi')
             ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->where('tu_moi.status', '=', 1) // Add this condition to filter by status
             ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
             ->get();
 
@@ -609,6 +623,7 @@ class TuMoiController extends Controller
     {
         $subjects = DB::table('tu_moi')
             ->where('tu_moi.chu_de_id', '=', $id_chu_de)
+            ->where('tu_moi.status', '=', 1) // Add this condition to filter by status
             ->select('tu_moi.id', 'tu_moi.name', 'tu_moi.tu_loai', 'tu_moi.image', 'tu_moi.phien_am')
             ->get();
         $chu_de_image = DB::table('chu_de')
