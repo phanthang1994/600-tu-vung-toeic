@@ -293,6 +293,10 @@ class ChuDeController extends Controller
                         $model->image = $this-> path_file_image . '/' .$rowData[1];
                         $model->so_nguoi_theo_hoc = $rowData[2];
                         $model->category_id = intval($rowData[3]);
+                        $model->description = $rowData[4];
+                        $model->youtube_code = $rowData[5];
+                        $model->status = $rowData[6];
+
 //                        dd($model);
                         $model->save();
                     }
@@ -343,9 +347,9 @@ class ChuDeController extends Controller
                         }
                         $rowData = $row->toArray();
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
-                        if ($rowData[0])
+                        if (intval($rowData[0]))
                         {
-                            $chuDe = ChuDe::find($rowData[0]);
+                            $chuDe = ChuDe::find(intval($rowData[0]));
 //                            dd($chuDe);
                         }
                         else continue;
@@ -353,15 +357,26 @@ class ChuDeController extends Controller
                             if($rowData[1] !='Null' )
                                 $chuDe->chu_de_name = $rowData[1];
                             if($rowData[2] !='Null' )
-                                $chuDe->image = $rowData[2];
+                            {
+                                if($chuDe->image!=$rowData[2])
+                                {
+                                    if(File::exists(public_path($chuDe->image))){
+                                        File::delete(public_path($chuDe->image));
+                                    }
+                                    $full_file_path = $this->path_file_image . '/' . $rowData[2];
+                                    $chuDe->image = $full_file_path;
+                                }
+                            }
                             if($rowData[3] !='Null' )
-                                $chuDe->so_nguoi_theo_hoc = $rowData[3];
+                                $chuDe->so_nguoi_theo_hoc =intval( $rowData[3]);
                             if($rowData[5] !='Null' )
                                 $chuDe->description = $rowData[5];
                             if($rowData[4] !='Null' )
                                 $chuDe->category_id = $rowData[4];
                             if( $rowData[6] != 'Null' )
                                 $chuDe->youtube_code= $rowData[6];
+                            if( $rowData[7] != 'Null' )
+                                $chuDe->youtube_code= $rowData[7];
                             $chuDe->save();
                         }
                     }

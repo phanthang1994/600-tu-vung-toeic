@@ -226,6 +226,10 @@ class TuMoiController extends Controller
                         $rowData = $row->toArray();
 //                        echo implode(', ', $rowData) . '<br>'; // Display the row data
                         $model = new TuMoi();
+                        if( $rowData[8]!='Null')
+                            $model->chu_de_id = intval($rowData[8]);
+                        else
+                            continue;
                         $model->name = $rowData[0];
                         $model->image = $this->path_file_image.'/'.$rowData[1];
                         $model->tu_loai = $rowData[2];
@@ -234,7 +238,8 @@ class TuMoiController extends Controller
                         $model->audio = $this->path_file_audio.'/'.$rowData[5];
                         $model->che_tu = $rowData[6];
                         $model->cau_truc_cau = $rowData[7];
-                        $model->chu_de_id = intval($rowData[8]);
+
+                        $model->status = intval($rowData[9]);
 //                        dd($model);
                         $model->save();
                     }
@@ -295,7 +300,18 @@ class TuMoiController extends Controller
                             if ($rowData[1]!='Null')
                                 $model->name = $rowData[1];
                             if ($rowData[2]!='Null')
-                                $model->image = $this->path_file_image.'/'.$rowData[2];
+                            {
+//                                dd($model->image,$this->path_file_image.'/'.$rowData[2]);
+                                if( $model->image !=$this->path_file_image.'/'.$rowData[2])
+                                {
+
+                                    if(File::exists(public_path($model->image))){
+                                        File::delete(public_path($model->image));
+                                    }
+                                    $model->image = $this->path_file_image.'/'.$rowData[2];
+
+                                }
+                            }
                             if ($rowData[3]!='Null')
                                 $model->tu_loai = $rowData[3];
                             if ($rowData[4]!='Null')
@@ -303,7 +319,17 @@ class TuMoiController extends Controller
                             if ($rowData[5]!='Null')
                                 $model->vi_du = $rowData[5];
                             if ($rowData[6]!='Null')
-                                $model->audio = $this->path_file_audio.'/'.$rowData[6];
+                            {
+                                if( $model->audio !=$this->path_file_audio.'/'.$rowData[6])
+                                {
+                                    if(File::exists(public_path($model->audio))){
+                                        File::delete(public_path($model->audio));
+                                    }
+                                    $model->audio = $this->path_file_audio.'/'.$rowData[6];
+
+                                }
+                            }
+
                             if ($rowData[7]!='Null')
                                 $model->che_tu = $rowData[7];
                             if ($rowData[8]!='Null')
