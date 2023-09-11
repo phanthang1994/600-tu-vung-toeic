@@ -318,15 +318,16 @@ class ChuDeController extends Controller
         $filePath = '';
         if ($request->has('file_upload')) {
             $file = $request->file_upload;
-            $file_name = $file->getClientoriginalName();
+            $file_name = $file->getClientOriginalName(); // Use getOriginalName() instead of getClientoriginalName()
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'chu_de-'. $x . '.' . $extension;
+            $file_name = 'chu_de-' . $x . '.' . $extension;
             $file->move(public_path($this->path_file_excel), $file_name);
             $request->merge(['image' => $file_name]);
-            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
-            $filePath = str_replace('/', '\\', $filePath);
+            $filePath = $this->path_file_excel . '/' . $file_name; // Remove public_path() and str_replace()
         }
+//        dd($filePath);
+
         $this->readExcelFile($filePath);
         return redirect()->route('chu_de');
     }
@@ -397,15 +398,15 @@ class ChuDeController extends Controller
         $filePath = '';
         if ($request->has('file_upload')) {
             $file = $request->file_upload;
-            $file_name = $file->getClientoriginalName();
+            $file_name = $file->getClientOriginalName(); // Use getOriginalName() instead of getClientoriginalName()
             $extension = $file->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'chu_de-'. $x . '.' . $extension;
+            $file_name = 'chu_de-' . $x . '.' . $extension;
             $file->move(public_path($this->path_file_excel), $file_name);
             $request->merge(['image' => $file_name]);
-            $filePath = public_path($this->path_file_excel) .'/'. $file_name;
-            $filePath = str_replace('/', '\\', $filePath);
+            $filePath = $this->path_file_excel . '/' . $file_name; // Remove public_path() and str_replace()
         }
+//        dd($filePath);
         $this->readUpdateExelFile($filePath);
         return redirect()->route('chu_de');
     }

@@ -133,7 +133,7 @@
         const currentQuestion = shuffledQuestionsBackUp[index]
         document.getElementById("question-number").innerHTML = index+1;
         document.getElementById("player-score").innerHTML = countPlayerScore();
-        document.querySelector('#str_imgQuestion').src = baseUrl+ currentQuestion.image
+        document.querySelector('#str_imgQuestion').src = baseUrl+'/'+ currentQuestion.image
         document.getElementById("display-question").innerHTML = currentQuestion.question + '<span style="color: red;">' + currentQuestion.phien_am + '</span>';
         document.getElementById("option-one-label").innerHTML = currentQuestion.optionA;
         document.getElementById("option-two-label").innerHTML = currentQuestion.optionB;

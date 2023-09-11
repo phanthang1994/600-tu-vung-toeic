@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Category;
+use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -56,17 +57,24 @@ class CategoryController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        // Handle file upload
         if ($request->hasFile('file_upload')) {
-            // Upload and store the image
-            $imagePath = $request->file('file_upload')->store('images/categories', 'public');
+            $file = $request->file_upload;
+            $file_name = $file->getClientOriginalName();
+            $extension = $file->extension();
+            $x = pathinfo($file_name, PATHINFO_FILENAME);
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
+            $file_name = 'category-' . $x . '-' . $formattedDatetime . '.' . $extension;
+            $file->move(public_path($this->path_file_image), $file_name);
+            $full_file_path = $this->path_file_image . '/' . $file_name;
+            $request->merge(['image' => $full_file_path]);
         }
 
         // Create a new Category instance with the form data
         $category = new Category();
         $category->category_name = $request->input('category_name');
         $category->description = $request->input('description'); // Set the 'description' field
-        $category->image = $imagePath;
+        $category->image = $full_file_path;
         $category->status = $request->input('status'); // Set the 'status' field
 
         // Save the new category to the database
@@ -118,9 +126,12 @@ class CategoryController extends Controller
             $file_name =  $file->getClientoriginalName();
             $extension = $file ->extension();
             $x = pathinfo($file_name, PATHINFO_FILENAME);
-            $file_name = 'category-'.$x.'.'.$extension;
-            $file->move(public_path($this->path_file_image),$file_name);
-            $request->merge(['image'=> $file_name]);
+            $currentDatetime = new DateTime();
+            $formattedDatetime = $currentDatetime->format('dmyHis');
+            $file_name = 'category-' . $x . '-' . $formattedDatetime . '.' . $extension;
+            $file->move(public_path($this->path_file_image), $file_name);
+            $full_file_path = $this->path_file_image . '/' . $file_name;
+            $request->merge(['image' => $full_file_path]);
             $oldest_image = $request->old_image;
             $path_to_remove=$this->path_file_image.'/'.$oldest_image;
             if(File::exists(public_path($path_to_remove)))

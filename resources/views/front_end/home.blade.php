@@ -31,7 +31,7 @@
                 <div class="" style="background-color:#FCFAF2; display: flex;justify-content: center; " >
                     <div class="tatCaKhoaHocCon">
                         <div style="padding:10px 10px; ">
-                            <img class="imgAtHome" src="{{$item->image}}" style="" alt="{{$item->image}}">
+                            <img class="imgAtHome" src="{{$item->image}}" style="" alt="{{$item->category_name}}">
                         </div>
                         <div class="loGoImd" style=" padding:10px 10px;display: flex;flex-wrap:wrap;">
                             <ul class="" style="width:100%;">
