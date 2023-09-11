@@ -30,8 +30,10 @@
             @foreach($categories as $item)
                 <div class="" style="background-color:#FCFAF2; display: flex;justify-content: center; " >
                     <div class="tatCaKhoaHocCon">
-                        <div style="padding:10px 10px; ">
-                            <img class="imgAtHome" src="{{$item->image}}" style="" alt="{{$item->category_name}}">
+                        <div style="padding: 10px 10px;">
+                            @if (file_exists(public_path($item->image)))
+                                <img class="imgAtHome" src="{{ $item->image }}" alt="{{ $item->category_name }}">
+                            @endif
                         </div>
                         <div class="loGoImd" style=" padding:10px 10px;display: flex;flex-wrap:wrap;">
                             <ul class="" style="width:100%;">
